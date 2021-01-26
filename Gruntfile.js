@@ -5,10 +5,6 @@ module.exports = function (grunt) {
         src: ["lib/js/**/*.js", "lib/dist/scripts/**/*.js"],
         dest: "lib/dist/scripts.js",
       },
-      // css: {
-      //   src: ["css/*.css"],
-      //   dest: "lib/dist/main.css",
-      // },
     },
     watch: {
       js: {
