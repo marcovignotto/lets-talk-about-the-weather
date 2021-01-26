@@ -14,19 +14,19 @@ module.exports = function (grunt) {
         ],
       },
       your_target: {
-        src: ["js/**/*.js"],
+        src: ["lib/js/**/*.js"],
       },
     },
     concat: {
       js: {
         // src: ["lib/js/**/*.js", "lib/dist/scripts/**/*.js"],
-        src: ["js/**/*.js"],
+        src: ["lib/js/**/*.js"],
         dest: "lib/dist/scripts/scripts.js",
       },
     },
     watch: {
       js: {
-        files: ["js/**/*.js"],
+        files: ["lib/js/**/*.js"],
         tasks: ["concat"],
       },
     },
