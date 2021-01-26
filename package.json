@@ -1,0 +1,21 @@
+{
+  "name": "website-corporate-page",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "node-sass --source-map lib/dist/css/main.css.map --output-style compressed -w lib/scss -o lib/dist/css -- recursive ",
+    "publish": "gh-pages -d lib/dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gh-pages": "^3.1.0",
+    "node-sass": "^5.0.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.3.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-watch": "^1.1.0"
+  }
+}
