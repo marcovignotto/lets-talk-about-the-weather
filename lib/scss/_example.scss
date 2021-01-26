@@ -37,3 +37,17 @@ pre[class*="language-"] {
   padding: 20px;
   background-color: white;
 }
+
+// DELETE
+.red__block {
+  background-color: red;
+  width: 200px;
+  height: 200px;
+  margin: 20px;
+}
+.red__block_big {
+  background-color: green;
+  width: 450px;
+  // height: 200px;
+  margin: 20px;
+}
