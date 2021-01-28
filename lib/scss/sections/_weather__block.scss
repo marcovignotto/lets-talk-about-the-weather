@@ -7,7 +7,12 @@
   padding-left: 1rem;
   padding-right: 1rem;
 
-  background-color: red;
+  background: linear-gradient(
+    142deg,
+    rgba(29, 166, 185, 1) 5%,
+    rgba(149, 230, 233, 1) 100%
+  );
+
   border-radius: 10px;
 }
 
