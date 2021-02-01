@@ -36,13 +36,29 @@ router.post(
     // if (!errors.isEmpty()) {
     //   return res.status(400).json({ errors: errors.array() });
     // }
+    console.log(req.body);
 
-    const { task, priority } = req.body;
+    const {
+      name,
+      language,
+      description,
+      icon,
+      location,
+      mainWeather,
+      temperature,
+      wind,
+    } = req.body;
 
     try {
       const newLocation = new Location({
-        task,
-        priority,
+        name,
+        language,
+        description,
+        icon,
+        location,
+        mainWeather,
+        temperature,
+        wind,
       });
 
       const toDo = await newLocation.save();

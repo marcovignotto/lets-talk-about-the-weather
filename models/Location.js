@@ -13,7 +13,7 @@ const LocationSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  main: {
+  mainWeather: {
     type: String,
     require: true,
   },
