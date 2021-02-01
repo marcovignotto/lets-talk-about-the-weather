@@ -1,11 +1,35 @@
 const mongoose = require("mongoose");
 
 const LocationSchema = mongoose.Schema({
-  task: {
+  name: {
     type: String,
     require: true,
   },
-  priority: {
+  language: {
+    type: String,
+    require: true,
+  },
+  location: {
+    type: String,
+    require: true,
+  },
+  main: {
+    type: String,
+    require: true,
+  },
+  icon: {
+    type: String,
+    require: true,
+  },
+  description: {
+    type: String,
+    require: true,
+  },
+  temperature: {
+    type: String,
+    require: true,
+  },
+  wind: {
     type: String,
     require: true,
   },
