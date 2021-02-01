@@ -2,6 +2,8 @@ const axios = require("axios");
 
 const dbCleaning = require("../../config/dbDelete");
 
+const updateGeneral = require("./updateGeneral");
+
 const allUsers = require("../../data/users");
 
 // @get request
@@ -59,7 +61,6 @@ const getWeather = async (firstName, location, language, units) => {
     };
 
     axios(options);
-    // return sendData;
   } catch (e) {
     console.error(e);
   }
@@ -68,12 +69,16 @@ const getWeather = async (firstName, location, language, units) => {
 // populate
 
 const populateDbWeather = () => {
-  dbCleaning().then((res) => {
-    if (res.result.ok >= 1) {
-      console.log("popilate");
-      allUsers.map((x) =>
-        getWeather(x.firstName, x.location, x.language, x.unit)
-      );
+  updateGeneral().then((res) => {
+    if (res.status >= 200 && res.status < 399) {
+      dbCleaning().then((res) => {
+        if (res.result.ok >= 1) {
+          console.log("allUses");
+          allUsers.map((x) =>
+            getWeather(x.firstName, x.location, x.language, x.unit)
+          );
+        }
+      });
     }
   });
 };

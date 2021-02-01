@@ -5,6 +5,8 @@ const { check, validationResult } = require("express-validator");
 
 const General = require("../models/General");
 
+const currentDate = new Date();
+
 // @route   GET api/location
 // @desc    Get all locations
 // @access  Private
@@ -70,7 +72,7 @@ router.put("/:id", async (req, res) => {
     if (!updGeneral) return res.status(404).json({ msg: "General not found" });
 
     updGeneral = await General.findByIdAndUpdate(req.params.id, {
-      date: Date.now(),
+      date: currentDate.setHours(currentDate.getHours() + 1),
     });
 
     res.json(updGeneral);
