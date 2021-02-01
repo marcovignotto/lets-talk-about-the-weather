@@ -36,10 +36,9 @@ router.post(
     // if (!errors.isEmpty()) {
     //   return res.status(400).json({ errors: errors.array() });
     // }
-    console.log(req.body);
 
     const {
-      name,
+      firstName,
       language,
       description,
       icon,
@@ -51,7 +50,7 @@ router.post(
 
     try {
       const newLocation = new Location({
-        name,
+        firstName,
         language,
         description,
         icon,
