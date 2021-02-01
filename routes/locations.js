@@ -10,13 +10,11 @@ const Location = require("../models/Location");
 // @access  Private
 
 router.get("/", async (req, res) => {
-  //   console.log(req);
   try {
     const locations = await Location.find({ locations: req.locations }).sort({
       date: -1,
     });
-    // const location\ = await Location.find({ location: req.location }).sort({ date: -1 });
-    console.log(locations);
+
     res.json(locations);
   } catch (error) {
     console.log(error.message);

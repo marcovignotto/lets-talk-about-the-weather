@@ -11,10 +11,10 @@ const General = require("../models/General");
 
 router.get("/", async (req, res) => {
   try {
-    const location = await Location.find({ location: req.location });
+    const generals = await General.find({ generals: req.generals });
     // const location\ = await Location.find({ location: req.location }).sort({ date: -1 });
 
-    res.json(location);
+    res.json(generals);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Server error");
