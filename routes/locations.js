@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+// import dbCleaning
+const dbCleaning = require("../config/dbDelete");
+
 const { check, validationResult } = require("express-validator");
 
 const Location = require("../models/Location");
@@ -14,7 +17,6 @@ router.get("/", async (req, res) => {
     const locations = await Location.find({ locations: req.locations }).sort({
       date: -1,
     });
-
     res.json(locations);
   } catch (error) {
     console.log(error.message);
@@ -38,6 +40,9 @@ router.post(
     //   return res.status(400).json({ errors: errors.array() });
     // }
 
+    // console.log(req);
+    // console.log(res);
+
     const {
       firstName,
       language,
@@ -60,6 +65,8 @@ router.post(
         temperature,
         wind,
       });
+
+      dbCleaning().catch(console.dir);
 
       const toDo = await newLocation.save();
 
