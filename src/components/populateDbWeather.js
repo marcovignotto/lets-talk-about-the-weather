@@ -71,14 +71,14 @@ const getWeather = async (firstName, location, language, units) => {
 const populateDbWeather = () => {
   updateGeneral().then((res) => {
     if (res.status >= 200 && res.status < 399) {
-      dbCleaning().then((res) => {
-        if (res.result.ok >= 1) {
-          console.log("allUses");
-          allUsers.map((x) =>
-            getWeather(x.firstName, x.location, x.language, x.unit)
-          );
-        }
-      });
+      console.log("ok");
+      // dbCleaning().then((res) => {
+      //   if (res.result.ok >= 1) {
+      //     allUsers.map((x) =>
+      //       getWeather(x.firstName, x.location, x.language, x.unit)
+      //     );
+      //   }
+      // });
     }
   });
 };

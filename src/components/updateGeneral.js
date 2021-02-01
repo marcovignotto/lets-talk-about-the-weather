@@ -19,7 +19,6 @@ const updateGeneral = async () => {
       transformResponse: [
         (data) => {
           // transform the response
-          //   console.log(data);
           return data;
         },
       ],

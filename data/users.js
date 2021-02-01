@@ -14,32 +14,24 @@
 
 const User = require("../models/User");
 
-let usersArr = [];
-// location, language,unit
 const USERS = [
   new User("John", "berlin", "de", "metric"),
   new User("Martha", "london", "en", "metric"),
   new User("Joe", "paris", "fr", "metric"),
   new User("William", "new York", "en", "imperial"),
-  // new User("Bill", "bagdad", "ar", "metric"),
-  // new User("John","boston", "en", "imperial"),
-  // new User("John","saigon", "vi", "metric"),
-  // new User("John","prague", "cz", "metric"),
-  // new User("John","barcelona", "ca", "metric"),
-  // new User("John","tel aviv", "en", "metric"),
-  // new User("John","athens", "el", "metric"),
-  // new User("John","venice", "it", "metric"),
-  // new User("John","moscow", "ru", "metric"),
-  // new User("John","kiev", "ua", "metric"),
-  // new User("John","nairobi", "en", "metric"),
-  // new User("John","Addis Abeba", "en", "metric"),
-  // new User("John","Mogadishu", "ar", "metric"),
+  new User("Bill", "bagdad", "ar", "metric"),
+  new User("Jane", "boston", "en", "imperial"),
+  new User("Martin", "saigon", "vi", "metric"),
+  new User("Elly", "prague", "cz", "metric"),
+  new User("Frances", "barcelona", "ca", "metric"),
+  new User("Aron", "tel aviv", "en", "metric"),
+  new User("Paul", "athens", "el", "metric"),
+  new User("Roger", "venice", "it", "metric"),
+  new User("Fredrich", "moscow", "ru", "metric"),
+  new User("Chris", "kiev", "ua", "metric"),
+  new User("Eva", "nairobi", "en", "metric"),
+  new User("Caroline", "Addis Abeba", "en", "metric"),
+  new User("Anna", "Mogadishu", "ar", "metric"),
 ];
 
-// call the function
-// makePosArr(0, USERS().length);
-
 module.exports = USERS;
-
-// randomization
-// console.log(posArr.sort(() => Math.random() - 0.5));
