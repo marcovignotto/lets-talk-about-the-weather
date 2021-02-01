@@ -66,7 +66,7 @@ router.post(
         wind,
       });
 
-      dbCleaning().catch(console.dir);
+      //   dbCleaning().catch(console.dir);
 
       const toDo = await newLocation.save();
 

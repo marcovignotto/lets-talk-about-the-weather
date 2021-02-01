@@ -19,7 +19,7 @@ const dbCleaning = async () => {
 
     const query = {};
     const result = await collection.deleteMany(query);
-
+    return result;
     console.log("Deleted " + result.deletedCount + " documents");
   } finally {
     // await client.close();
