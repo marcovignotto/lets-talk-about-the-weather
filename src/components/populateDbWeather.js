@@ -71,7 +71,6 @@ const getWeather = async (firstName, location, language, units) => {
 const populateDbWeather = () => {
   updateGeneral().then((res) => {
     if (res.status >= 200 && res.status < 399) {
-      console.log("ok");
       // dbCleaning().then((res) => {
       //   if (res.result.ok >= 1) {
       //     allUsers.map((x) =>
