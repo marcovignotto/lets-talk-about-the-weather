@@ -15,6 +15,7 @@ app.get("/", (req, res) =>
 
 // routes
 app.use("/api/locations", require("./routes/locations"));
+app.use("/api/general", require("./routes/general"));
 
 const PORT = process.env.PORT || 5000;
 
