@@ -16,6 +16,11 @@ app.get("/", (req, res) =>
   res.send({ msg: `Let's talk about the weather API` })
 );
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
+
 // routes
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/general", require("./routes/general"));

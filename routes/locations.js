@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
 
 // import dbCleaning
 const dbCleaning = require("../config/dbDelete");
@@ -7,12 +8,13 @@ const dbCleaning = require("../config/dbDelete");
 const { check, validationResult } = require("express-validator");
 
 const Location = require("../models/Location");
+const BackendUser = require("../models/BackendUser");
 
 // @route   GET api/location
 // @desc    Get all locations
 // @access  Private
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const locations = await Location.find({ locations: req.locations }).sort({
       date: -1,
