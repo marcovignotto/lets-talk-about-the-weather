@@ -1,6 +1,5 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
-const populateDbWeather = require("./src/components/populateDbWeather");
 
 const app = express();
 
@@ -8,11 +7,12 @@ const app = express();
 
 // connect Mongo DB
 connectDB();
+// const populateDbWeather = require("./src/components/populateDbWeather");
 // connectDB().then((res) => populateDbWeather());
 
 // get weather
 
-// init middleware
+// Middleware
 app.use(express.json({ extended: false }));
 
 app.get("/", (req, res) =>
@@ -22,6 +22,7 @@ app.get("/", (req, res) =>
 // routes
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/general", require("./routes/general"));
+app.use("/api/users", require("./routes/users"));
 
 const PORT = process.env.PORT || 5000;
 
