@@ -12,7 +12,7 @@ const path = require("path");
 
 // get weather
 
-// init middleware
+// Middleware
 app.use(express.json({ extended: false }));
 
 app.get("/", (req, res) =>
@@ -22,6 +22,8 @@ app.get("/", (req, res) =>
 // routes
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/general", require("./routes/general"));
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
 
 // is production
 
