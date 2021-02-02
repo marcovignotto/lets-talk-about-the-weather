@@ -3,31 +3,38 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const auth = require("../middleware/auth");
+
 const config = require("config");
 
 const { check, validationResult } = require("express-validator");
 
 const BackendUser = require("../models/BackendUser");
 
-const currentDate = new Date();
-
-// @route   GET api/users
-// @desc    Get all userss
+// @route   GET api/auth
+// @desc    Get all auths
 // @access  Private
 
-// @route   POST api/users
-// @desc    add a users
+router.get("/", auth, async (req, res) => {
+  try {
+    // req.user is assign in the middleware
+    const user = await BackendUser.findById(req.user.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json("Server error");
+  }
+});
+
+// @route   POST api/auth
+// @desc    add a auth
 // @access  Private
 
 router.post(
   "/",
   [
-    check("userName", "Username is required!").not().isEmpty(),
     check("email", "Please insert a valid E-mail").isEmail(),
-    check(
-      "password",
-      "Please insert a valid password with 6 or more characters"
-    ).isLength({ min: 6 }),
+    check("password", "Password is required").exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -35,27 +42,18 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { userName, email, password } = req.body;
+    const { email, password } = req.body;
 
     try {
       let user = await BackendUser.findOne({ email });
 
-      if (user) {
-        return res.status(400).json({ msg: "Username already exists!" });
+      if (!user) {
+        return res.status(400).json({ msg: "Invalid credentials" });
       }
 
-      user = new BackendUser({
-        userName,
-        email,
-        password,
-      });
+      const isMatch = await bcrypt.compare(password, user.password);
 
-      const salt = await bcrypt.genSalt(10);
-
-      // insert the hashed password into the obj
-      user.password = await bcrypt.hash(password, salt);
-
-      await user.save();
+      if (!isMatch) res.status(400).json({ msg: "Invalid Credentials" });
 
       const payload = {
         user: {
@@ -81,12 +79,12 @@ router.post(
   }
 );
 
-// @route   PUT api/users/:id
-// @desc    Update users
+// @route   PUT api/auth/:id
+// @desc    Update auth
 // @access  Private
 
-// @route   DELETE api/users/:id
-// @desc    Delete users
+// @route   DELETE api/auth/:id
+// @desc    Delete auth
 // @access  Private
 
 module.exports = router;
