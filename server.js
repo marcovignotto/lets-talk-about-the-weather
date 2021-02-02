@@ -1,5 +1,8 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
+
+var cors = require("cors");
+
 const config = require("config");
 
 const app = express();
@@ -7,7 +10,7 @@ const app = express();
 // connect Mongo DB
 connectDB();
 
-// get weather
+app.use(cors());
 
 // Middleware
 app.use(express.json({ extended: false }));
