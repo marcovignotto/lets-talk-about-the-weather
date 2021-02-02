@@ -1,14 +1,14 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
-const populateDbWeather = require("./src/components/populateDbWeather");
+const config = require("config");
 
 const app = express();
 
-// get users
-
 // connect Mongo DB
 connectDB();
+const populateDbWeather = require("./src/components/populateDbWeather");
 // connectDB().then((res) => populateDbWeather());
+const path = require("path");
 
 // get weather
 
@@ -23,6 +23,16 @@ app.get("/", (req, res) =>
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/general", require("./routes/general"));
 
-const PORT = process.env.PORT || 5000;
+// is production
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("client/build"));
+
+//   app.get("*", (req, res) =>
+//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+//   );
+// }
+
+const PORT = process.env.PORT || config.get("server.PORT");
+
+app.listen(PORT, () => console.log(`Server started`));

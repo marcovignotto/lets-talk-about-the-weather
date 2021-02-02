@@ -1,6 +1,7 @@
 const axios = require("axios");
+const config = require("config");
 
-const URL_POST = "http://127.0.0.1:5000/api/general/6017c8b6ee1e290f38a21a9f";
+const URL_POST = config.get("localApi.urlPost");
 
 // const currentDate = new Date();
 // const timestamp = currentDate.getTime();

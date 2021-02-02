@@ -1,17 +1,3 @@
-// // create positions
-// let posArr = [];
-// function makePosArr(start, total) {
-//   for (let i = start; i < total + 1; i++) {
-//     posArr.push(i);
-//   }
-
-//   // delete second position
-//   return posArr.splice(
-//     posArr.find((x) => x === start + 1),
-//     1
-//   );
-// }
-
 const User = require("../models/User");
 
 const USERS = [

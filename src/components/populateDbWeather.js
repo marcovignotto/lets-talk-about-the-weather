@@ -1,4 +1,5 @@
 const axios = require("axios");
+const config = require("config");
 var CronJob = require("cron").CronJob;
 
 const dbCleaning = require("../../config/dbDelete");
@@ -10,14 +11,14 @@ const allUsers = require("../../data/users");
 // @get request
 
 const getWeather = async (firstName, location, language, units) => {
-  const API_URL = "https://api.openweathermap.org/data/2.5/weather";
-  const API_KEY = "386d2fb975cfed105bf736e651309f91";
+  const API_URL = config.get("openWeartherAPI.apiUrl");
+  const API_KEY = config.get("openWeartherAPI.apiKey");
   const LOCATION_CODE = location;
   const LANG = language;
   const UNITS = units;
   const FULL_API_URL = `${API_URL}?q=${LOCATION_CODE}&units=${UNITS}&appid=${API_KEY}&lang=${LANG}`;
 
-  const URL_POST = "http://127.0.0.1:5000/api/locations";
+  const URL_POST = config.get("localApi.urlGet");
 
   try {
     const res = await axios.get(FULL_API_URL);
