@@ -6,9 +6,6 @@ const app = express();
 
 // connect Mongo DB
 connectDB();
-const populateDbWeather = require("./src/components/populateDbWeather");
-// connectDB().then((res) => populateDbWeather());
-const path = require("path");
 
 // get weather
 
