@@ -14,7 +14,7 @@ const client = new MongoClient(db, dbOptions);
 const dbCleaning = async () => {
   try {
     await client.connect();
-    // const database = client.db("test");
+    const database = client.db("test");
     const collection = database.collection("locations");
 
     const query = {};

@@ -8,7 +8,6 @@ const dbCleaning = require("../config/dbDelete");
 const { check, validationResult } = require("express-validator");
 
 const Location = require("../models/Location");
-const BackendUser = require("../models/BackendUser");
 
 // @route   GET api/location
 // @desc    Get all locations
@@ -32,6 +31,7 @@ router.get("/", auth, async (req, res) => {
 
 router.post(
   "/",
+  auth,
   //   [
   //     check("Location", "Task is required").not().isEmpty(),
   //     check("priority", "Give it a priority").not().isEmpty(),

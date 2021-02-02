@@ -51,7 +51,11 @@ const getWeather = async (firstName, location, language, units) => {
     // SEND
     const options = {
       method: "post",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Authorization: config.get("authLocalApi.Bearer"),
+      },
       url: URL_POST,
       data: objLocation,
       transformResponse: [
@@ -96,7 +100,7 @@ var job = new CronJob(
 );
 job.start();
 
-// module.exports = populateDbWeather;
+module.exports = populateDbWeather;
 
 // console.log(res.data);
 // console.log(name);

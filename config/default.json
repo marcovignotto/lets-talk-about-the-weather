@@ -15,7 +15,7 @@
     "URI": "mongodb+srv://marco123:marco123@cluster0-mjoj6.mongodb.net/test?retryWrites=true&w=majority"
   },
   "authLocalApi": {
-    "Bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxOTQwZTU4OGFjNmYyNmI0N2UzN2Q3In0sImlhdCI6MTYxMjI2ODg4OSwiZXhwIjoxNjEyNjI4ODg5fQ.e645a39in2Z5jl43sWaltfOfFc4p98oYpYeDgegx6YQ",
+    "Bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxOTQwZTU4OGFjNmYyNmI0N2UzN2Q3In0sImlhdCI6MTYxMjI2ODg4OSwiZXhwIjoxNjEyNjI4ODg5fQ.e645a39in2Z5jl43sWaltfOfFc4p98oYpYeDgegx6YQ",
     "jwtSecret": "mySecretSecretMy"
   }
 }
