@@ -7,7 +7,8 @@ const app = express();
 // get users
 
 // connect Mongo DB
-connectDB().then((res) => populateDbWeather());
+connectDB();
+// connectDB().then((res) => populateDbWeather());
 
 // get weather
 

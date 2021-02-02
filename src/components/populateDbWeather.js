@@ -1,4 +1,5 @@
 const axios = require("axios");
+var CronJob = require("cron").CronJob;
 
 const dbCleaning = require("../../config/dbDelete");
 
@@ -71,18 +72,30 @@ const getWeather = async (firstName, location, language, units) => {
 const populateDbWeather = () => {
   updateGeneral().then((res) => {
     if (res.status >= 200 && res.status < 399) {
-      // dbCleaning().then((res) => {
-      //   if (res.result.ok >= 1) {
-      //     allUsers.map((x) =>
-      //       getWeather(x.firstName, x.location, x.language, x.unit)
-      //     );
-      //   }
-      // });
+      dbCleaning().then((res) => {
+        if (res.result.ok >= 1) {
+          console.log("DB Populated");
+          allUsers.map((x) =>
+            getWeather(x.firstName, x.location, x.language, x.unit)
+          );
+        }
+      });
     }
   });
 };
 
-module.exports = populateDbWeather;
+var job = new CronJob(
+  "0 */30 * * * *",
+  function () {
+    populateDbWeather();
+  },
+  null,
+  true,
+  "Europe/Berlin"
+);
+job.start();
+
+// module.exports = populateDbWeather;
 
 // console.log(res.data);
 // console.log(name);
