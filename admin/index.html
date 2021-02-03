@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
@@ -11,41 +13,24 @@
         <div class="col-4"></div>
         <div class="col-4">
           <h3>Login</h3>
+          <form action="">
+            <input
+              class="input-text-email email"
+              type="email"
+              placeholder="example@email.com"
+            />
+
+            <input
+              class="input-text-email password"
+              type="password"
+              placeholder="password"
+            />
+            <input class="btn-login" type="submit" value="Submit" />
+          </form>
         </div>
         <div class="col-4"></div>
       </div>
     </div>
-    <script>
-      window.addEventListener("load", function (ev) {
-        sessionStorage.setItem(
-          "MyUniqueUserToken",
-          JSON.stringify(
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxYTc5YWY2OTY1YzAxZTM2ZDBlNmEyIn0sImlhdCI6MTYxMjM0NzkyNH0.sPxO1VNU3zJEQZFkCCluwomx9OXJMKgcG0ajTGBaH58"
-          )
-        );
-
-        let url = "http://127.0.0.1:5000/api/locations";
-        // let url = "https://jsonplaceholder.typicode.com/posts";
-
-        let token = JSON.parse(sessionStorage.getItem("MyUniqueUserToken"));
-
-        let h = new Headers();
-        h.append("Authorization", `Bearer ${token}`);
-
-        let req = new Request(url, {
-          method: "GET",
-          mode: "cors",
-          headers: h,
-        });
-        fetch(req)
-          .then((resp) => resp.json())
-          .then((data) => {
-            console.log(data[0]);
-          })
-          .catch((err) => {
-            console.error(err.message);
-          });
-      });
-    </script>
+    <script src="scripts/index.js"></script>
   </body>
 </html>

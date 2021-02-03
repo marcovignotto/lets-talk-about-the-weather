@@ -6,6 +6,7 @@ module.exports = function (req, res, next) {
   // const token = req.header("x-auth-token");
   // for bearer token auth
   const token = req.header("Authorization").split(" ")[1];
+  console.log(token);
 
   if (!token) res.status(401).json({ msg: "No token, no auth!" });
 
