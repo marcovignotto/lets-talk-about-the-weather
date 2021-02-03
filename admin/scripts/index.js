@@ -2,6 +2,7 @@
 // import { gridItem } from "./gridItem.js";
 
 // DOM
+const formLogin = document.querySelector(".form__login");
 const btnLogin = document.querySelector(".btn-login");
 const emailInput = document.querySelector(".email");
 const emailPassword = document.querySelector(".password");
@@ -59,6 +60,8 @@ const gridItem = (firstName, location, language, unit) => {
 
 // LIST LOCATIONS - NOT init
 const listLocations = async (token) => {
+  formLogin.remove();
+
   try {
     const optionsPostLocations = {
       method: "get",
@@ -92,7 +95,11 @@ const listLocations = async (token) => {
 // Check Token for listLocations()
 if (sessionStorage.getItem("isAuthenticated")) {
   // get user token and pass it as argument
+  formLogin.classList.add("hide");
   listLocations(sessionStorage.getItem("UserToken"));
+}
+if (!sessionStorage.getItem("isAuthenticated")) {
+  formLogin.classList.remove("hide");
 }
 
 // SEND LOGIN
