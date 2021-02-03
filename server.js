@@ -1,6 +1,11 @@
 const express = require("express");
 const connectDB = require("./config/db.js");
 
+const auth = require("./middleware/auth");
+const basicAuth = require("express-basic-auth");
+
+var path = require("path");
+
 var cors = require("cors");
 
 const config = require("config");
@@ -28,13 +33,19 @@ app.use((req, res, next) => {
   next();
 });
 
+const adminAuthKeys = {
+  admin: "123456",
+};
+
 // routes
+
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/general", require("./routes/general"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/auth", require("./routes/auth"));
 
-// is production
+// HTML ADMIN
+app.use("/admin", express.static(path.join(__dirname, "admin")));
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static("client/build"));
