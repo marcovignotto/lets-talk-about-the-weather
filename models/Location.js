@@ -13,6 +13,10 @@ const LocationSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  unit: {
+    type: String,
+    require: true,
+  },
   mainWeather: {
     type: String,
     require: true,
@@ -40,13 +44,3 @@ const LocationSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model("location", LocationSchema);
-
-// name
-// language
-
-// getLocation = res.name,
-// getMain = res.weather[0].main,
-// getIcon = res.weather[0].icon,
-// getMainDesc = res.weather[0].description,
-// getTemp = res.main.temp,
-// getWind = res.wind.speed,

@@ -41,12 +41,12 @@ const allWeatherUsers = async () => {
 
 // @get request
 
-const getWeather = async (firstName, location, language, units) => {
+const getWeather = async (firstName, location, language, unitLocation) => {
   const API_URL = config.get("openWeartherAPI.apiUrl");
   const API_KEY = config.get("openWeartherAPI.apiKey");
   const LOCATION_CODE = location;
   const LANG = language;
-  const UNITS = units;
+  const UNITS = unitLocation;
   const FULL_API_URL = `${API_URL}?q=${LOCATION_CODE}&units=${UNITS}&appid=${API_KEY}&lang=${LANG}`;
 
   const URL_POST = config.get("localApi.urlGet");
@@ -72,6 +72,7 @@ const getWeather = async (firstName, location, language, units) => {
       firstName,
       language,
       location: name,
+      unit: unitLocation,
       mainWeather: weather[0].main,
       icon: weather[0].icon,
       description: weather[0].description,
@@ -106,7 +107,6 @@ const getWeather = async (firstName, location, language, units) => {
 // populate
 
 const populateDbWeather = () => {
-  console.log("pop started");
   dbCleaning().then((res) => {
     if (res.result.ok >= 1) {
       allWeatherUsers().then((res) => {

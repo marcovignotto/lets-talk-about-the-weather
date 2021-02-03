@@ -23,17 +23,17 @@ const gridItem = (firstName, location, language, unit) => {
   firstNameCol.innerHTML = firstName;
 
   const locationCol = document.createElement("div");
-  locationCol.className = "col-3 location";
+  locationCol.className = "col-4 location";
 
   locationCol.innerHTML = location;
 
   const languageCol = document.createElement("div");
-  languageCol.className = "col-3 language";
+  languageCol.className = "col-1 language";
 
   languageCol.innerHTML = language;
 
   const unitCol = document.createElement("div");
-  unitCol.className = "col-3 unit";
+  unitCol.className = "col-2 unit";
 
   unitCol.innerHTML = unit;
 
