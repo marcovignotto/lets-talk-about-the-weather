@@ -6,7 +6,36 @@ const dbCleaning = require("../../config/dbDelete");
 
 const updateGeneral = require("./updateGeneral");
 
+// URLs
+
+const URL_GET_WEATHER_USERS = config.get("localApi.urlGetWeatherUsers");
+
+// Arrays
+let allWeatherUsersDB = [];
+
 // const allUsers = require("../../data/users");
+const allWeatherUsers = async () => {
+  const options = {
+    method: "get",
+    headers: {
+      // "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      // Authorization: config.get("authLocalApi.Bearer"),
+    },
+    url: URL_GET_WEATHER_USERS,
+    transformResponse: [
+      (data) => {
+        // transform the response
+        return data;
+      },
+    ],
+  };
+
+  const res = await axios(options);
+  allWeatherUsersDB = JSON.parse(res.data);
+};
+
+allWeatherUsers();
 
 // @get request
 
@@ -75,30 +104,30 @@ const getWeather = async (firstName, location, language, units) => {
 // populate
 
 const populateDbWeather = () => {
-  updateGeneral().then((res) => {
-    if (res.status >= 200 && res.status < 399) {
-      dbCleaning().then((res) => {
-        if (res.result.ok >= 1) {
-          console.log("DB Populated");
-          allUsers.map((x) =>
-            getWeather(x.firstName, x.location, x.language, x.unit)
-          );
-        }
-      });
+  // updateGeneral().then((res) => {
+  // if (res.status >= 200 && res.status < 399) {
+  dbCleaning().then((res) => {
+    if (res.result.ok >= 1) {
+      console.log("DB Populated");
+      allWeatherUsersDB.map((x) =>
+        getWeather(x.firstName, x.location, x.language, x.unit)
+      );
     }
   });
+  // }
+  // });
 };
 
-// var job = new CronJob(
-//   "0 */30 * * * *",
-//   function () {
-//     populateDbWeather();
-//   },
-//   null,
-//   true,
-//   "Europe/Berlin"
-// );
-// job.start();
+var job = new CronJob(
+  "0 */30 * * * *",
+  function () {
+    populateDbWeather();
+  },
+  null,
+  true,
+  "Europe/Berlin"
+);
+job.start();
 
 module.exports = populateDbWeather;
 

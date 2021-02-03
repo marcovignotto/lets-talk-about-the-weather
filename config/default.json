@@ -9,7 +9,8 @@
   },
   "localApi": {
     "urlGet": "http://127.0.0.1:5000/api/locations",
-    "urlPost": "http://127.0.0.1:5000/api/general/6017c8b6ee1e290f38a21a9f"
+    "urlPost": "http://127.0.0.1:5000/api/general/6017c8b6ee1e290f38a21a9f",
+    "urlGetWeatherUsers": "http://127.0.0.1:5000/api/weatherusers"
   },
   "mongoDb": {
     "URI": "mongodb+srv://marco123:marco123@cluster0-mjoj6.mongodb.net/test?retryWrites=true&w=majority"

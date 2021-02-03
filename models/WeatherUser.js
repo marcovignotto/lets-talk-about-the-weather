@@ -13,6 +13,10 @@ const WeatherUser = mongoose.Schema({
     type: String,
     require: true,
   },
+  unit: {
+    type: String,
+    require: true,
+  },
   date: {
     type: Date,
     default: Date.now,

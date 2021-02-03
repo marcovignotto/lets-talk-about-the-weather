@@ -61,8 +61,6 @@ router.post(
         unit,
       });
 
-      console.log(newWeatherUser);
-
       const addUser = await newWeatherUser.save();
 
       res.json(addUser);
