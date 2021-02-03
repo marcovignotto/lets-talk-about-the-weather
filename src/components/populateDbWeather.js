@@ -6,7 +6,7 @@ const dbCleaning = require("../../config/dbDelete");
 
 const updateGeneral = require("./updateGeneral");
 
-const allUsers = require("../../data/users");
+// const allUsers = require("../../data/users");
 
 // @get request
 
@@ -89,16 +89,16 @@ const populateDbWeather = () => {
   });
 };
 
-var job = new CronJob(
-  "0 */30 * * * *",
-  function () {
-    populateDbWeather();
-  },
-  null,
-  true,
-  "Europe/Berlin"
-);
-job.start();
+// var job = new CronJob(
+//   "0 */30 * * * *",
+//   function () {
+//     populateDbWeather();
+//   },
+//   null,
+//   true,
+//   "Europe/Berlin"
+// );
+// job.start();
 
 module.exports = populateDbWeather;
 

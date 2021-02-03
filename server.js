@@ -40,8 +40,9 @@ const adminAuthKeys = {
 // routes
 
 app.use("/api/locations", require("./routes/locations"));
-app.use("/api/general", require("./routes/general"));
+// app.use("/api/general", require("./routes/general"));
 app.use("/api/users", require("./routes/users"));
+app.use("/api/weatherusers", require("./routes/weatherUsers"));
 app.use("/api/auth", require("./routes/auth"));
 
 // HTML ADMIN
