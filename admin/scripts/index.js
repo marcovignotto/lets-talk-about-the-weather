@@ -8,9 +8,10 @@ const sendData = async (e) => {
   e.preventDefault();
 
   const URL_POST = "http://localhost:5000/api/auth";
+  const URL_GET = "http://127.0.0.1:5000/api/locations";
 
   try {
-    const options = {
+    const optionsPostAuth = {
       method: "post",
 
       data: {
@@ -26,15 +27,31 @@ const sendData = async (e) => {
       ],
     };
 
-    const res = await axios(options);
+    const res = await axios(optionsPostAuth);
 
-    //gives token to put into session storage and
+    const { token } = JSON.parse(res.data);
 
-    //   to use with bearer auth
+    sessionStorage.setItem("UserToken", JSON.stringify(token));
 
-    console.log(res.data);
+    const optionsPostLocation = {
+      method: "get",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      url: URL_GET,
+      transformResponse: [
+        (data) => {
+          // transform the response
+          return data;
+        },
+      ],
+    };
 
-    return JSON.parse(res.data);
+    await axios(optionsPostLocation);
+
+    // return JSON.parse(res.data);
   } catch (e) {
     console.error(e);
   }
@@ -43,19 +60,12 @@ const sendData = async (e) => {
 btnLogin.addEventListener("click", sendData);
 
 window.addEventListener("load", function (ev) {
-  sessionStorage.setItem(
-    "MyUniqueUserToken",
-    JSON.stringify(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxYTc5YWY2OTY1YzAxZTM2ZDBlNmEyIn0sImlhdCI6MTYxMjM0NzkyNH0.sPxO1VNU3zJEQZFkCCluwomx9OXJMKgcG0ajTGBaH58"
-    )
-  );
-
   // let url = "https://jsonplaceholder.typicode.com/posts";
 
   let token = JSON.parse(sessionStorage.getItem("MyUniqueUserToken"));
 
   let h = new Headers();
-  h.append("Authorization", `Bearer ${token}`);
+  //   h.append("Authorization", `Bearer ${token}`);
 
   // let req = new Request(url, {
   //   method: "GET",
