@@ -1,14 +1,45 @@
+// DOM
 const btnLogin = document.querySelector(".btn-login");
-
 const emailInput = document.querySelector(".email");
-
 const emailPassword = document.querySelector(".password");
 
-const sendData = async (e) => {
-  e.preventDefault();
+// URLs
+const URL_POST = "http://localhost:5000/api/auth";
+const URL_GET = "http://127.0.0.1:5000/api/locations";
 
-  const URL_POST = "http://localhost:5000/api/auth";
-  const URL_GET = "http://127.0.0.1:5000/api/locations";
+// LIST LOCATIONS - NOT init
+const listLocations = async (token) => {
+  const optionsPostLocations = {
+    method: "get",
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    url: URL_GET,
+    transformResponse: [
+      (data) => {
+        // transform the response
+        return data;
+      },
+    ],
+  };
+
+  resLocations = await axios(optionsPostLocations);
+  console.log(JSON.parse(resLocations.data));
+};
+
+// END LIST LOCATIONS
+
+// Check Token for listLocations()
+if (sessionStorage.getItem("isAuthenticated")) {
+  // get user token and pass it as argument
+  listLocations(sessionStorage.getItem("UserToken"));
+}
+
+// SEND LOGIN
+const sendLogin = async (e) => {
+  e.preventDefault();
 
   try {
     const optionsPostAuth = {
@@ -31,9 +62,9 @@ const sendData = async (e) => {
 
     const { token } = JSON.parse(res.data);
 
-    sessionStorage.setItem("UserToken", JSON.stringify(token));
+    sessionStorage.setItem("UserToken", token);
 
-    const optionsPostLocation = {
+    const optionsPostLocations = {
       method: "get",
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -49,7 +80,10 @@ const sendData = async (e) => {
       ],
     };
 
-    await axios(optionsPostLocation);
+    resLocations = await axios(optionsPostLocations);
+
+    if (resLocations.status >= 200 && resLocations.status <= 399)
+      sessionStorage.setItem("isAuthenticated", true);
 
     // return JSON.parse(res.data);
   } catch (e) {
@@ -57,27 +91,7 @@ const sendData = async (e) => {
   }
 };
 
-btnLogin.addEventListener("click", sendData);
+// END SEND LOGIN
 
-window.addEventListener("load", function (ev) {
-  // let url = "https://jsonplaceholder.typicode.com/posts";
-
-  let token = JSON.parse(sessionStorage.getItem("MyUniqueUserToken"));
-
-  let h = new Headers();
-  //   h.append("Authorization", `Bearer ${token}`);
-
-  // let req = new Request(url, {
-  //   method: "GET",
-  //   mode: "cors",
-  //   headers: h,
-  // });
-  // fetch(req)
-  //   .then((resp) => resp.json())
-  //   .then((data) => {
-  //     console.log(data[0]);
-  //   })
-  //   .catch((err) => {
-  //     console.error(err.message);
-  //   });
-});
+// BTNs
+btnLogin.addEventListener("click", sendLogin);
