@@ -46,6 +46,7 @@ app.use("/api/auth", require("./routes/auth"));
 
 // HTML ADMIN
 app.use("/admin", express.static(path.join(__dirname, "admin")));
+// app.use("/admin/*", auth, express.static(path.join(__dirname, "admin")));
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static("client/build"));

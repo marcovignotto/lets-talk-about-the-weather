@@ -6,28 +6,31 @@
     <title>Admin</title>
   </head>
   <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+          <h3>Login</h3>
+        </div>
+        <div class="col-4"></div>
+      </div>
+    </div>
     <script>
-      //   document.addEventListener("DOMContentLoaded", () => {
-      //     document.getElementById("btnFetch").addEventListener("click", sendReq);
-      //     //pretend to get a token after logging in
-      //     sessionStorage.setItem(
-      //       "MyUniqueUserToken",
-      //       JSON.stringify(
-      //         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-      //       )
-      //     );
-      //   });
       window.addEventListener("load", function (ev) {
+        sessionStorage.setItem(
+          "MyUniqueUserToken",
+          JSON.stringify(
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxYTc5YWY2OTY1YzAxZTM2ZDBlNmEyIn0sImlhdCI6MTYxMjM0NzkyNH0.sPxO1VNU3zJEQZFkCCluwomx9OXJMKgcG0ajTGBaH58"
+          )
+        );
+
         let url = "http://127.0.0.1:5000/api/locations";
         // let url = "https://jsonplaceholder.typicode.com/posts";
 
-        // let token = JSON.parse(sessionStorage.getItem("MyUniqueUserToken"));
+        let token = JSON.parse(sessionStorage.getItem("MyUniqueUserToken"));
 
         let h = new Headers();
-        h.append(
-          "Authorization",
-          `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxOTQwZTU4OGFjNmYyNmI0N2UzN2Q3In0sImlhdCI6MTYxMjI2ODg4OSwiZXhwIjoxNjEyNjI4ODg5fQ.e645a39in2Z5jl43sWaltfOfFc4p98oYpYeDgegx6YQ`
-        );
+        h.append("Authorization", `Bearer ${token}`);
 
         let req = new Request(url, {
           method: "GET",
