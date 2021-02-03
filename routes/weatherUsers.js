@@ -18,7 +18,6 @@ const WeatherUser = require("../models/WeatherUser");
 // @access  Private
 
 router.get("/", async (req, res) => {
-  console.log(req);
   try {
     const weatherUsers = await WeatherUser.find({
       weatherUsers: req.weatherUsers,
@@ -36,56 +35,43 @@ router.get("/", async (req, res) => {
 // @desc    add a weatherusers
 // @access  Private
 
-// router.post(
-//   "/",
-//   auth,
-//   //   [
-//   //     check("Location", "Task is required").not().isEmpty(),
-//   //     check("priority", "Give it a priority").not().isEmpty(),
-//   //   ],
-//   async (req, res) => {
-//     // const errors = validationResult(req);
-//     // if (!errors.isEmpty()) {
-//     //   return res.status(400).json({ errors: errors.array() });
-//     // }
+router.post(
+  "/",
+  //   auth,
+  //   [
+  //     check("Location", "Task is required").not().isEmpty(),
+  //     check("priority", "Give it a priority").not().isEmpty(),
+  //   ],
+  async (req, res) => {
+    // const errors = validationResult(req);
+    // if (!errors.isEmpty()) {
+    //   return res.status(400).json({ errors: errors.array() });
+    // }
 
-//     // console.log(req);
-//     // console.log(res);
+    // console.log(req);
+    // console.log(res);
 
-//     const {
-//       firstName,
-//       language,
-//       description,
-//       icon,
-//       location,
-//       mainWeather,
-//       temperature,
-//       wind,
-//     } = req.body;
+    const { firstName, language, location, unit } = req.body;
 
-//     try {
-//       const newLocation = new Location({
-//         firstName,
-//         language,
-//         description,
-//         icon,
-//         location,
-//         mainWeather,
-//         temperature,
-//         wind,
-//       });
+    try {
+      const newWeatherUser = new WeatherUser({
+        firstName,
+        language,
+        location,
+        unit,
+      });
 
-//       //   dbCleaning().catch(console.dir);
+      console.log(newWeatherUser);
 
-//       const toDo = await newLocation.save();
+      const addUser = await newWeatherUser.save();
 
-//       res.json(toDo);
-//     } catch (error) {
-//       console.error(error.message);
-//       res.status(500).send("Server Error");
-//     }
-//   }
-// );
+      res.json(addUser);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 // @route   PUT api/weatherusers/:id
 // @desc    Update weatherusers
