@@ -6,8 +6,6 @@ const emailPassword = document.querySelector(".password");
 
 const sendData = async (e) => {
   e.preventDefault();
-  console.log(emailInput.value);
-  console.log(emailPassword.value);
 
   const URL_POST = "http://localhost:5000/api/auth";
 
@@ -16,8 +14,8 @@ const sendData = async (e) => {
       method: "post",
 
       data: {
-        email: "admin@gmail.com",
-        password: "123456",
+        email: emailInput.value,
+        password: emailPassword.value,
       },
       url: URL_POST,
       transformResponse: [
