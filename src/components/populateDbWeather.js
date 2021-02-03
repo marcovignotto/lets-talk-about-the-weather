@@ -15,27 +15,29 @@ let allWeatherUsersDB = [];
 
 // const allUsers = require("../../data/users");
 const allWeatherUsers = async () => {
-  const options = {
-    method: "get",
-    headers: {
-      // "Access-Control-Allow-Origin": "*",
-      "Content-Type": "application/json",
-      // Authorization: config.get("authLocalApi.Bearer"),
-    },
-    url: URL_GET_WEATHER_USERS,
-    transformResponse: [
-      (data) => {
-        // transform the response
-        return data;
+  try {
+    const options = {
+      method: "get",
+      headers: {
+        // "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Authorization: config.get("authLocalApi.Bearer"),
       },
-    ],
-  };
+      url: URL_GET_WEATHER_USERS,
+      transformResponse: [
+        (data) => {
+          // transform the response
+          return data;
+        },
+      ],
+    };
 
-  const res = await axios(options);
-  allWeatherUsersDB = JSON.parse(res.data);
+    const res = await axios(options);
+    return JSON.parse(res.data);
+  } catch (err) {
+    console.error(err);
+  }
 };
-
-allWeatherUsers();
 
 // @get request
 
@@ -104,16 +106,23 @@ const getWeather = async (firstName, location, language, units) => {
 // populate
 
 const populateDbWeather = () => {
-  // updateGeneral().then((res) => {
-  // if (res.status >= 200 && res.status < 399) {
+  console.log("pop started");
   dbCleaning().then((res) => {
     if (res.result.ok >= 1) {
-      console.log("DB Populated");
-      allWeatherUsersDB.map((x) =>
-        getWeather(x.firstName, x.location, x.language, x.unit)
-      );
+      allWeatherUsers().then((res) => {
+        console.log("DB Populated");
+        res.map((x) => getWeather(x.firstName, x.location, x.language, x.unit));
+      });
     }
   });
+  // dbCleaning().then((res) => {
+  //   if (res.result.ok >= 1) {
+  //     console.log("DB Populated");
+  //     allWeatherUsersDB.map((x) =>
+  //       getWeather(x.firstName, x.location, x.language, x.unit)
+  //     );
+  //   }
+  // });
   // }
   // });
 };
