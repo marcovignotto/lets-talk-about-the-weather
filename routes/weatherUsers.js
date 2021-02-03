@@ -17,7 +17,7 @@ const WeatherUser = require("../models/WeatherUser");
 // @desc    Get all weatherusers
 // @access  Private
 
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
     const weatherUsers = await WeatherUser.find({
       weatherUsers: req.weatherUsers,
@@ -37,6 +37,7 @@ router.get("/", async (req, res) => {
 
 router.post(
   "/",
+  auth,
   //   auth,
   //   [
   //     check("Location", "Task is required").not().isEmpty(),
@@ -75,7 +76,7 @@ router.post(
 // @desc    Update weatherusers
 // @access  Private
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { firstName, language, location, unit } = req.body;
 
   const userFields = {};
@@ -106,7 +107,7 @@ router.put("/:id", async (req, res) => {
 // @desc    Delete weatherusers
 // @access  Private
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     let user = await WeatherUser.findById(req.params.id);
 
