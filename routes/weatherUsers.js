@@ -77,15 +77,42 @@ router.post(
 // @desc    Update weatherusers
 // @access  Private
 
+router.put("/:id", async (req, res) => {
+  const { firstName, language, location, unit } = req.body;
+
+  const userFields = {};
+  if (firstName) userFields.firstName = firstName;
+  if (language) userFields.language = language;
+  if (location) userFields.location = location;
+  if (unit) userFields.unit = unit;
+
+  try {
+    let user = await WeatherUser.findById(req.params.id);
+
+    if (!user) return res.status(404).json({ msg: "Task not found" });
+
+    user = await WeatherUser.findByIdAndUpdate(
+      req.params.id,
+      { $set: userFields },
+      { new: true }
+    );
+
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
 // @route   DELETE api/weatherusers/:id
 // @desc    Delete weatherusers
 // @access  Private
 
 router.delete("/:id", async (req, res) => {
   try {
-    let task = await WeatherUser.findById(req.params.id);
+    let user = await WeatherUser.findById(req.params.id);
 
-    if (!task) return res.status(404).json({ msg: "User not found" });
+    if (!user) return res.status(404).json({ msg: "User not found" });
 
     await WeatherUser.findByIdAndRemove(req.params.id);
 
