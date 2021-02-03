@@ -81,4 +81,19 @@ router.post(
 // @desc    Delete weatherusers
 // @access  Private
 
+router.delete("/:id", async (req, res) => {
+  try {
+    let task = await WeatherUser.findById(req.params.id);
+
+    if (!task) return res.status(404).json({ msg: "User not found" });
+
+    await WeatherUser.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: "User deleted" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
