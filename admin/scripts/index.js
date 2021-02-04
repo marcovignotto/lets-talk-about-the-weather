@@ -121,6 +121,13 @@ if (!sessionStorage.getItem("isAuthenticated")) {
 }
 
 const inputs = {
+  userToUpdate: {
+    _id: "",
+    firstName: "",
+    location: "",
+    language: "",
+    unit: "",
+  },
   id: function (e) {
     return e.target.parentElement.parentElement.getAttribute("data-id");
   },
@@ -185,30 +192,45 @@ const inputs = {
 
     // this.userToUpdate(firstNameCol.value, location, language, unit);
 
-    let objToUpd = {
-      firstName,
-      location,
-      language,
-      unit,
+    // const sendDataForUpd = () => {
+    //   // console.log(firstNameCol.value, location, language, unit);
+    //   let objToUpd = {
+    //     firstName,
+    //     location,
+    //     language,
+    //     unit,
+    //   };
+    //   this.userToUpdate(objToUpd);
+    // };
+    const sendDataForUpd = (a) => {
+      console.log("update data");
+      this.userToUpdate.id = _id;
+      this.userToUpdate.firstName = a;
+      this.userToUpdate.location = locationCol.value;
+      this.userToUpdate.language = languageCol.value;
+      this.userToUpdate.unit = unitCol.value;
     };
-    this.userToUpdate(objToUpd);
-
-    return { row, objToUpd };
+    sendDataForUpd(firstNameCol.value);
+    console.log(this.userToUpdate);
+    // sendDataForUpd();
+    // console.log("firstNameCol.value", firstNameCol.value);
+    return { row };
   },
 
-  userToUpdate: function (objToUpd) {
-    let userToUpdate = {};
-    if (objToUpd === undefined) return userToUpdate;
-    const { firstName, location, language, unit } = objToUpd;
-    userToUpdate = {
-      firstName,
-      // location,
-      // language,
-      // unit,
-    };
-    console.log(userToUpdate);
-    return userToUpdate;
-  },
+  // userToUpdate: function (objToUpd) {
+  //   // console.log(objToUpd);
+  //   // let userToUpdate = {};
+  //   // if (objToUpd === undefined) return userToUpdate;
+  //   const { firstName, location, language, unit } = objToUpd;
+  //   userToUpdate = {
+  //     firstName,
+  //     location,
+  //     language,
+  //     unit,
+  //   };
+  //   console.log(userToUpdate);
+  //   return userToUpdate;
+  // },
 };
 
 // EDIT & DELETE
@@ -382,7 +404,10 @@ const undoEditWeatherUser = (e) => {
 };
 
 const updateWeatherUser = async (e) => {
-  console.log(inputs.userToUpdate());
+  inputs.row().sendDataForUpd();
+  console.log(inputs.userToUpdate);
+
+  // inputs.row().sendDataForUpd();
 
   e.preventDefault();
   // console.log(e.target);
