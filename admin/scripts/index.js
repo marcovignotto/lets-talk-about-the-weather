@@ -137,35 +137,30 @@ const submitEdit = (e) => {
   firstNameCol.setAttribute("type", "text");
   firstNameCol.setAttribute("value", firstName);
 
-  // firstNameCol.innerHTML = firstName;
-
   const locationCol = document.createElement("input");
   locationCol.className = "col-4 edit__input location";
   locationCol.setAttribute("type", "text");
   locationCol.setAttribute("value", location);
-  // locationCol.innerHTML = location;
 
   const languageCol = document.createElement("input");
   languageCol.className = "col-1 edit__input language";
   languageCol.setAttribute("type", "text");
   languageCol.setAttribute("value", language);
-  // languageCol.innerHTML = language;
 
   const unitCol = document.createElement("input");
   unitCol.className = "col-2 edit__input unit";
   unitCol.setAttribute("type", "text");
   unitCol.setAttribute("value", unit);
-  // unitCol.innerHTML = unit;
 
   const editIcon = document.createElement("div");
-  editIcon.className = "col-1 edit__input edit__icon";
+  editIcon.className = "col-1 save__icon";
   editIcon.dataset.id = id;
-  editIcon.innerHTML = `<button class="btn__edit"><i class="fas fa-save"></i></button>`;
+  editIcon.innerHTML = `<button class="btn__update__weather__user"><i class="fas fa-save"></i></button>`;
 
   const deleteIcon = document.createElement("div");
-  deleteIcon.className = "col-1 edit__input delete__icon";
+  deleteIcon.className = "col-1 undo__icon";
   deleteIcon.dataset.id = id;
-  deleteIcon.innerHTML = `<button class="btn__delete"><i class="fas fa-times"></i></button>`;
+  deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
 
   row.innerHTML +=
     firstNameCol.outerHTML +
@@ -176,6 +171,8 @@ const submitEdit = (e) => {
     deleteIcon.outerHTML;
 
   gridItem.after(row);
+
+  iconsEditInit(e, id, firstName, location, language, unit);
 };
 
 const submitDelete = async (e) => {
@@ -297,13 +294,34 @@ btnLogin.addEventListener("click", sendLogin);
 
 // ICONS
 const iconsInit = () => {
-  // document.querySelectorAll(".edit__icon");
-  //     const iconEdit = document.querySelector(".edit__icon");
-  //     const iconDelete = document.querySelector(".delete__icon");
   document
     .querySelectorAll(".edit__icon")
     .forEach((x) => x.addEventListener("click", submitEdit));
   document
     .querySelectorAll(".delete__icon")
     .forEach((x) => x.addEventListener("click", submitDelete));
+};
+
+const iconsEditInit = (e, id, firstName, location, language, unit) => {
+  document
+    .querySelector(".btn__update__weather__user")
+    .addEventListener(
+      "click",
+      updateWeatherUser(e, id, firstName, location, language, unit)
+    );
+  document
+    .querySelector(".btn__undo__weather__user")
+    .addEventListener("click", undoEditWeatherUser);
+};
+
+const undoEditWeatherUser = (e) => {
+  console.log("undo");
+  e.preventDefault();
+  e.target.parentElement.closest(".grid__item__edit").remove();
+};
+
+const updateWeatherUser = (e, id, firstName, location, language, unit) => {
+  console.log("upd weather user");
+  e.preventDefault();
+  console.log(id, firstName, location, language, unit);
 };
