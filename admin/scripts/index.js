@@ -183,7 +183,31 @@ const inputs = {
       editIcon.outerHTML +
       deleteIcon.outerHTML;
 
-    return row;
+    // this.userToUpdate(firstNameCol.value, location, language, unit);
+
+    let objToUpd = {
+      firstName,
+      location,
+      language,
+      unit,
+    };
+    this.userToUpdate(objToUpd);
+
+    return { row, objToUpd };
+  },
+
+  userToUpdate: function (objToUpd) {
+    let userToUpdate = {};
+    if (objToUpd === undefined) return userToUpdate;
+    const { firstName, location, language, unit } = objToUpd;
+    userToUpdate = {
+      firstName,
+      // location,
+      // language,
+      // unit,
+    };
+    console.log(userToUpdate);
+    return userToUpdate;
   },
 };
 
@@ -195,13 +219,15 @@ const submitEdit = (e) => {
 
   inputs
     .gridItem(e)
-    .after(inputs.row(_id, firstName, location, language, unit));
+    .after(inputs.row(_id, firstName, location, language, unit).row);
 
   iconsEditInit();
+
+  // console.log(inputs.userToUpdate());
 };
 
 const addNewUserInputs = (e) => {
-  inputs.menuRow(e).after(inputs.row());
+  inputs.menuRow(e).after(inputs.row().row);
 
   // iconsNewUserInit();
 };
@@ -324,7 +350,6 @@ const sendLogin = async (e) => {
 btnLogin.addEventListener("click", sendLogin);
 
 btnAddUser.addEventListener("click", function (e) {
-  console.log(e.target.parentElement.parentElement.querySelector(".menu"));
   addNewUserInputs(e);
 });
 // ICONS
@@ -357,6 +382,8 @@ const undoEditWeatherUser = (e) => {
 };
 
 const updateWeatherUser = async (e) => {
+  console.log(inputs.userToUpdate());
+
   e.preventDefault();
   // console.log(e.target);
 
@@ -412,33 +439,6 @@ const updateWeatherUser = async (e) => {
   weatherUserObj.firstName = weatherUserObj.first__name;
   delete weatherUserObj.first__name;
 
-  // END OBJ TEST
-
-  // // OBJ OK
-
-  // e.target.parentElement.parentElement.parentElement
-  //   .querySelectorAll("input")
-  //   .forEach((x) => {
-  //     if (x.classList.contains("first__name"))
-  //       weatherUserObj["firstName"] = x.value;
-  //     if (x.classList.contains("location"))
-  //       weatherUserObj["location"] = x.value;
-  //     if (x.classList.contains("language"))
-  //       weatherUserObj["language"] = x.value;
-  //     if (x.classList.contains("unit")) weatherUserObj["unit"] = x.value;
-  //   });
-
-  // // console.log(weatherUserObj);
-  // // END OBJ OK
-
-  // let weatherUserObj = {
-  //   _id: id,
-  //   firstName,
-  //   location,
-  //   language,
-  //   unit,
-  // };
-  // console.log("updateWeatherUser", weatherUserObj);
   try {
     const optionUpdateWeatherUser = {
       method: "put",
@@ -457,7 +457,7 @@ const updateWeatherUser = async (e) => {
       ],
     };
     resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
-    console.log(resUpdateWeatherUser);
+    // console.log(resUpdateWeatherUser);
 
     // if (
     //   resUpdateWeatherUser.status >= 200 &&
