@@ -175,7 +175,7 @@ const submitEdit = (e) => {
 
   let weatherUserObj = {
     _id: id,
-    firstName: this.firstNameCol.value,
+    firstName: firstNameCol.value,
     location,
     language,
     unit,
@@ -184,7 +184,12 @@ const submitEdit = (e) => {
   // iconsEditInit(id, firstName, location, language, unit);
   console.log(firstNameCol.value);
   console.log(weatherUserObj);
-  iconsEditInit(weatherUserObj);
+
+  // function getUpdates() {
+  //   console.log(firstNameCol.value);
+  // }
+
+  iconsEditInit();
 };
 
 const submitDelete = async (e) => {
@@ -319,8 +324,8 @@ const iconsInit = () => {
 const iconsEditInit = (weatherUserObj) => {
   document
     .querySelector(".btn__update__weather__user")
-    .addEventListener("click", function () {
-      updateWeatherUser(weatherUserObj);
+    .addEventListener("click", function (e) {
+      updateWeatherUser(e);
     });
   document
     .querySelector(".btn__undo__weather__user")
@@ -333,7 +338,38 @@ const undoEditWeatherUser = (e) => {
   e.target.parentElement.closest(".grid__item__edit").remove();
 };
 
-const updateWeatherUser = async (weatherUserObj) => {
+const updateWeatherUser = async (e) => {
+  e.preventDefault();
+  console.log(e.target);
+
+  let id = e.target.parentElement.parentElement.getAttribute("data-id");
+  let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
+    ".first__name"
+  ).value;
+
+  // let gridItem = e.target.parentElement.closest(".grid__item");
+  console.log(id);
+  console.log(firstName);
+  // console.log(gridItem);
+  let weatherUserObj = {};
+  console.log(e.target.parentElement.parentElement.parentElement);
+  // e.target.parentElement.parentElement.parentElement
+  //   .querySelectorAll("input")
+  //   .forEach((x) => console.log(x.classList.contains("first__name")));
+  weatherUserObj["_id"] = id;
+  e.target.parentElement.parentElement.parentElement
+    .querySelectorAll("input")
+    .forEach((x) => {
+      if (x.classList.contains("first__name"))
+        weatherUserObj["firstName"] = x.value;
+      if (x.classList.contains("location"))
+        weatherUserObj["location"] = x.value;
+      if (x.classList.contains("language"))
+        weatherUserObj["language"] = x.value;
+      if (x.classList.contains("unit")) weatherUserObj["unit"] = x.value;
+    });
+
+  console.log(weatherUserObj);
   // let weatherUserObj = {
   //   _id: id,
   //   firstName,
@@ -341,47 +377,47 @@ const updateWeatherUser = async (weatherUserObj) => {
   //   language,
   //   unit,
   // };
-  console.log("updateWeatherUser", weatherUserObj);
-  try {
-    const optionUpdateWeatherUser = {
-      method: "put",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      url: `${URL_PUT}/${weatherUserObj._id}`,
-      data: weatherUserObj,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
-    resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
-    console.log(resUpdateWeatherUser);
+  // console.log("updateWeatherUser", weatherUserObj);
+  // try {
+  //   const optionUpdateWeatherUser = {
+  //     method: "put",
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     url: `${URL_PUT}/${weatherUserObj._id}`,
+  //     data: weatherUserObj,
+  //     transformResponse: [
+  //       (data) => {
+  //         // transform the response
+  //         return data;
+  //       },
+  //     ],
+  //   };
+  //   resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
+  //   console.log(resUpdateWeatherUser);
 
-    // if (
-    //   resUpdateWeatherUser.status >= 200 &&
-    //   resUpdateWeatherUser.status <= 399
-    // ) {
-    //   console.log("User updated");
-    //   // gridItem.style.transition = "all 2s";
-    //   // // remove class
-    //   // gridItem.classList.remove("row");
-    //   // // instead of removing filling it empty so it removes all the childs
-    //   // gridItem.style.opacity = "0";
-    //   // gridItem.innerHTML = `${userName} successfully removed`;
-    //   // gridItem.style.opacity = "1";
-    //   // setTimeout(() => {
-    //   //   gridItem.style.opacity = "0";
-    //   // }, 1000);
-    //   // setTimeout(() => {
-    //   //   gridItem.remove();
-    //   // }, 3000);
-    // }
-  } catch (err) {
-    console.error(err);
-  }
+  //   // if (
+  //   //   resUpdateWeatherUser.status >= 200 &&
+  //   //   resUpdateWeatherUser.status <= 399
+  //   // ) {
+  //   //   console.log("User updated");
+  //   //   // gridItem.style.transition = "all 2s";
+  //   //   // // remove class
+  //   //   // gridItem.classList.remove("row");
+  //   //   // // instead of removing filling it empty so it removes all the childs
+  //   //   // gridItem.style.opacity = "0";
+  //   //   // gridItem.innerHTML = `${userName} successfully removed`;
+  //   //   // gridItem.style.opacity = "1";
+  //   //   // setTimeout(() => {
+  //   //   //   gridItem.style.opacity = "0";
+  //   //   // }, 1000);
+  //   //   // setTimeout(() => {
+  //   //   //   gridItem.remove();
+  //   //   // }, 3000);
+  //   // }
+  // } catch (err) {
+  //   console.error(err);
+  // }
 };
