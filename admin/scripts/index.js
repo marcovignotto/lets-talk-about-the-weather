@@ -22,6 +22,7 @@ const locationList = document.querySelector(".locations__list");
 const URL_POST = "http://localhost:5000/api/auth";
 const URL_GET = "http://127.0.0.1:5000/api/weatherusers";
 const URL_DELETE = "http://127.0.0.1:5000/api/weatherusers/";
+const URL_PUT = "http://127.0.0.1:5000/api/weatherusers/";
 
 // GRID ITEM
 
@@ -172,7 +173,18 @@ const submitEdit = (e) => {
 
   gridItem.after(row);
 
-  iconsEditInit(e, id, firstName, location, language, unit);
+  let weatherUserObj = {
+    _id: id,
+    firstName: this.firstNameCol.value,
+    location,
+    language,
+    unit,
+  };
+
+  // iconsEditInit(id, firstName, location, language, unit);
+  console.log(firstNameCol.value);
+  console.log(weatherUserObj);
+  iconsEditInit(weatherUserObj);
 };
 
 const submitDelete = async (e) => {
@@ -294,21 +306,22 @@ btnLogin.addEventListener("click", sendLogin);
 
 // ICONS
 const iconsInit = () => {
-  document
-    .querySelectorAll(".edit__icon")
-    .forEach((x) => x.addEventListener("click", submitEdit));
+  document.querySelectorAll(".edit__icon").forEach((x) =>
+    x.addEventListener("click", function (e) {
+      submitEdit(e);
+    })
+  );
   document
     .querySelectorAll(".delete__icon")
     .forEach((x) => x.addEventListener("click", submitDelete));
 };
 
-const iconsEditInit = (e, id, firstName, location, language, unit) => {
+const iconsEditInit = (weatherUserObj) => {
   document
     .querySelector(".btn__update__weather__user")
-    .addEventListener(
-      "click",
-      updateWeatherUser(e, id, firstName, location, language, unit)
-    );
+    .addEventListener("click", function () {
+      updateWeatherUser(weatherUserObj);
+    });
   document
     .querySelector(".btn__undo__weather__user")
     .addEventListener("click", undoEditWeatherUser);
@@ -320,8 +333,55 @@ const undoEditWeatherUser = (e) => {
   e.target.parentElement.closest(".grid__item__edit").remove();
 };
 
-const updateWeatherUser = (e, id, firstName, location, language, unit) => {
-  console.log("upd weather user");
-  e.preventDefault();
-  console.log(id, firstName, location, language, unit);
+const updateWeatherUser = async (weatherUserObj) => {
+  // let weatherUserObj = {
+  //   _id: id,
+  //   firstName,
+  //   location,
+  //   language,
+  //   unit,
+  // };
+  console.log("updateWeatherUser", weatherUserObj);
+  try {
+    const optionUpdateWeatherUser = {
+      method: "put",
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      url: `${URL_PUT}/${weatherUserObj._id}`,
+      data: weatherUserObj,
+      transformResponse: [
+        (data) => {
+          // transform the response
+          return data;
+        },
+      ],
+    };
+    resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
+    console.log(resUpdateWeatherUser);
+
+    // if (
+    //   resUpdateWeatherUser.status >= 200 &&
+    //   resUpdateWeatherUser.status <= 399
+    // ) {
+    //   console.log("User updated");
+    //   // gridItem.style.transition = "all 2s";
+    //   // // remove class
+    //   // gridItem.classList.remove("row");
+    //   // // instead of removing filling it empty so it removes all the childs
+    //   // gridItem.style.opacity = "0";
+    //   // gridItem.innerHTML = `${userName} successfully removed`;
+    //   // gridItem.style.opacity = "1";
+    //   // setTimeout(() => {
+    //   //   gridItem.style.opacity = "0";
+    //   // }, 1000);
+    //   // setTimeout(() => {
+    //   //   gridItem.remove();
+    //   // }, 3000);
+    // }
+  } catch (err) {
+    console.error(err);
+  }
 };

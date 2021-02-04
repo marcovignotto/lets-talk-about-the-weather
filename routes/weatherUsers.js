@@ -88,7 +88,7 @@ router.put("/:id", auth, async (req, res) => {
   try {
     let user = await WeatherUser.findById(req.params.id);
 
-    if (!user) return res.status(404).json({ msg: "Task not found" });
+    if (!user) return res.status(404).json({ msg: "User not found" });
 
     user = await WeatherUser.findByIdAndUpdate(
       req.params.id,
