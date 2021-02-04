@@ -9,6 +9,8 @@ let arrAllUsers = [];
 // login
 const formLogin = document.querySelector(".form__login");
 const btnLogin = document.querySelector(".btn-login");
+// ADD user
+const btnAddUser = document.querySelector(".btn-add-user");
 // forms
 const emailInput = document.querySelector(".email");
 const emailPassword = document.querySelector(".password");
@@ -117,6 +119,31 @@ if (sessionStorage.getItem("isAuthenticated")) {
 if (!sessionStorage.getItem("isAuthenticated")) {
   formLogin.classList.remove("hide");
 }
+
+const inputs = {
+  // e: this.e,
+  // number: this.e.target,
+  // myTarget: this.number,
+  id: function (e) {
+    return e.target.getAttribute("data-id");
+  },
+  menu: function (e) {
+    return e.target.parentElement.closest(".menu");
+  },
+
+  div: function (e) {
+    const row = document.createElement("div");
+    row.className = `row grid__item__edit pb-1`;
+    row.style.backgroundColor = "red";
+    row.innerHTML = this.id(e);
+    this.menu(e).appendChild(row);
+  },
+};
+
+btnAddUser.addEventListener("click", function (e) {
+  console.log(e.target.getAttribute("data-id"));
+  inputs.div(e);
+});
 
 // EDIT & DELETE
 const submitEdit = (e) => {
