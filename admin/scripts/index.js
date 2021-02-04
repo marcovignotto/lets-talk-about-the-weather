@@ -3,7 +3,7 @@
 
 // VAR
 var token = "";
-
+let arrAllUsers = [];
 // DOM
 
 // login
@@ -46,7 +46,6 @@ const gridItem = (firstName, location, language, unit, id) => {
 
   const unitCol = document.createElement("div");
   unitCol.className = "col-2 unit";
-
   unitCol.innerHTML = unit;
 
   const editIcon = document.createElement("div");
@@ -93,9 +92,9 @@ const listUsers = async (token) => {
     };
 
     resUsers = await axios(optionsPostUsers);
-    console.log(JSON.parse(resUsers.data));
+    arrAllUsers = JSON.parse(resUsers.data);
 
-    JSON.parse(resUsers.data).map((x) =>
+    arrAllUsers.map((x) =>
       gridItem(x.firstName, x.location, x.language, x.unit, x._id)
     );
 
@@ -119,7 +118,65 @@ if (!sessionStorage.getItem("isAuthenticated")) {
 }
 
 // EDIT & DELETE
-const submitEdit = () => console.log("edit");
+const submitEdit = (e) => {
+  // get id from event
+  let id = e.target.parentElement.parentElement.getAttribute("data-id");
+  // get grdItem
+  let gridItem = e.target.parentElement.closest(".grid__item");
+  // extract obj
+  let userToEdit = arrAllUsers.find((x) => x._id === id);
+
+  // destructuring
+  const { firstName, location, language, unit } = userToEdit;
+
+  const row = document.createElement("div");
+  row.className = `row grid__item__edit pb-1`;
+
+  const firstNameCol = document.createElement("input");
+  firstNameCol.className = "col-3 edit__input first__name";
+  firstNameCol.setAttribute("type", "text");
+  firstNameCol.setAttribute("value", firstName);
+
+  // firstNameCol.innerHTML = firstName;
+
+  const locationCol = document.createElement("input");
+  locationCol.className = "col-4 edit__input location";
+  locationCol.setAttribute("type", "text");
+  locationCol.setAttribute("value", location);
+  // locationCol.innerHTML = location;
+
+  const languageCol = document.createElement("input");
+  languageCol.className = "col-1 edit__input language";
+  languageCol.setAttribute("type", "text");
+  languageCol.setAttribute("value", language);
+  // languageCol.innerHTML = language;
+
+  const unitCol = document.createElement("input");
+  unitCol.className = "col-2 edit__input unit";
+  unitCol.setAttribute("type", "text");
+  unitCol.setAttribute("value", unit);
+  // unitCol.innerHTML = unit;
+
+  const editIcon = document.createElement("div");
+  editIcon.className = "col-1 edit__input edit__icon";
+  editIcon.dataset.id = id;
+  editIcon.innerHTML = `<button class="btn__edit"><i class="fas fa-save"></i></button>`;
+
+  const deleteIcon = document.createElement("div");
+  deleteIcon.className = "col-1 edit__input delete__icon";
+  deleteIcon.dataset.id = id;
+  deleteIcon.innerHTML = `<button class="btn__delete"><i class="fas fa-times"></i></button>`;
+
+  row.innerHTML +=
+    firstNameCol.outerHTML +
+    locationCol.outerHTML +
+    languageCol.outerHTML +
+    unitCol.outerHTML +
+    editIcon.outerHTML +
+    deleteIcon.outerHTML;
+
+  gridItem.after(row);
+};
 
 const submitDelete = async (e) => {
   e.preventDefault();
@@ -130,48 +187,48 @@ const submitDelete = async (e) => {
 
   let gridItem = e.target.parentElement.closest(".grid__item");
 
-  try {
-    const optionsDeleteWeatherUser = {
-      method: "delete",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      url: `${URL_DELETE}/${id}`,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
+  // try {
+  //   const optionsDeleteWeatherUser = {
+  //     method: "delete",
+  //     headers: {
+  //       "Access-Control-Allow-Origin": "*",
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //     url: `${URL_DELETE}/${id}`,
+  //     transformResponse: [
+  //       (data) => {
+  //         // transform the response
+  //         return data;
+  //       },
+  //     ],
+  //   };
 
-    resDeleteWeatherUser = await axios(optionsDeleteWeatherUser);
-    if (
-      resDeleteWeatherUser.status >= 200 &&
-      resDeleteWeatherUser.status <= 399
-    ) {
-      gridItem.style.transition = "all 2s";
-      // remove class
-      gridItem.classList.remove("row");
+  //   resDeleteWeatherUser = await axios(optionsDeleteWeatherUser);
+  //   if (
+  //     resDeleteWeatherUser.status >= 200 &&
+  //     resDeleteWeatherUser.status <= 399
+  //   ) {
+  //     gridItem.style.transition = "all 2s";
+  //     // remove class
+  //     gridItem.classList.remove("row");
 
-      // instead of removing filling it empty so it removes all the childs
-      gridItem.style.opacity = "0";
-      gridItem.innerHTML = `${userName} successfully removed`;
-      gridItem.style.opacity = "1";
+  //     // instead of removing filling it empty so it removes all the childs
+  //     gridItem.style.opacity = "0";
+  //     gridItem.innerHTML = `${userName} successfully removed`;
+  //     gridItem.style.opacity = "1";
 
-      setTimeout(() => {
-        gridItem.style.opacity = "0";
-      }, 1000);
+  //     setTimeout(() => {
+  //       gridItem.style.opacity = "0";
+  //     }, 1000);
 
-      setTimeout(() => {
-        gridItem.remove();
-      }, 3000);
-    }
-  } catch (err) {
-    console.error(err);
-  }
+  //     setTimeout(() => {
+  //       gridItem.remove();
+  //     }, 3000);
+  //   }
+  // } catch (err) {
+  //   console.error(err);
+  // }
 };
 
 // END EDIT & DELETE
