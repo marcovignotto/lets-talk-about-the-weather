@@ -203,7 +203,7 @@ const submitEdit = (e) => {
 const addNewUserInputs = (e) => {
   inputs.menuRow(e).after(inputs.row());
 
-  // iconsEditInit();
+  // iconsNewUserInit();
 };
 
 const submitDelete = async (e) => {
