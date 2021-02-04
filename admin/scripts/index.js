@@ -10,13 +10,13 @@ const locationList = document.querySelector(".locations__list");
 
 // URLs
 const URL_POST = "http://localhost:5000/api/auth";
-const URL_GET = "http://127.0.0.1:5000/api/locations";
+const URL_GET = "http://127.0.0.1:5000/api/weatherusers";
 
-// CRID ITEM
+// GRID ITEM
 
 const gridItem = (firstName, location, language, unit) => {
   const row = document.createElement("div");
-  row.className = `row grid__item`;
+  row.className = `row grid__item pb-1`;
 
   const firstNameCol = document.createElement("div");
   firstNameCol.className = "col-3 first__name";
@@ -40,11 +40,11 @@ const gridItem = (firstName, location, language, unit) => {
 
   const editIcon = document.createElement("div");
   editIcon.className = "col-1 edit__icon";
-  editIcon.innerHTML = "X";
+  editIcon.innerHTML = `<button class="btn__edit"><i class="far fa-1x fa-edit"></i></button>`;
 
   const deleteIcon = document.createElement("div");
   deleteIcon.className = "col-1 delete__icon";
-  deleteIcon.innerHTML = "X";
+  deleteIcon.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
   row.innerHTML +=
     firstNameCol.outerHTML +

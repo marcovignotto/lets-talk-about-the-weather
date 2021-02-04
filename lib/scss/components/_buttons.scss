@@ -139,6 +139,25 @@
   }
 }
 
+// BTN ICONS
+.btn {
+  &__edit,
+  &__delete {
+    // @extend %btn-shared;
+    // color: $yellow-text;
+    // background-color: $yellow;
+    font-size: 1rem;
+    // text-transform: uppercase;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    & :hover {
+      color: red;
+    }
+  }
+}
+
 // button[class^="btn-"]:hover,
 // a[class^="btn-"]:hover,
 // input[class^="btn-"]:hover {
