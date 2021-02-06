@@ -1,81 +1,283 @@
-// IMPORTS
-// import { gridItem } from "./gridItem.js";
-
 // VAR
 var token = "";
 let arrAllUsers = [];
-// DOM
 
-// login
-const formLogin = document.querySelector(".form__login");
-const btnLogin = document.querySelector(".btn-login");
-// ADD user
-const btnAddUser = document.querySelector(".btn-add-user");
-// forms
-const emailInput = document.querySelector(".email");
-const emailPassword = document.querySelector(".password");
-// listing
-const locationList = document.querySelector(".locations__list");
-// icons
+const ServerCtrl = (function () {
+  const URLs = {
+    URL_POST: "http://localhost:5000/api/auth",
+    URL_GET: "http://127.0.0.1:5000/api/weatherusers",
+    URL_DELETE: "http://127.0.0.1:5000/api/weatherusers/",
+    URL_PUT: "http://127.0.0.1:5000/api/weatherusers/",
+  };
 
-// END DOM
+  return {
+    getUrls: function () {
+      return URLs;
+    },
 
-// URLs
-const URL_POST = "http://localhost:5000/api/auth";
-const URL_GET = "http://127.0.0.1:5000/api/weatherusers";
-const URL_DELETE = "http://127.0.0.1:5000/api/weatherusers/";
-const URL_PUT = "http://127.0.0.1:5000/api/weatherusers/";
+    callApi: async function (method, email, password, url) {
+      console.log(method, email, password, url);
+      try {
+        const options = {
+          method: method,
+          data: {
+            email: email,
+            password: password,
+          },
+          url: url,
+          transformResponse: [
+            (data) => {
+              // transform the response
+              return data;
+            },
+          ],
+        };
 
-// GRID ITEM
+        const res = await axios(options);
 
-const gridItem = (firstName, location, language, unit, id) => {
-  const row = document.createElement("div");
-  row.className = `row grid__item pb-1`;
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    callApiAuth: async function (method, token, url) {
+      try {
+        const options = {
+          method: method,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          url: url,
+          transformResponse: [
+            (data) => {
+              // transform the response
+              return data;
+            },
+          ],
+        };
+        const res = await axios(options);
+        if (res.status >= 200 && res.status <= 399) {
+          sessionStorage.setItem("isAuthenticated", true);
+          sessionStorage.setItem("UserToken", token);
+        }
+        return res;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  };
+})();
 
-  const firstNameCol = document.createElement("div");
-  firstNameCol.className = "col-3 first__name";
+const ItemCtrl = (function () {
+  // const token = "";
+  const token = { token: sessionStorage.getItem("UserToken") };
+  return {
+    sendLogin: async function (e) {
+      e.preventDefault();
+      const URLs = ServerCtrl.getUrls();
 
-  firstNameCol.innerHTML = firstName;
+      ServerCtrl.callApi(
+        "post",
+        App.selectors().emailInput.value,
+        App.selectors().emailPassword.value,
+        URLs.URL_POST
+      ).then((res) => {
+        ServerCtrl.callApiAuth("get", JSON.parse(res).token, URLs.URL_GET);
+      });
+    },
+    sendLoginOldWorking: async function (e) {
+      e.preventDefault();
+      console.log();
+      const email = App.selectors().emailInput.value;
+      const password = App.selectors().emailPassword.value;
 
-  const locationCol = document.createElement("div");
-  locationCol.className = "col-4 location";
+      try {
+        const optionsPostAuth = {
+          method: "post",
+          data: {
+            email: email,
+            password: password,
+          },
+          url: App.urls().URL_POST,
+          transformResponse: [
+            (data) => {
+              // transform the response
+              return data;
+            },
+          ],
+        };
 
-  locationCol.innerHTML = location;
+        const res = await axios(optionsPostAuth);
+        const { token } = JSON.parse(res.data);
 
-  const languageCol = document.createElement("div");
-  languageCol.className = "col-1 language";
+        sessionStorage.setItem("UserToken", token);
 
-  languageCol.innerHTML = language;
+        const optionsPostLocations = {
+          method: "get",
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          url: App.urls().URL_GET,
+          transformResponse: [
+            (data) => {
+              // transform the response
+              return data;
+            },
+          ],
+        };
 
-  const unitCol = document.createElement("div");
-  unitCol.className = "col-2 unit";
-  unitCol.innerHTML = unit;
+        resLocations = await axios(optionsPostLocations);
+        console.log(resLocations);
+        if (resLocations.status >= 200 && resLocations.status <= 399)
+          sessionStorage.setItem("isAuthenticated", true);
 
-  const editIcon = document.createElement("div");
-  editIcon.className = "col-1 edit__icon";
-  editIcon.dataset.id = id;
-  editIcon.innerHTML = `<button class="btn__edit"><i class="far fa-1x fa-edit"></i></button>`;
+        listUsers(token);
+        // return JSON.parse(res.data);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    getToken: function () {
+      return token.token;
+    },
+  };
+})();
 
-  const deleteIcon = document.createElement("div");
-  deleteIcon.className = "col-1 delete__icon";
-  deleteIcon.dataset.id = id;
-  deleteIcon.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
+const UICtrl = (function () {
+  const UISelectorsClasses = {
+    // login
+    formLogin: ".form__login",
+    btnLogin: ".btn-login",
+    emailInput: ".email",
+    emailPassword: ".password",
 
-  row.innerHTML +=
-    firstNameCol.outerHTML +
-    locationCol.outerHTML +
-    languageCol.outerHTML +
-    unitCol.outerHTML +
-    editIcon.outerHTML +
-    deleteIcon.outerHTML;
+    // ADD user
+    btnAddUser: ".btn-add-user",
 
-  locationList.appendChild(row);
-};
-// END GRID ITEM
+    // listing
+    locationList: ".locations__list",
+    // icons
+  };
+
+  const UISelectors = {
+    // login
+    formLogin: document.querySelector(UISelectorsClasses.formLogin),
+    btnLogin: document.querySelector(UISelectorsClasses.btnLogin),
+    emailInput: document.querySelector(UISelectorsClasses.emailInput),
+    emailPassword: document.querySelector(UISelectorsClasses.emailPassword),
+
+    // ADD user
+    btnAddUser: document.querySelector(UISelectorsClasses.btnAddUser),
+    // forms
+    // listing
+    locationList: document.querySelector(UISelectorsClasses.locationList),
+    // icons
+    btnTestApi: document.querySelector(".btn-test-api"),
+  };
+
+  // public
+  return {
+    gridItem: function (firstName, location, language, unit, id) {
+      const row = document.createElement("div");
+      row.className = `row grid__item pb-1`;
+
+      const firstNameCol = document.createElement("div");
+      firstNameCol.className = "col-3 first__name";
+
+      firstNameCol.innerHTML = firstName;
+
+      const locationCol = document.createElement("div");
+      locationCol.className = "col-4 location";
+
+      locationCol.innerHTML = location;
+
+      const languageCol = document.createElement("div");
+      languageCol.className = "col-1 language";
+
+      languageCol.innerHTML = language;
+
+      const unitCol = document.createElement("div");
+      unitCol.className = "col-2 unit";
+      unitCol.innerHTML = unit;
+
+      const editIcon = document.createElement("div");
+      editIcon.className = "col-1 edit__icon";
+      editIcon.dataset.id = id;
+      editIcon.innerHTML = `<button class="btn__edit"><i class="far fa-1x fa-edit"></i></button>`;
+
+      const deleteIcon = document.createElement("div");
+      deleteIcon.className = "col-1 delete__icon";
+      deleteIcon.dataset.id = id;
+      deleteIcon.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
+
+      row.innerHTML +=
+        firstNameCol.outerHTML +
+        locationCol.outerHTML +
+        languageCol.outerHTML +
+        unitCol.outerHTML +
+        editIcon.outerHTML +
+        deleteIcon.outerHTML;
+
+      locationList.appendChild(row);
+    },
+
+    getSelectors: function () {
+      return UISelectors;
+    },
+  };
+})();
+
+const App = (function (ItemCtrl, UICtrl) {
+  // Event listeners init
+  const URLs = ServerCtrl.getUrls();
+  const UISelectors = UICtrl.getSelectors();
+
+  const loadEventListeners = function () {
+    UISelectors.btnLogin.addEventListener("click", function (e) {
+      ItemCtrl.sendLogin(e);
+    });
+    UISelectors.btnLogin.addEventListener("click", function (e) {
+      e.preventDefault();
+      ServerCtrl.callApi(
+        "post",
+        App.selectors().emailInput.value,
+        App.selectors().emailPassword.value,
+        URLs.URL_POST
+      )
+        .then((res) => {
+          ServerCtrl.callApiAuth("get", JSON.parse(res).token, URLs.URL_GET);
+        })
+        .then((res) => console.log(res));
+      // listUsers(token);
+    });
+
+    // document
+    //   .querySelector(UISelectors.btnAddUser)
+    //   .addEventListener("click", function (e) {
+    //     addNewUserInputs(e);
+
+    //   });
+  };
+
+  return {
+    init: function () {
+      loadEventListeners();
+    },
+    selectors: () => UISelectors,
+    urls: () => URLs,
+  };
+})(ItemCtrl, UICtrl);
+
+App.init();
 
 // LIST USERS - NOT init
 const listUsers = async (token) => {
-  formLogin.remove();
+  console.log("listUsers");
+  App.selectors().formLogin.remove();
 
   try {
     const optionsPostUsers = {
@@ -85,7 +287,7 @@ const listUsers = async (token) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      url: URL_GET,
+      url: App.urls().URL_GET,
       transformResponse: [
         (data) => {
           // transform the response
@@ -107,20 +309,27 @@ const listUsers = async (token) => {
   }
 };
 
-// END LIST USERS
-
 // Check Token for listUsers()
 if (sessionStorage.getItem("isAuthenticated")) {
   // get user token and pass it as argument
   token = sessionStorage.getItem("UserToken");
-  formLogin.classList.add("hide");
+  App.selectors().formLogin.classList.add("hide");
   listUsers(token);
 }
 if (!sessionStorage.getItem("isAuthenticated")) {
-  formLogin.classList.remove("hide");
+  document;
+  App.selectors().formLogin.classList.remove("hide");
 }
 
-const inputs = {
+// END LIST USERS
+
+//
+// FIRST REFACTORING WORKING
+//
+// NOW DISABLED
+//
+
+const inputs1 = {
   userToUpdate: {
     _id: "",
     firstName: "",
@@ -234,7 +443,7 @@ const inputs = {
 };
 
 // EDIT & DELETE
-const submitEdit = (e) => {
+const submitEdit1 = (e) => {
   const { _id, firstName, location, language, unit } = inputs.userToEdit(
     inputs.id(e)
   );
@@ -248,11 +457,21 @@ const submitEdit = (e) => {
   // console.log(inputs.userToUpdate());
 };
 
-const addNewUserInputs = (e) => {
+const addNewUserInputs1 = (e) => {
   inputs.menuRow(e).after(inputs.row().row);
 
   // iconsNewUserInit();
 };
+
+//
+// END FIRST REFACTORING WORKING
+//
+//
+
+//
+//
+
+//
 
 const submitDelete = async (e) => {
   e.preventDefault();
@@ -313,6 +532,7 @@ const submitDelete = async (e) => {
 
 // SEND LOGIN
 const sendLogin = async (e) => {
+  console.log("sendLogin");
   e.preventDefault();
 
   try {
@@ -369,11 +589,7 @@ const sendLogin = async (e) => {
 // END SEND LOGIN
 
 // BTNs
-btnLogin.addEventListener("click", sendLogin);
 
-btnAddUser.addEventListener("click", function (e) {
-  addNewUserInputs(e);
-});
 // ICONS
 const iconsInit = () => {
   document.querySelectorAll(".edit__icon").forEach((x) =>
