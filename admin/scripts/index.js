@@ -76,12 +76,15 @@ const ItemCtrl = (function () {
     sendLogin: async function (e) {
       e.preventDefault();
       const URLs = ServerCtrl.getUrls();
+
+      // post to get token
       await ServerCtrl.callApi(
         "post",
         App.selectors().emailInput.value,
         App.selectors().emailPassword.value,
         URLs.URL_POST
       )
+        // get auth with token
         .then((res) => {
           return ServerCtrl.callApiAuth(
             "get",
@@ -89,6 +92,7 @@ const ItemCtrl = (function () {
             URLs.URL_GET
           );
         })
+        // populate users
         .then((res) => UICtrl.listUsers(res));
     },
     sendLoginOldWorking: async function (e) {
@@ -409,6 +413,7 @@ const UICtrl = (function () {
         .querySelectorAll(this.getSelectorsClasses().iconDelete)
         .forEach((x) => x.addEventListener("click", this.submitDelete));
     },
+
     iconsEditInit: function (weatherUserObj) {
       console.log("INIT ICONS EDIT");
       document
@@ -589,24 +594,6 @@ const addNewUserInputs1 = (e) => {
 
   // iconsNewUserInit();
 };
-
-//
-// END FIRST REFACTORING WORKING
-//
-//
-
-//
-//
-
-//
-
-// END EDIT & DELETE
-
-//
-
-// BTNs
-
-// ICONS
 
 const undoEditWeatherUser = (e) => {
   console.log("undo");
