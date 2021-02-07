@@ -165,6 +165,10 @@ const UICtrl = (function () {
     // listing
     locationList: ".locations__list",
     // icons
+    iconEdit: ".edit__icon",
+    iconDelete: ".delete__icon",
+    iconUdateWeaUser: ".btn__update__weather__user",
+    iconUndoWeaUser: ".btn__undo__weather__user",
   };
 
   const UISelectors = {
@@ -180,7 +184,6 @@ const UICtrl = (function () {
     // listing
     locationList: document.querySelector(UISelectorsClasses.locationList),
     // icons
-    btnTestApi: document.querySelector(".btn-test-api"),
   };
 
   // public
@@ -228,9 +231,163 @@ const UICtrl = (function () {
 
       this.getSelectors().locationList.appendChild(row);
     },
+    row: function (
+      _id = "",
+      firstName = "",
+      location = "",
+      language = "",
+      unit = ""
+    ) {
+      const row = document.createElement("div");
+      row.className = `row grid__item__edit pb-1`;
+
+      const firstNameCol = document.createElement("input");
+      firstNameCol.className = "col-3 edit__input first__name";
+      firstNameCol.setAttribute("type", "text");
+      firstNameCol.setAttribute("value", firstName);
+
+      const locationCol = document.createElement("input");
+      locationCol.className = "col-4 edit__input location";
+      locationCol.setAttribute("type", "text");
+      locationCol.setAttribute("value", location);
+
+      const languageCol = document.createElement("input");
+      languageCol.className = "col-1 edit__input language";
+      languageCol.setAttribute("type", "text");
+      languageCol.setAttribute("value", language);
+
+      const unitCol = document.createElement("input");
+      unitCol.className = "col-2 edit__input unit";
+      unitCol.setAttribute("type", "text");
+      unitCol.setAttribute("value", unit);
+
+      const editIcon = document.createElement("div");
+      editIcon.className = "col-1 save__icon";
+      editIcon.dataset.id = _id;
+      editIcon.innerHTML = `<button class="btn__update__weather__user"><i class="fas fa-save"></i></button>`;
+
+      const deleteIcon = document.createElement("div");
+      deleteIcon.className = "col-1 undo__icon";
+      deleteIcon.dataset.id = _id;
+      deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
+
+      row.innerHTML +=
+        firstNameCol.outerHTML +
+        locationCol.outerHTML +
+        languageCol.outerHTML +
+        unitCol.outerHTML +
+        editIcon.outerHTML +
+        deleteIcon.outerHTML;
+
+      // this.userToUpdate(firstNameCol.value, location, language, unit);
+
+      // const sendDataForUpd = () => {
+      //   // console.log(firstNameCol.value, location, language, unit);
+      //   let objToUpd = {
+      //     firstName,
+      //     location,
+      //     language,
+      //     unit,
+      //   };
+      //   this.userToUpdate(objToUpd);
+      // };
+      // const sendDataForUpd = (a) => {
+      //   console.log("update data");
+      //   this.userToUpdate.id = _id;
+      //   this.userToUpdate.firstName = a;
+      //   this.userToUpdate.location = locationCol.value;
+      //   this.userToUpdate.language = languageCol.value;
+      //   this.userToUpdate.unit = unitCol.value;
+      // };
+      // sendDataForUpd(firstNameCol.value);
+      // console.log(this.userToUpdate);
+      // // sendDataForUpd();
+      // // console.log("firstNameCol.value", firstNameCol.value);
+      return row;
+    },
 
     getSelectors: function () {
       return UISelectors;
+    },
+    getSelectorsClasses: function () {
+      return UISelectorsClasses;
+    },
+
+    submitEdit: function (e) {
+      // get the closest row (the one to edit)
+      let closestRow = e.target.closest(".row");
+
+      // get id to edit
+      let id = e.target.parentElement.parentElement.getAttribute("data-id");
+
+      // filter id to edit
+      let getAllUsers = JSON.parse(sessionStorage.getItem("arrUsers"));
+
+      const { _id, firstName, location, language, unit } = getAllUsers.find(
+        (x) => x._id === id
+      );
+
+      // create new row
+      let newRow = UICtrl.row(_id, firstName, location, language, unit);
+
+      // append new row after edited row
+      closestRow.after(newRow);
+
+      UICtrl.iconsEditInit();
+    },
+
+    submitDelete: async function (e) {
+      e.preventDefault();
+      console.log("sub delete", e);
+      let id = e.target.parentElement.parentElement.getAttribute("data-id");
+      let userName = e.target.parentElement.parentElement.parentElement.querySelector(
+        ".first__name"
+      ).textContent;
+
+      let gridItem = e.target.parentElement.closest(".grid__item");
+
+      // try {
+      //   const optionsDeleteWeatherUser = {
+      //     method: "delete",
+      //     headers: {
+      //       "Access-Control-Allow-Origin": "*",
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${token}`,
+      //     },
+      //     url: `${URL_DELETE}/${id}`,
+      //     transformResponse: [
+      //       (data) => {
+      //         // transform the response
+      //         return data;
+      //       },
+      //     ],
+      //   };
+
+      //   resDeleteWeatherUser = await axios(optionsDeleteWeatherUser);
+      //   if (
+      //     resDeleteWeatherUser.status >= 200 &&
+      //     resDeleteWeatherUser.status <= 399
+      //   ) {
+      //     gridItem.style.transition = "all 2s";
+      //     // remove class
+      //     gridItem.classList.remove("row");
+
+      //     // instead of removing filling it empty so it removes all the childs
+      //     gridItem.style.opacity = "0";
+      //     gridItem.innerHTML = `${userName} successfully removed`;
+      //     gridItem.style.opacity = "1";
+
+      //     setTimeout(() => {
+      //       gridItem.style.opacity = "0";
+      //     }, 1000);
+
+      //     setTimeout(() => {
+      //       gridItem.remove();
+      //     }, 3000);
+      //   }
+      // } catch (err) {
+      //   console.error(err);
+      // }
     },
 
     listUsers: function (usersArr) {
@@ -241,7 +398,27 @@ const UICtrl = (function () {
         this.gridItem(x.firstName, x.location, x.language, x.unit, x._id)
       );
 
-      iconsInit();
+      this.iconsInit();
+    },
+
+    iconsInit: function () {
+      document
+        .querySelectorAll(this.getSelectorsClasses().iconEdit)
+        .forEach((x) => x.addEventListener("click", this.submitEdit));
+      document
+        .querySelectorAll(this.getSelectorsClasses().iconDelete)
+        .forEach((x) => x.addEventListener("click", this.submitDelete));
+    },
+    iconsEditInit: function (weatherUserObj) {
+      console.log("INIT ICONS EDIT");
+      document
+        .querySelector(iconUdateWeaUser)
+        .addEventListener("click", function (e) {
+          updateWeatherUser(e);
+        });
+      document
+        .querySelector(iconUndoWeaUser)
+        .addEventListener("click", undoEditWeatherUser);
     },
   };
 })();
@@ -292,133 +469,120 @@ App.init();
 // NOW DISABLED
 //
 
-const inputs1 = {
-  userToUpdate: {
-    _id: "",
-    firstName: "",
-    location: "",
-    language: "",
-    unit: "",
-  },
-  id: function (e) {
-    return e.target.parentElement.parentElement.getAttribute("data-id");
-  },
-  gridItem: function (e) {
-    return e.target.parentElement.closest(".grid__item");
-  },
-  menuRow: function (e) {
-    return e.target.parentElement.parentElement.querySelector(".menu");
-  },
-  userToEdit: function (id = "") {
-    let userToEdit = arrAllUsers.find((x) => x._id === id);
-    return userToEdit;
-  },
+// const XXXXXXXinputs = {
+//   userToUpdate: {
+//     _id: "",
+//     firstName: "",
+//     location: "",
+//     language: "",
+//     unit: "",
+//   },
+//   id: function (e) {
+//     return e.target.parentElement.parentElement.getAttribute("data-id");
+//   },
+//   gridItem: function (e) {
+//     return e.target.parentElement.closest(".grid__item");
+//   },
+//   menuRow: function (e) {
+//     return e.target.parentElement.parentElement.querySelector(".menu");
+//   },
+//   userToEdit: function (id = "") {
+//     let userToEdit = arrAllUsers.find((x) => x._id === id);
+//     return userToEdit;
+//   },
 
-  row: function (
-    _id = "",
-    firstName = "",
-    location = "",
-    language = "",
-    unit = ""
-  ) {
-    const row = document.createElement("div");
-    row.className = `row grid__item__edit pb-1`;
+//   row: function (
+//     _id = "",
+//     firstName = "",
+//     location = "",
+//     language = "",
+//     unit = ""
+//   ) {
+//     const row = document.createElement("div");
+//     row.className = `row grid__item__edit pb-1`;
 
-    const firstNameCol = document.createElement("input");
-    firstNameCol.className = "col-3 edit__input first__name";
-    firstNameCol.setAttribute("type", "text");
-    firstNameCol.setAttribute("value", firstName);
+//     const firstNameCol = document.createElement("input");
+//     firstNameCol.className = "col-3 edit__input first__name";
+//     firstNameCol.setAttribute("type", "text");
+//     firstNameCol.setAttribute("value", firstName);
 
-    const locationCol = document.createElement("input");
-    locationCol.className = "col-4 edit__input location";
-    locationCol.setAttribute("type", "text");
-    locationCol.setAttribute("value", location);
+//     const locationCol = document.createElement("input");
+//     locationCol.className = "col-4 edit__input location";
+//     locationCol.setAttribute("type", "text");
+//     locationCol.setAttribute("value", location);
 
-    const languageCol = document.createElement("input");
-    languageCol.className = "col-1 edit__input language";
-    languageCol.setAttribute("type", "text");
-    languageCol.setAttribute("value", language);
+//     const languageCol = document.createElement("input");
+//     languageCol.className = "col-1 edit__input language";
+//     languageCol.setAttribute("type", "text");
+//     languageCol.setAttribute("value", language);
 
-    const unitCol = document.createElement("input");
-    unitCol.className = "col-2 edit__input unit";
-    unitCol.setAttribute("type", "text");
-    unitCol.setAttribute("value", unit);
+//     const unitCol = document.createElement("input");
+//     unitCol.className = "col-2 edit__input unit";
+//     unitCol.setAttribute("type", "text");
+//     unitCol.setAttribute("value", unit);
 
-    const editIcon = document.createElement("div");
-    editIcon.className = "col-1 save__icon";
-    editIcon.dataset.id = _id;
-    editIcon.innerHTML = `<button class="btn__update__weather__user"><i class="fas fa-save"></i></button>`;
+//     const editIcon = document.createElement("div");
+//     editIcon.className = "col-1 save__icon";
+//     editIcon.dataset.id = _id;
+//     editIcon.innerHTML = `<button class="btn__update__weather__user"><i class="fas fa-save"></i></button>`;
 
-    const deleteIcon = document.createElement("div");
-    deleteIcon.className = "col-1 undo__icon";
-    deleteIcon.dataset.id = _id;
-    deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
+//     const deleteIcon = document.createElement("div");
+//     deleteIcon.className = "col-1 undo__icon";
+//     deleteIcon.dataset.id = _id;
+//     deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
 
-    row.innerHTML +=
-      firstNameCol.outerHTML +
-      locationCol.outerHTML +
-      languageCol.outerHTML +
-      unitCol.outerHTML +
-      editIcon.outerHTML +
-      deleteIcon.outerHTML;
+//     row.innerHTML +=
+//       firstNameCol.outerHTML +
+//       locationCol.outerHTML +
+//       languageCol.outerHTML +
+//       unitCol.outerHTML +
+//       editIcon.outerHTML +
+//       deleteIcon.outerHTML;
 
-    // this.userToUpdate(firstNameCol.value, location, language, unit);
+//     // this.userToUpdate(firstNameCol.value, location, language, unit);
 
-    // const sendDataForUpd = () => {
-    //   // console.log(firstNameCol.value, location, language, unit);
-    //   let objToUpd = {
-    //     firstName,
-    //     location,
-    //     language,
-    //     unit,
-    //   };
-    //   this.userToUpdate(objToUpd);
-    // };
-    const sendDataForUpd = (a) => {
-      console.log("update data");
-      this.userToUpdate.id = _id;
-      this.userToUpdate.firstName = a;
-      this.userToUpdate.location = locationCol.value;
-      this.userToUpdate.language = languageCol.value;
-      this.userToUpdate.unit = unitCol.value;
-    };
-    sendDataForUpd(firstNameCol.value);
-    console.log(this.userToUpdate);
-    // sendDataForUpd();
-    // console.log("firstNameCol.value", firstNameCol.value);
-    return { row };
-  },
+//     // const sendDataForUpd = () => {
+//     //   // console.log(firstNameCol.value, location, language, unit);
+//     //   let objToUpd = {
+//     //     firstName,
+//     //     location,
+//     //     language,
+//     //     unit,
+//     //   };
+//     //   this.userToUpdate(objToUpd);
+//     // };
+//     const sendDataForUpd = (a) => {
+//       console.log("update data");
+//       this.userToUpdate.id = _id;
+//       this.userToUpdate.firstName = a;
+//       this.userToUpdate.location = locationCol.value;
+//       this.userToUpdate.language = languageCol.value;
+//       this.userToUpdate.unit = unitCol.value;
+//     };
+//     sendDataForUpd(firstNameCol.value);
+//     console.log(this.userToUpdate);
+//     // sendDataForUpd();
+//     // console.log("firstNameCol.value", firstNameCol.value);
+//     return { row };
+//   },
 
-  // userToUpdate: function (objToUpd) {
-  //   // console.log(objToUpd);
-  //   // let userToUpdate = {};
-  //   // if (objToUpd === undefined) return userToUpdate;
-  //   const { firstName, location, language, unit } = objToUpd;
-  //   userToUpdate = {
-  //     firstName,
-  //     location,
-  //     language,
-  //     unit,
-  //   };
-  //   console.log(userToUpdate);
-  //   return userToUpdate;
-  // },
-};
+//   // userToUpdate: function (objToUpd) {
+//   //   // console.log(objToUpd);
+//   //   // let userToUpdate = {};
+//   //   // if (objToUpd === undefined) return userToUpdate;
+//   //   const { firstName, location, language, unit } = objToUpd;
+//   //   userToUpdate = {
+//   //     firstName,
+//   //     location,
+//   //     language,
+//   //     unit,
+//   //   };
+//   //   console.log(userToUpdate);
+//   //   return userToUpdate;
+//   // },
+// };
 
 // EDIT & DELETE
-const submitEdit1 = (e) => {
-  const { _id, firstName, location, language, unit } = inputs.userToEdit(
-    inputs.id(e)
-  );
-
-  inputs
-    .gridItem(e)
-    .after(inputs.row(_id, firstName, location, language, unit).row);
-
-  iconsEditInit();
-
-  // console.log(inputs.userToUpdate());
-};
 
 const addNewUserInputs1 = (e) => {
   inputs.menuRow(e).after(inputs.row().row);
@@ -436,59 +600,6 @@ const addNewUserInputs1 = (e) => {
 
 //
 
-const submitDelete = async (e) => {
-  e.preventDefault();
-  let id = e.target.parentElement.parentElement.getAttribute("data-id");
-  let userName = e.target.parentElement.parentElement.parentElement.querySelector(
-    ".first__name"
-  ).textContent;
-
-  let gridItem = e.target.parentElement.closest(".grid__item");
-
-  // try {
-  //   const optionsDeleteWeatherUser = {
-  //     method: "delete",
-  //     headers: {
-  //       "Access-Control-Allow-Origin": "*",
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //     url: `${URL_DELETE}/${id}`,
-  //     transformResponse: [
-  //       (data) => {
-  //         // transform the response
-  //         return data;
-  //       },
-  //     ],
-  //   };
-
-  //   resDeleteWeatherUser = await axios(optionsDeleteWeatherUser);
-  //   if (
-  //     resDeleteWeatherUser.status >= 200 &&
-  //     resDeleteWeatherUser.status <= 399
-  //   ) {
-  //     gridItem.style.transition = "all 2s";
-  //     // remove class
-  //     gridItem.classList.remove("row");
-
-  //     // instead of removing filling it empty so it removes all the childs
-  //     gridItem.style.opacity = "0";
-  //     gridItem.innerHTML = `${userName} successfully removed`;
-  //     gridItem.style.opacity = "1";
-
-  //     setTimeout(() => {
-  //       gridItem.style.opacity = "0";
-  //     }, 1000);
-
-  //     setTimeout(() => {
-  //       gridItem.remove();
-  //     }, 3000);
-  //   }
-  // } catch (err) {
-  //   console.error(err);
-  // }
-};
-
 // END EDIT & DELETE
 
 //
@@ -496,27 +607,6 @@ const submitDelete = async (e) => {
 // BTNs
 
 // ICONS
-const iconsInit = () => {
-  document.querySelectorAll(".edit__icon").forEach((x) =>
-    x.addEventListener("click", function (e) {
-      submitEdit(e);
-    })
-  );
-  document
-    .querySelectorAll(".delete__icon")
-    .forEach((x) => x.addEventListener("click", submitDelete));
-};
-
-const iconsEditInit = (weatherUserObj) => {
-  document
-    .querySelector(".btn__update__weather__user")
-    .addEventListener("click", function (e) {
-      updateWeatherUser(e);
-    });
-  document
-    .querySelector(".btn__undo__weather__user")
-    .addEventListener("click", undoEditWeatherUser);
-};
 
 const undoEditWeatherUser = (e) => {
   console.log("undo");
