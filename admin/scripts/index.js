@@ -16,7 +16,6 @@ const ServerCtrl = (function () {
     },
 
     callApi: async function (method, email, password, url) {
-      console.log(method, email, password, url);
       try {
         const options = {
           method: method,
@@ -34,7 +33,6 @@ const ServerCtrl = (function () {
         };
 
         const res = await axios(options);
-
         return res.data;
       } catch (err) {
         console.error(err);
@@ -62,7 +60,8 @@ const ServerCtrl = (function () {
           sessionStorage.setItem("isAuthenticated", true);
           sessionStorage.setItem("UserToken", token);
         }
-        return res;
+        return res.data;
+        // console.log(res);
       } catch (err) {
         console.error(err);
       }
@@ -77,15 +76,20 @@ const ItemCtrl = (function () {
     sendLogin: async function (e) {
       e.preventDefault();
       const URLs = ServerCtrl.getUrls();
-
-      ServerCtrl.callApi(
+      await ServerCtrl.callApi(
         "post",
         App.selectors().emailInput.value,
         App.selectors().emailPassword.value,
         URLs.URL_POST
-      ).then((res) => {
-        ServerCtrl.callApiAuth("get", JSON.parse(res).token, URLs.URL_GET);
-      });
+      )
+        .then((res) => {
+          return ServerCtrl.callApiAuth(
+            "get",
+            JSON.parse(res).token,
+            URLs.URL_GET
+          );
+        })
+        .then((res) => UICtrl.listUsers(res));
     },
     sendLoginOldWorking: async function (e) {
       e.preventDefault();
@@ -222,11 +226,21 @@ const UICtrl = (function () {
         editIcon.outerHTML +
         deleteIcon.outerHTML;
 
-      locationList.appendChild(row);
+      this.getSelectors().locationList.appendChild(row);
     },
 
     getSelectors: function () {
       return UISelectors;
+    },
+
+    listUsers: function (usersArr) {
+      App.selectors().formLogin.remove();
+
+      JSON.parse(usersArr).map((x) =>
+        this.gridItem(x.firstName, x.location, x.language, x.unit, x._id)
+      );
+
+      iconsInit();
     },
   };
 })();
@@ -240,20 +254,20 @@ const App = (function (ItemCtrl, UICtrl) {
     UISelectors.btnLogin.addEventListener("click", function (e) {
       ItemCtrl.sendLogin(e);
     });
-    UISelectors.btnLogin.addEventListener("click", function (e) {
-      e.preventDefault();
-      ServerCtrl.callApi(
-        "post",
-        App.selectors().emailInput.value,
-        App.selectors().emailPassword.value,
-        URLs.URL_POST
-      )
-        .then((res) => {
-          ServerCtrl.callApiAuth("get", JSON.parse(res).token, URLs.URL_GET);
-        })
-        .then((res) => console.log(res));
-      // listUsers(token);
-    });
+    // UISelectors.btnLogin.addEventListener("click", function (e) {
+    //   e.preventDefault();
+    //   ServerCtrl.callApi(
+    //     "post",
+    //     App.selectors().emailInput.value,
+    //     App.selectors().emailPassword.value,
+    //     URLs.URL_POST
+    //   )
+    //     .then((res) => {
+    //       ServerCtrl.callApiAuth("get", JSON.parse(res).token, URLs.URL_GET);
+    //     })
+    //     .then((res) => console.log(res));
+    //   // listUsers(token);
+    // });
 
     // document
     //   .querySelector(UISelectors.btnAddUser)
@@ -275,7 +289,7 @@ const App = (function (ItemCtrl, UICtrl) {
 App.init();
 
 // LIST USERS - NOT init
-const listUsers = async (token) => {
+const OLDlistUsersOLD = async (token) => {
   console.log("listUsers");
   App.selectors().formLogin.remove();
 
@@ -314,7 +328,7 @@ if (sessionStorage.getItem("isAuthenticated")) {
   // get user token and pass it as argument
   token = sessionStorage.getItem("UserToken");
   App.selectors().formLogin.classList.add("hide");
-  listUsers(token);
+  UICtrl.listUsers(token);
 }
 if (!sessionStorage.getItem("isAuthenticated")) {
   document;
@@ -531,60 +545,60 @@ const submitDelete = async (e) => {
 //
 
 // SEND LOGIN
-const sendLogin = async (e) => {
-  console.log("sendLogin");
-  e.preventDefault();
+// const sendLogin = async (e) => {
+//   console.log("sendLogin");
+//   e.preventDefault();
 
-  try {
-    const optionsPostAuth = {
-      method: "post",
+//   try {
+//     const optionsPostAuth = {
+//       method: "post",
 
-      data: {
-        email: emailInput.value,
-        password: emailPassword.value,
-      },
-      url: URL_POST,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
+//       data: {
+//         email: emailInput.value,
+//         password: emailPassword.value,
+//       },
+//       url: URL_POST,
+//       transformResponse: [
+//         (data) => {
+//           // transform the response
+//           return data;
+//         },
+//       ],
+//     };
 
-    const res = await axios(optionsPostAuth);
+//     const res = await axios(optionsPostAuth);
 
-    const { token } = JSON.parse(res.data);
+//     const { token } = JSON.parse(res.data);
 
-    sessionStorage.setItem("UserToken", token);
+//     sessionStorage.setItem("UserToken", token);
 
-    const optionsPostLocations = {
-      method: "get",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      url: URL_GET,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
+//     const optionsPostLocations = {
+//       method: "get",
+//       headers: {
+//         "Access-Control-Allow-Origin": "*",
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//       url: URL_GET,
+//       transformResponse: [
+//         (data) => {
+//           // transform the response
+//           return data;
+//         },
+//       ],
+//     };
 
-    resLocations = await axios(optionsPostLocations);
+//     resLocations = await axios(optionsPostLocations);
 
-    if (resLocations.status >= 200 && resLocations.status <= 399)
-      sessionStorage.setItem("isAuthenticated", true);
+//     if (resLocations.status >= 200 && resLocations.status <= 399)
+//       sessionStorage.setItem("isAuthenticated", true);
 
-    listUsers(token);
-    // return JSON.parse(res.data);
-  } catch (e) {
-    console.error(e);
-  }
-};
+//     listUsers(token);
+//     // return JSON.parse(res.data);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 // END SEND LOGIN
 
