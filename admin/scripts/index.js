@@ -38,9 +38,8 @@ const ServerCtrl = (function () {
         console.error(err);
       }
     },
-    callApiAuth: async function (method, token, url, id = "") {
-      // console.log(method, token, url, id);
-      if (method === "delete") url = `${url}/${id}`;
+    callApiAuth: async function (method, token, url, id = "", obj = {}) {
+      if (method === "delete" || method === "put") url = `${url}/${id}`;
 
       try {
         const options = {
@@ -50,6 +49,7 @@ const ServerCtrl = (function () {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
+          data: obj,
           url: url,
           transformResponse: [
             (data) => {
@@ -183,6 +183,15 @@ const UICtrl = (function () {
     // Rows and Grids
     gridItem: ".grid__item",
     row: ".row",
+
+    // grid classes
+    firstName: ".first__name",
+    location: ".location",
+    language: ".language",
+    unit: ".unit",
+
+    // grid edit
+    gridItemEdit: ".grid__item__edit",
   };
 
   const UISelectors = {
@@ -258,21 +267,25 @@ const UICtrl = (function () {
       const firstNameCol = document.createElement("input");
       firstNameCol.className = "col-3 edit__input first__name";
       firstNameCol.setAttribute("type", "text");
+      firstNameCol.setAttribute("id", "firstName");
       firstNameCol.setAttribute("value", firstName);
 
       const locationCol = document.createElement("input");
       locationCol.className = "col-4 edit__input location";
       locationCol.setAttribute("type", "text");
+      locationCol.setAttribute("id", "location");
       locationCol.setAttribute("value", location);
 
       const languageCol = document.createElement("input");
       languageCol.className = "col-1 edit__input language";
       languageCol.setAttribute("type", "text");
+      languageCol.setAttribute("id", "language");
       languageCol.setAttribute("value", language);
 
       const unitCol = document.createElement("input");
       unitCol.className = "col-2 edit__input unit";
       unitCol.setAttribute("type", "text");
+      unitCol.setAttribute("id", "unit");
       unitCol.setAttribute("value", unit);
 
       const editIcon = document.createElement("div");
@@ -406,108 +419,87 @@ const UICtrl = (function () {
     },
 
     updateWeatherUser: async function (e) {
-      inputs.row().sendDataForUpd();
-      console.log(inputs.userToUpdate);
-
-      // inputs.row().sendDataForUpd();
-
       e.preventDefault();
-      // console.log(e.target);
 
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
       let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
         ".first__name"
       ).value;
 
-      let weatherUserObj = {};
-      weatherUserObj["_id"] = id;
-
-      let inputClassesArr = [];
-      let inputClassesToDelete = [
-        "col-1",
-        "col-2",
-        "col-3",
-        "col-4",
-        "edit__input",
-      ];
-
-      // collect all the classes  OK
-      e.target.parentElement.parentElement.parentElement
-        .querySelectorAll("input")
-        .forEach((x) => inputClassesArr.push([...x.className.split(" ")]));
-
-      const flatten = (arr) => [].concat.apply([], arr);
-
-      // flat arrays and return unique array
-      inputClassesArr = [...new Set(flatten(inputClassesArr))];
-
-      // FILTER the two arrays
-
-      inputClassesArr = inputClassesArr.filter(
-        (value) => !inputClassesToDelete.includes(value)
-      );
-
-      // change first__name
-
-      // OBJ TEST
-
       let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
         "input"
       );
 
+      let weatherUserObj = {};
+      weatherUserObj["_id"] = id;
+
+      let inputClassesArr = [];
+
+      // collect all the classes  OK
+      allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
+
+      // flat array
+      inputClassesArr = inputClassesArr.flat();
+
       // loop througt the nodes and create obj
       allNodes.forEach((x, i) => {
-        if (x.classList.contains(inputClassesArr[i]))
+        if (x.getAttribute("id") === inputClassesArr[i])
           weatherUserObj[inputClassesArr[i]] = x.value;
       });
 
-      // change from first__name to firstName
-      weatherUserObj["firstName"] = "";
-      weatherUserObj.firstName = weatherUserObj.first__name;
-      delete weatherUserObj.first__name;
+      const res = await ServerCtrl.callApiAuth(
+        "put",
+        ItemCtrl.getToken(),
+        App.urls().URL_PUT,
+        weatherUserObj._id,
+        weatherUserObj
+      );
 
-      // try {
-      //   const optionUpdateWeatherUser = {
-      //     method: "put",
-      //     headers: {
-      //       "Access-Control-Allow-Origin": "*",
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //     url: `${URL_PUT}/${weatherUserObj._id}`,
-      //     data: weatherUserObj,
-      //     transformResponse: [
-      //       (data) => {
-      //         // transform the response
-      //         return data;
-      //       },
-      //     ],
-      //   };
-      //   resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
-      //   // console.log(resUpdateWeatherUser);
+      if (res.status >= 200 && res.status <= 399) {
+        // get array from session Storage
+        let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
 
-      //   // if (
-      //   //   resUpdateWeatherUser.status >= 200 &&
-      //   //   resUpdateWeatherUser.status <= 399
-      //   // ) {
-      //   //   console.log("User updated");
-      //   //   // gridItem.style.transition = "all 2s";
-      //   //   // // remove class
-      //   //   // gridItem.classList.remove("row");
-      //   //   // // instead of removing filling it empty so it removes all the childs
-      //   //   // gridItem.style.opacity = "0";
-      //   //   // gridItem.innerHTML = `${userName} successfully removed`;
-      //   //   // gridItem.style.opacity = "1";
-      //   //   // setTimeout(() => {
-      //   //   //   gridItem.style.opacity = "0";
-      //   //   // }, 1000);
-      //   //   // setTimeout(() => {
-      //   //   //   gridItem.remove();
-      //   //   // }, 3000);
-      //   // }
-      // } catch (err) {
-      //   console.error(err);
-      // }
+        // splice Item
+        JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+          if (x._id === id) {
+            console.log("Update from arr pos", i);
+            arrUsers.splice(i, 1, weatherUserObj);
+          }
+        });
+
+        // update array in session Storage
+        sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
+        // console.log(UICtrl.getSelectorsClasses().gridItem);
+        let currRow = e.target.closest(
+          UICtrl.getSelectorsClasses().gridItemEdit
+        );
+
+        let prevRow =
+          e.target.parentElement.parentElement.parentElement
+            .previousElementSibling;
+
+        setTimeout(() => {
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().firstName
+          ).innerHTML = weatherUserObj.firstName;
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().location
+          ).innerHTML = weatherUserObj.location;
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().language
+          ).innerHTML = weatherUserObj.language;
+          prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
+            weatherUserObj.unit;
+        }, 500);
+
+        setTimeout(() => {
+          currRow.style.opacity = "0";
+        }, 1000);
+
+        setTimeout(() => {
+          currRow.remove();
+        }, 1500);
+      }
     },
 
     listUsers: function (usersArr) {
@@ -534,7 +526,7 @@ const UICtrl = (function () {
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUpdateWeaUser)
         .addEventListener("click", function (e) {
-          updateWeatherUser(e);
+          UICtrl.updateWeatherUser(e);
         });
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
