@@ -38,7 +38,10 @@ const ServerCtrl = (function () {
         console.error(err);
       }
     },
-    callApiAuth: async function (method, token, url) {
+    callApiAuth: async function (method, token, url, id = "") {
+      // console.log(method, token, url, id);
+      if (method === "delete") url = `${url}/${id}`;
+
       try {
         const options = {
           method: method,
@@ -56,12 +59,12 @@ const ServerCtrl = (function () {
           ],
         };
         const res = await axios(options);
+
         if (res.status >= 200 && res.status <= 399) {
           sessionStorage.setItem("isAuthenticated", true);
           sessionStorage.setItem("UserToken", token);
         }
-        return res.data;
-        // console.log(res);
+        return res;
       } catch (err) {
         console.error(err);
       }
@@ -72,6 +75,7 @@ const ServerCtrl = (function () {
 const ItemCtrl = (function () {
   // const token = "";
   const token = { token: sessionStorage.getItem("UserToken") };
+  const arrUsers = { arrUsers: sessionStorage.getItem("arrUsers") };
   return {
     sendLogin: async function (e) {
       e.preventDefault();
@@ -93,7 +97,7 @@ const ItemCtrl = (function () {
           );
         })
         // populate users
-        .then((res) => UICtrl.listUsers(res));
+        .then((res) => UICtrl.listUsers(res.data));
     },
     sendLoginOldWorking: async function (e) {
       e.preventDefault();
@@ -152,6 +156,9 @@ const ItemCtrl = (function () {
     getToken: function () {
       return token.token;
     },
+    getArrUsers: function () {
+      return arrUsers.arrUsers;
+    },
   };
 })();
 
@@ -171,8 +178,11 @@ const UICtrl = (function () {
     // icons
     iconEdit: ".edit__icon",
     iconDelete: ".delete__icon",
-    iconUdateWeaUser: ".btn__update__weather__user",
+    iconUpdateWeaUser: ".btn__update__weather__user",
     iconUndoWeaUser: ".btn__undo__weather__user",
+    // Rows and Grids
+    gridItem: ".grid__item",
+    row: ".row",
   };
 
   const UISelectors = {
@@ -319,7 +329,7 @@ const UICtrl = (function () {
 
     submitEdit: function (e) {
       // get the closest row (the one to edit)
-      let closestRow = e.target.closest(".row");
+      let closestRow = e.target.closest(UICtrl.getSelectorsClasses().row);
 
       // get id to edit
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
@@ -342,23 +352,130 @@ const UICtrl = (function () {
 
     submitDelete: async function (e) {
       e.preventDefault();
-      console.log("sub delete", e);
+
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
+
       let userName = e.target.parentElement.parentElement.parentElement.querySelector(
         ".first__name"
       ).textContent;
 
-      let gridItem = e.target.parentElement.closest(".grid__item");
+      let gridItem = e.target.parentElement.closest(
+        UICtrl.getSelectorsClasses().gridItem
+      );
+
+      const res = await ServerCtrl.callApiAuth(
+        "delete",
+        ItemCtrl.getToken(),
+        App.urls().URL_DELETE,
+        id
+      );
+
+      if (res.status >= 200 && res.status <= 399) {
+        // get array from session Storage
+        let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+        // splice Item
+        JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+          if (x._id === id) {
+            console.log("del from arr", i);
+            arrUsers.splice(i, 1);
+          }
+        });
+
+        // update array in session Storage
+        sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
+
+        // DOM
+        gridItem;
+        gridItem.style.transition = "all 2s";
+        // remove class
+        gridItem.classList.remove("row");
+
+        // instead of removing filling it empty so it removes all the childs
+        gridItem.style.opacity = "0";
+        gridItem.innerHTML = `${userName} successfully removed`;
+        gridItem.style.opacity = "1";
+
+        setTimeout(() => {
+          gridItem.style.opacity = "0";
+        }, 1000);
+
+        setTimeout(() => {
+          gridItem.remove();
+        }, 3000);
+      }
+    },
+
+    updateWeatherUser: async function (e) {
+      inputs.row().sendDataForUpd();
+      console.log(inputs.userToUpdate);
+
+      // inputs.row().sendDataForUpd();
+
+      e.preventDefault();
+      // console.log(e.target);
+
+      let id = e.target.parentElement.parentElement.getAttribute("data-id");
+      let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
+        ".first__name"
+      ).value;
+
+      let weatherUserObj = {};
+      weatherUserObj["_id"] = id;
+
+      let inputClassesArr = [];
+      let inputClassesToDelete = [
+        "col-1",
+        "col-2",
+        "col-3",
+        "col-4",
+        "edit__input",
+      ];
+
+      // collect all the classes  OK
+      e.target.parentElement.parentElement.parentElement
+        .querySelectorAll("input")
+        .forEach((x) => inputClassesArr.push([...x.className.split(" ")]));
+
+      const flatten = (arr) => [].concat.apply([], arr);
+
+      // flat arrays and return unique array
+      inputClassesArr = [...new Set(flatten(inputClassesArr))];
+
+      // FILTER the two arrays
+
+      inputClassesArr = inputClassesArr.filter(
+        (value) => !inputClassesToDelete.includes(value)
+      );
+
+      // change first__name
+
+      // OBJ TEST
+
+      let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
+        "input"
+      );
+
+      // loop througt the nodes and create obj
+      allNodes.forEach((x, i) => {
+        if (x.classList.contains(inputClassesArr[i]))
+          weatherUserObj[inputClassesArr[i]] = x.value;
+      });
+
+      // change from first__name to firstName
+      weatherUserObj["firstName"] = "";
+      weatherUserObj.firstName = weatherUserObj.first__name;
+      delete weatherUserObj.first__name;
 
       // try {
-      //   const optionsDeleteWeatherUser = {
-      //     method: "delete",
+      //   const optionUpdateWeatherUser = {
+      //     method: "put",
       //     headers: {
       //       "Access-Control-Allow-Origin": "*",
       //       "Content-Type": "application/json",
       //       Authorization: `Bearer ${token}`,
       //     },
-      //     url: `${URL_DELETE}/${id}`,
+      //     url: `${URL_PUT}/${weatherUserObj._id}`,
+      //     data: weatherUserObj,
       //     transformResponse: [
       //       (data) => {
       //         // transform the response
@@ -366,29 +483,28 @@ const UICtrl = (function () {
       //       },
       //     ],
       //   };
+      //   resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
+      //   // console.log(resUpdateWeatherUser);
 
-      //   resDeleteWeatherUser = await axios(optionsDeleteWeatherUser);
-      //   if (
-      //     resDeleteWeatherUser.status >= 200 &&
-      //     resDeleteWeatherUser.status <= 399
-      //   ) {
-      //     gridItem.style.transition = "all 2s";
-      //     // remove class
-      //     gridItem.classList.remove("row");
-
-      //     // instead of removing filling it empty so it removes all the childs
-      //     gridItem.style.opacity = "0";
-      //     gridItem.innerHTML = `${userName} successfully removed`;
-      //     gridItem.style.opacity = "1";
-
-      //     setTimeout(() => {
-      //       gridItem.style.opacity = "0";
-      //     }, 1000);
-
-      //     setTimeout(() => {
-      //       gridItem.remove();
-      //     }, 3000);
-      //   }
+      //   // if (
+      //   //   resUpdateWeatherUser.status >= 200 &&
+      //   //   resUpdateWeatherUser.status <= 399
+      //   // ) {
+      //   //   console.log("User updated");
+      //   //   // gridItem.style.transition = "all 2s";
+      //   //   // // remove class
+      //   //   // gridItem.classList.remove("row");
+      //   //   // // instead of removing filling it empty so it removes all the childs
+      //   //   // gridItem.style.opacity = "0";
+      //   //   // gridItem.innerHTML = `${userName} successfully removed`;
+      //   //   // gridItem.style.opacity = "1";
+      //   //   // setTimeout(() => {
+      //   //   //   gridItem.style.opacity = "0";
+      //   //   // }, 1000);
+      //   //   // setTimeout(() => {
+      //   //   //   gridItem.remove();
+      //   //   // }, 3000);
+      //   // }
       // } catch (err) {
       //   console.error(err);
       // }
@@ -415,14 +531,13 @@ const UICtrl = (function () {
     },
 
     iconsEditInit: function (weatherUserObj) {
-      console.log("INIT ICONS EDIT");
       document
-        .querySelector(iconUdateWeaUser)
+        .querySelector(UICtrl.getSelectorsClasses().iconUpdateWeaUser)
         .addEventListener("click", function (e) {
           updateWeatherUser(e);
         });
       document
-        .querySelector(iconUndoWeaUser)
+        .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
         .addEventListener("click", undoEditWeatherUser);
     },
   };
@@ -599,109 +714,4 @@ const undoEditWeatherUser = (e) => {
   console.log("undo");
   e.preventDefault();
   e.target.parentElement.closest(".grid__item__edit").remove();
-};
-
-const updateWeatherUser = async (e) => {
-  inputs.row().sendDataForUpd();
-  console.log(inputs.userToUpdate);
-
-  // inputs.row().sendDataForUpd();
-
-  e.preventDefault();
-  // console.log(e.target);
-
-  let id = e.target.parentElement.parentElement.getAttribute("data-id");
-  let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
-    ".first__name"
-  ).value;
-
-  let weatherUserObj = {};
-  weatherUserObj["_id"] = id;
-
-  let inputClassesArr = [];
-  let inputClassesToDelete = [
-    "col-1",
-    "col-2",
-    "col-3",
-    "col-4",
-    "edit__input",
-  ];
-
-  // collect all the classes  OK
-  e.target.parentElement.parentElement.parentElement
-    .querySelectorAll("input")
-    .forEach((x) => inputClassesArr.push([...x.className.split(" ")]));
-
-  const flatten = (arr) => [].concat.apply([], arr);
-
-  // flat arrays and return unique array
-  inputClassesArr = [...new Set(flatten(inputClassesArr))];
-
-  // FILTER the two arrays
-
-  inputClassesArr = inputClassesArr.filter(
-    (value) => !inputClassesToDelete.includes(value)
-  );
-
-  // change first__name
-
-  // OBJ TEST
-
-  let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
-    "input"
-  );
-
-  // loop througt the nodes and create obj
-  allNodes.forEach((x, i) => {
-    if (x.classList.contains(inputClassesArr[i]))
-      weatherUserObj[inputClassesArr[i]] = x.value;
-  });
-
-  // change from first__name to firstName
-  weatherUserObj["firstName"] = "";
-  weatherUserObj.firstName = weatherUserObj.first__name;
-  delete weatherUserObj.first__name;
-
-  try {
-    const optionUpdateWeatherUser = {
-      method: "put",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      url: `${URL_PUT}/${weatherUserObj._id}`,
-      data: weatherUserObj,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
-    resUpdateWeatherUser = await axios(optionUpdateWeatherUser);
-    // console.log(resUpdateWeatherUser);
-
-    // if (
-    //   resUpdateWeatherUser.status >= 200 &&
-    //   resUpdateWeatherUser.status <= 399
-    // ) {
-    //   console.log("User updated");
-    //   // gridItem.style.transition = "all 2s";
-    //   // // remove class
-    //   // gridItem.classList.remove("row");
-    //   // // instead of removing filling it empty so it removes all the childs
-    //   // gridItem.style.opacity = "0";
-    //   // gridItem.innerHTML = `${userName} successfully removed`;
-    //   // gridItem.style.opacity = "1";
-    //   // setTimeout(() => {
-    //   //   gridItem.style.opacity = "0";
-    //   // }, 1000);
-    //   // setTimeout(() => {
-    //   //   gridItem.remove();
-    //   // }, 3000);
-    // }
-  } catch (err) {
-    console.error(err);
-  }
 };
