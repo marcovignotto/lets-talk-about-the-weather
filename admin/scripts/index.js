@@ -2,6 +2,26 @@
 var token = "";
 let arrAllUsers = [];
 
+const OWCtrL = (function () {
+  const URLs = {
+    OPEN_WEATHER_GET:
+      "https://api.openweathermap.org/data/2.5/weather?q=",
+  };
+  const keys = {
+    apiKey: "169986ea94b386da8e6d479f3e6971d",
+  };
+  return {
+    openWCallApi: function (location, units, language) {
+
+      const URL = `${URLs.OPEN_WEATHER_GET}${location}&units=${units}&appid=${keys}&lang=${language}`,
+
+      
+
+      return keys;
+    },
+  };
+})();
+
 const ServerCtrl = (function () {
   const URLs = {
     URL_POST: "http://localhost:5000/api/auth",
@@ -9,6 +29,8 @@ const ServerCtrl = (function () {
     URL_GET: "http://127.0.0.1:5000/api/weatherusers",
     URL_DELETE: "http://127.0.0.1:5000/api/weatherusers/",
     URL_PUT: "http://127.0.0.1:5000/api/weatherusers/",
+    OPEN_WEATHER_GET:
+      "api.openweathermap.org/data/2.5/weather?q=berlin&units=metric&appid=169986ea94b386da8e6d479f3e6971d0&lang=en",
   };
 
   return {
@@ -206,8 +228,6 @@ const ItemCtrl = (function () {
       );
 
       if (res.status >= 200 && res.status <= 399) {
-        // console.log(JSON.parse(res.data)._id);
-
         // get id just created and add to the object
         weatherUserObj["_id"] = JSON.parse(res.data)._id;
 
@@ -238,7 +258,7 @@ const ItemCtrl = (function () {
           currRow.remove();
         }, 1000);
 
-        // Create new row
+        // Create new row with no I doesn't automatically append
 
         let newRow = UICtrl.gridItem(
           firstName,
@@ -277,11 +297,13 @@ const UICtrl = (function () {
 
     // listing
     locationList: ".locations__list",
+
     // icons
     iconEdit: ".edit__icon",
     iconDelete: ".delete__icon",
     iconUpdateWeaUser: ".btn__update__weather__user",
     iconUndoWeaUser: ".btn__undo__weather__user",
+
     // Rows and Grids
     gridItem: ".grid__item",
     row: ".row",
@@ -294,6 +316,9 @@ const UICtrl = (function () {
 
     // grid edit
     gridItemEdit: ".grid__item__edit",
+
+    //menu
+    menu: ".menu",
   };
 
   const UISelectors = {
@@ -308,7 +333,9 @@ const UICtrl = (function () {
     // forms
     // listing
     locationList: document.querySelector(UISelectorsClasses.locationList),
+
     // icons
+    menu: document.querySelector(UISelectorsClasses.menu),
   };
 
   // public
@@ -599,6 +626,7 @@ const UICtrl = (function () {
     },
 
     listUsers: function (usersArr) {
+      UICtrl.showMenu();
       App.selectors().formLogin.remove();
       sessionStorage.setItem("arrUsers", usersArr);
 
@@ -630,10 +658,15 @@ const UICtrl = (function () {
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
         .addEventListener("click", undoEditWeatherUser);
     },
+    showMenu: function () {
+      App.selectors().menu.classList.remove("hide");
+    },
   };
 })();
 
-const App = (function (ItemCtrl, UICtrl) {
+const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
+  console.log(OWCtrL.openWCallApi());
+
   // Event listeners init
   const URLs = ServerCtrl.getUrls();
   const UISelectors = UICtrl.getSelectors();
@@ -650,6 +683,7 @@ const App = (function (ItemCtrl, UICtrl) {
     if (sessionStorage.getItem("isAuthenticated")) {
       // hide login
       App.selectors().formLogin.classList.add("hide");
+      UICtrl.showMenu();
       // get array of users from session Storage
       UICtrl.listUsers(sessionStorage.getItem("arrUsers"));
     }
@@ -667,7 +701,7 @@ const App = (function (ItemCtrl, UICtrl) {
     selectors: () => UISelectors,
     urls: () => URLs,
   };
-})(ItemCtrl, UICtrl);
+})(ItemCtrl, UICtrl, ServerCtrl, OWCtrL);
 
 App.init();
 
