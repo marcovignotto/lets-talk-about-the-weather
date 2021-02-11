@@ -226,37 +226,38 @@ const ItemCtrl = (function () {
 
         // DOM
         let currRow = e.target.closest(UICtrl.getSelectorsClasses().row);
-        console.log(currRow);
 
         let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+        console.log(lastElement.previousElementSibling);
+
+        setTimeout(() => {
+          currRow.style.opacity = "0";
+        }, 500);
+
+        setTimeout(() => {
+          currRow.remove();
+        }, 1000);
 
         // Create new row
-        let newRow = UICtrl.row(_id, firstName, location, language, unit);
-        console.log(newRow);
+
+        let newRow = UICtrl.gridItem(
+          firstName,
+          location,
+          language,
+          unit,
+          _id,
+          "no"
+        );
+
+        // opacity to new row
+        newRow.style.opacity = "0";
+
         // append new row after edited row
         lastElement.after(newRow);
 
-        // to disable is is to save
-        // setTimeout(() => {
-        //   currRow.querySelector(
-        //     UICtrl.getSelectorsClasses().firstName
-        //   ).innerHTML = weatherUserObj.firstName;
-        //   currRow.querySelector(
-        //     UICtrl.getSelectorsClasses().location
-        //   ).innerHTML = weatherUserObj.location;
-        //   currRow.querySelector(
-        //     UICtrl.getSelectorsClasses().language
-        //   ).innerHTML = weatherUserObj.language;
-        //   currRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
-        //     weatherUserObj.unit;
-        // }, 500);
-
         setTimeout(() => {
-          // currRow.style.opacity = "0";
-        }, 1000);
-
-        setTimeout(() => {
-          // currRow.remove();
+          // opacity to new row
+          newRow.style.opacity = "1";
         }, 1500);
       }
     },
@@ -312,7 +313,14 @@ const UICtrl = (function () {
 
   // public
   return {
-    gridItem: function (firstName, location, language, unit, id) {
+    gridItem: function (
+      firstName,
+      location,
+      language,
+      unit,
+      id,
+      append = "yes"
+    ) {
       const row = document.createElement("div");
       row.className = `row grid__item pb-1`;
 
@@ -353,7 +361,10 @@ const UICtrl = (function () {
         editIcon.outerHTML +
         deleteIcon.outerHTML;
 
-      this.getSelectors().locationList.appendChild(row);
+      if (append === "yes") {
+        return this.getSelectors().locationList.appendChild(row);
+      }
+      return row;
     },
     row: function (
       _id = "",
