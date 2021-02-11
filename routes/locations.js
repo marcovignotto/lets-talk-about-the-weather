@@ -2,9 +2,6 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-// import dbCleaning
-const dbCleaning = require("../config/dbDelete");
-
 const { check, validationResult } = require("express-validator");
 
 const Location = require("../models/Location");
@@ -69,8 +66,6 @@ router.post(
         temperature,
         wind,
       });
-
-      //   dbCleaning().catch(console.dir);
 
       const toDo = await newLocation.save();
 

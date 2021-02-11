@@ -4,20 +4,33 @@ let arrAllUsers = [];
 
 const OWCtrL = (function () {
   const URLs = {
-    OPEN_WEATHER_GET:
-      "https://api.openweathermap.org/data/2.5/weather?q=",
+    OPEN_WEATHER_GET: "https://api.openweathermap.org/data/2.5/weather?q=",
   };
   const keys = {
-    apiKey: "169986ea94b386da8e6d479f3e6971d",
+    apiKey: "169986ea94b386da8e6d479f3e6971d0",
   };
   return {
-    openWCallApi: function (location, units, language) {
+    openWCallApi: async function (location, units, language) {
+      const URL = `${URLs.OPEN_WEATHER_GET}${location}&units=${units}&appid=${keys.apiKey}&lang=${language}`;
+      try {
+        const options = {
+          method: "get",
+          url: URL,
+          transformResponse: [
+            (data) => {
+              // transform the response
+              return data;
+            },
+          ],
+        };
 
-      const URL = `${URLs.OPEN_WEATHER_GET}${location}&units=${units}&appid=${keys}&lang=${language}`,
+        const res = await axios(options);
+        return res.data;
+      } catch (err) {
+        console.error(err);
+      }
 
-      
-
-      return keys;
+      return location, units, language;
     },
   };
 })();
@@ -26,11 +39,10 @@ const ServerCtrl = (function () {
   const URLs = {
     URL_POST: "http://localhost:5000/api/auth",
     URL_POST_USER: "http://127.0.0.1:5000/api/weatherusers/",
+    URL_POST_LOCATION: "http://127.0.0.1:5000/api/locations/",
     URL_GET: "http://127.0.0.1:5000/api/weatherusers",
     URL_DELETE: "http://127.0.0.1:5000/api/weatherusers/",
     URL_PUT: "http://127.0.0.1:5000/api/weatherusers/",
-    OPEN_WEATHER_GET:
-      "api.openweathermap.org/data/2.5/weather?q=berlin&units=metric&appid=169986ea94b386da8e6d479f3e6971d0&lang=en",
   };
 
   return {
@@ -63,6 +75,8 @@ const ServerCtrl = (function () {
     },
     callApiAuth: async function (method, token, url, obj = {}, id = "") {
       if (method === "delete" || method === "put") url = `${url}/${id}`;
+
+      // console.log(method, token, url, obj);
 
       try {
         const options = {
@@ -205,7 +219,15 @@ const ItemCtrl = (function () {
     },
     addUserRow: function () {
       // grid item below last one
-      let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+      let lastElement;
+
+      if (UICtrl.getSelectors().locationList.lastElementChild === null) {
+        lastElement = UICtrl.getSelectors().locationList;
+      } else {
+        lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+      }
+      // console.log(UICtrl.getSelectors().locationList.lastElementChild === null);
+
       // create new row
       let newRow = UICtrl.row();
 
@@ -247,8 +269,13 @@ const ItemCtrl = (function () {
         // DOM
         let currRow = e.target.closest(UICtrl.getSelectorsClasses().row);
 
-        let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
-        console.log(lastElement.previousElementSibling);
+        let lastElement;
+
+        if (UICtrl.getSelectors().locationList.lastElementChild === null) {
+          lastElement = UICtrl.getSelectors().locationList;
+        } else {
+          lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+        }
 
         setTimeout(() => {
           currRow.style.opacity = "0";
@@ -279,7 +306,50 @@ const ItemCtrl = (function () {
           // opacity to new row
           newRow.style.opacity = "1";
         }, 1500);
+
+        // create user location sending the just created data to the function
+        this.createUserLocation(firstName, location, unit, language);
       }
+    },
+    createUserLocation: async function (firstName, location, units, language) {
+      // OW API CALL
+      const res = await OWCtrL.openWCallApi(location, units, language);
+
+      // PARSE IT
+      const parsedRes = JSON.parse(res);
+
+      const {
+        getLocation = parsedRes.name,
+        getMain = parsedRes.weather[0].main,
+        getIcon = parsedRes.weather[0].icon,
+        getMainDesc = parsedRes.weather[0].description,
+        getTemp = parsedRes.main.temp,
+        getWind = parsedRes.wind.speed,
+      } = parsedRes;
+
+      // CREATEOBJ
+      const objLocation = {
+        firstName: firstName,
+        language: language,
+        description: getMainDesc,
+        icon: getIcon,
+        location: getLocation,
+        mainWeather: getMain,
+        temperature: getTemp,
+        wind: getWind,
+      };
+
+      // POST ON MONGO
+
+      const resLocation = await ServerCtrl.callApiAuth(
+        "post",
+        ItemCtrl.getToken(),
+        App.urls().URL_POST_LOCATION,
+        objLocation,
+        ""
+      );
+
+      return resLocation;
     },
   };
 })();
@@ -665,8 +735,6 @@ const UICtrl = (function () {
 })();
 
 const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
-  console.log(OWCtrL.openWCallApi());
-
   // Event listeners init
   const URLs = ServerCtrl.getUrls();
   const UISelectors = UICtrl.getSelectors();
