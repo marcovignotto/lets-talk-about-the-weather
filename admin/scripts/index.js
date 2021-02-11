@@ -75,9 +75,6 @@ const ServerCtrl = (function () {
 })();
 
 const ItemCtrl = (function () {
-  // const token = "";
-  const token = { token: sessionStorage.getItem("UserToken") };
-  const arrUsers = { arrUsers: sessionStorage.getItem("arrUsers") };
   return {
     getInputUser: function (e) {
       // function that loops through the input nodes in the closest row
@@ -179,10 +176,10 @@ const ItemCtrl = (function () {
     //   }
     // },
     getToken: function () {
-      return token.token;
+      return sessionStorage.getItem("UserToken");
     },
     getArrUsers: function () {
-      return arrUsers.arrUsers;
+      return sessionStorage.getItem("arrUsers");
     },
     addUserRow: function () {
       // grid item below last one
@@ -197,7 +194,6 @@ const ItemCtrl = (function () {
       UICtrl.iconsEditInit("save");
     },
     saveWeatherUser: async function (e) {
-      let target = e.target.closest(UICtrl.getSelectorsClasses().row);
       ItemCtrl.getInputUser(e);
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
@@ -210,49 +206,57 @@ const ItemCtrl = (function () {
       );
 
       if (res.status >= 200 && res.status <= 399) {
-        // get array from session Storage
-        let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+        // console.log(JSON.parse(res.data)._id);
 
-        console.log(arrUsers);
-        // splice Item
-        // JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
-        //   if (x._id === id) {
-        //     arrUsers.splice(i, 1, weatherUserObj);
-        //   }
-        // });
+        // get id just created and add to the object
+        weatherUserObj["_id"] = JSON.parse(res.data)._id;
+
+        // get array from session Storage
+        let arrUsers = JSON.parse(ItemCtrl.getArrUsers());
+
+        // push in array
+        arrUsers.push(weatherUserObj);
 
         // update array in session Storage
+
         sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
 
-        let currRow = e.target.closest(
-          UICtrl.getSelectorsClasses().gridItemEdit
-        );
+        // destru weatherObj
+        const { _id, firstName, location, language, unit } = weatherUserObj;
 
-        let prevRow =
-          e.target.parentElement.parentElement.parentElement
-            .previousElementSibling;
+        // DOM
+        let currRow = e.target.closest(UICtrl.getSelectorsClasses().row);
+        console.log(currRow);
+
+        let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+
+        // Create new row
+        let newRow = UICtrl.row(_id, firstName, location, language, unit);
+        console.log(newRow);
+        // append new row after edited row
+        lastElement.after(newRow);
 
         // to disable is is to save
-        setTimeout(() => {
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().firstName
-          ).innerHTML = weatherUserObj.firstName;
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().location
-          ).innerHTML = weatherUserObj.location;
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().language
-          ).innerHTML = weatherUserObj.language;
-          prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
-            weatherUserObj.unit;
-        }, 500);
+        // setTimeout(() => {
+        //   currRow.querySelector(
+        //     UICtrl.getSelectorsClasses().firstName
+        //   ).innerHTML = weatherUserObj.firstName;
+        //   currRow.querySelector(
+        //     UICtrl.getSelectorsClasses().location
+        //   ).innerHTML = weatherUserObj.location;
+        //   currRow.querySelector(
+        //     UICtrl.getSelectorsClasses().language
+        //   ).innerHTML = weatherUserObj.language;
+        //   currRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
+        //     weatherUserObj.unit;
+        // }, 500);
 
         setTimeout(() => {
-          currRow.style.opacity = "0";
+          // currRow.style.opacity = "0";
         }, 1000);
 
         setTimeout(() => {
-          currRow.remove();
+          // currRow.remove();
         }, 1500);
       }
     },
@@ -453,6 +457,7 @@ const UICtrl = (function () {
         "delete",
         ItemCtrl.getToken(),
         App.urls().URL_DELETE,
+        {},
         id
       );
 
