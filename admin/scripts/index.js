@@ -5,6 +5,7 @@ let arrAllUsers = [];
 const ServerCtrl = (function () {
   const URLs = {
     URL_POST: "http://localhost:5000/api/auth",
+    URL_POST_USER: "127.0.0.1:5000/api/weatherusers/",
     URL_GET: "http://127.0.0.1:5000/api/weatherusers",
     URL_DELETE: "http://127.0.0.1:5000/api/weatherusers/",
     URL_PUT: "http://127.0.0.1:5000/api/weatherusers/",
@@ -38,7 +39,7 @@ const ServerCtrl = (function () {
         console.error(err);
       }
     },
-    callApiAuth: async function (method, token, url, id = "", obj = {}) {
+    callApiAuth: async function (method, token, url, obj = {}, id = "") {
       if (method === "delete" || method === "put") url = `${url}/${id}`;
 
       try {
@@ -58,7 +59,10 @@ const ServerCtrl = (function () {
             },
           ],
         };
+        console.log(options);
+
         const res = await axios(options);
+        console.log(res);
 
         if (res.status >= 200 && res.status <= 399) {
           sessionStorage.setItem("isAuthenticated", true);
@@ -158,6 +162,21 @@ const ItemCtrl = (function () {
     },
     getArrUsers: function () {
       return arrUsers.arrUsers;
+    },
+    addUser: function () {
+      // grid item below last one
+      let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
+      // create new row
+      let newRow = UICtrl.row();
+
+      // set newUser type to change function from Update to Save
+      newRow.setAttribute("type", "newUser");
+
+      // append new row after edited row
+      lastElement.after(newRow);
+
+      // mandatory
+      UICtrl.iconsEditInit();
     },
   };
 })();
@@ -306,30 +325,6 @@ const UICtrl = (function () {
         editIcon.outerHTML +
         deleteIcon.outerHTML;
 
-      // this.userToUpdate(firstNameCol.value, location, language, unit);
-
-      // const sendDataForUpd = () => {
-      //   // console.log(firstNameCol.value, location, language, unit);
-      //   let objToUpd = {
-      //     firstName,
-      //     location,
-      //     language,
-      //     unit,
-      //   };
-      //   this.userToUpdate(objToUpd);
-      // };
-      // const sendDataForUpd = (a) => {
-      //   console.log("update data");
-      //   this.userToUpdate.id = _id;
-      //   this.userToUpdate.firstName = a;
-      //   this.userToUpdate.location = locationCol.value;
-      //   this.userToUpdate.language = languageCol.value;
-      //   this.userToUpdate.unit = unitCol.value;
-      // };
-      // sendDataForUpd(firstNameCol.value);
-      // console.log(this.userToUpdate);
-      // // sendDataForUpd();
-      // // console.log("firstNameCol.value", firstNameCol.value);
       return row;
     },
 
@@ -421,6 +416,7 @@ const UICtrl = (function () {
     updateWeatherUser: async function (e) {
       e.preventDefault();
 
+      // get values for uptate
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
       let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
         ".first__name"
@@ -429,6 +425,43 @@ const UICtrl = (function () {
       let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
         "input"
       );
+
+      // check if is to save instead of update
+
+      let toSave =
+        e.target
+          .closest(UICtrl.getSelectorsClasses().row)
+          .getAttribute("type") === "newUser";
+
+      let putPost = toSave ? "post" : "put";
+      id = toSave ? "" : id;
+
+      // if (
+      //   e.target
+      //     .closest(UICtrl.getSelectorsClasses().row)
+      //     .getAttribute("type") === "newUser"
+      // ) {
+
+      //   const res = await ServerCtrl.callApiAuth(
+      //     "post",
+      //     ItemCtrl.getToken(),
+      //     App.urls().URL_POST_USER,
+      //     weatherUserObj,
+      //     '',
+      //   );
+
+      //    if (res.status >= 200 && res.status <= 399) {
+      //   // get array from session Storage
+      //   let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+
+      //   // splice Item
+      //   JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+      //     if (x._id === id) {
+      //       arrUsers.splice(i, 1, weatherUserObj);
+      //     }
+      //   });
+
+      // }
 
       let weatherUserObj = {};
       weatherUserObj["_id"] = id;
@@ -447,12 +480,14 @@ const UICtrl = (function () {
           weatherUserObj[inputClassesArr[i]] = x.value;
       });
 
+      // checks var toSave ? put > post
+
       const res = await ServerCtrl.callApiAuth(
-        "put",
+        putPost,
         ItemCtrl.getToken(),
         App.urls().URL_PUT,
-        weatherUserObj._id,
-        weatherUserObj
+        weatherUserObj,
+        weatherUserObj._id
       );
 
       if (res.status >= 200 && res.status <= 399) {
@@ -462,14 +497,13 @@ const UICtrl = (function () {
         // splice Item
         JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
           if (x._id === id) {
-            console.log("Update from arr pos", i);
             arrUsers.splice(i, 1, weatherUserObj);
           }
         });
 
         // update array in session Storage
         sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
-        // console.log(UICtrl.getSelectorsClasses().gridItem);
+
         let currRow = e.target.closest(
           UICtrl.getSelectorsClasses().gridItemEdit
         );
@@ -478,6 +512,7 @@ const UICtrl = (function () {
           e.target.parentElement.parentElement.parentElement
             .previousElementSibling;
 
+        // to disable is is to save
         setTimeout(() => {
           prevRow.querySelector(
             UICtrl.getSelectorsClasses().firstName
@@ -522,7 +557,7 @@ const UICtrl = (function () {
         .forEach((x) => x.addEventListener("click", this.submitDelete));
     },
 
-    iconsEditInit: function (weatherUserObj) {
+    iconsEditInit: function () {
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUpdateWeaUser)
         .addEventListener("click", function (e) {
@@ -544,6 +579,8 @@ const App = (function (ItemCtrl, UICtrl) {
     UISelectors.btnLogin.addEventListener("click", function (e) {
       ItemCtrl.sendLogin(e);
     });
+
+    UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUser);
   };
 
   const checkSessionOnStart = function () {
