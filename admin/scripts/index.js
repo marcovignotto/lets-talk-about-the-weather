@@ -81,6 +81,29 @@ const ItemCtrl = (function () {
   const token = { token: sessionStorage.getItem("UserToken") };
   const arrUsers = { arrUsers: sessionStorage.getItem("arrUsers") };
   return {
+    getInputUser: function (e) {
+      let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
+        "input"
+      );
+
+      let weatherUserObj = {};
+      // weatherUserObj["_id"] = "id";
+
+      let inputClassesArr = [];
+
+      // collect all the classes  OK
+      allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
+
+      // flat array
+      inputClassesArr = inputClassesArr.flat();
+
+      // loop througt the nodes and create obj
+      allNodes.forEach((x, i) => {
+        if (x.getAttribute("id") === inputClassesArr[i])
+          weatherUserObj[inputClassesArr[i]] = x.value;
+      });
+      return weatherUserObj;
+    },
     sendLogin: async function (e) {
       e.preventDefault();
       const URLs = ServerCtrl.getUrls();
@@ -163,20 +186,21 @@ const ItemCtrl = (function () {
     getArrUsers: function () {
       return arrUsers.arrUsers;
     },
-    addUser: function () {
+    addUserRow: function () {
       // grid item below last one
       let lastElement = UICtrl.getSelectors().locationList.lastElementChild;
       // create new row
       let newRow = UICtrl.row();
 
-      // set newUser type to change function from Update to Save
-      newRow.setAttribute("type", "newUser");
-
       // append new row after edited row
       lastElement.after(newRow);
 
       // mandatory
-      UICtrl.iconsEditInit();
+      UICtrl.iconsEditInit("save");
+    },
+    saveWeatherUser: function (e) {
+      let target = e.target.closest(UICtrl.getSelectorsClasses().row);
+      ItemCtrl.getInputUser(e);
     },
   };
 })();
@@ -355,7 +379,7 @@ const UICtrl = (function () {
       // append new row after edited row
       closestRow.after(newRow);
 
-      UICtrl.iconsEditInit();
+      UICtrl.iconsEditInit("update");
     },
 
     submitDelete: async function (e) {
@@ -418,72 +442,43 @@ const UICtrl = (function () {
 
       // get values for uptate
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
-      let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
-        ".first__name"
-      ).value;
+      // let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
+      //   ".first__name"
+      // ).value;
 
-      let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
-        "input"
-      );
+      // let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
+      //   "input"
+      // );
 
-      // check if is to save instead of update
+      // let weatherUserObj = {};
+      // weatherUserObj["_id"] = id;
 
-      let toSave =
-        e.target
-          .closest(UICtrl.getSelectorsClasses().row)
-          .getAttribute("type") === "newUser";
+      // let inputClassesArr = [];
 
-      let putPost = toSave ? "post" : "put";
-      id = toSave ? "" : id;
+      // // collect all the classes  OK
+      // allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
 
-      // if (
-      //   e.target
-      //     .closest(UICtrl.getSelectorsClasses().row)
-      //     .getAttribute("type") === "newUser"
-      // ) {
+      // // flat array
+      // inputClassesArr = inputClassesArr.flat();
 
-      //   const res = await ServerCtrl.callApiAuth(
-      //     "post",
-      //     ItemCtrl.getToken(),
-      //     App.urls().URL_POST_USER,
-      //     weatherUserObj,
-      //     '',
-      //   );
+      // // loop througt the nodes and create obj
+      // allNodes.forEach((x, i) => {
+      //   if (x.getAttribute("id") === inputClassesArr[i])
+      //     weatherUserObj[inputClassesArr[i]] = x.value;
+      // });
 
-      //    if (res.status >= 200 && res.status <= 399) {
-      //   // get array from session Storage
-      //   let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+      // send evetnt to funciton that returns an obj
+      console.log(e.target.parentElement.parentElement.getAttribute("data-id"));
 
-      //   // splice Item
-      //   JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
-      //     if (x._id === id) {
-      //       arrUsers.splice(i, 1, weatherUserObj);
-      //     }
-      //   });
+      console.log(id);
+      let weatherUserObj = ItemCtrl.getInputUser(e);
 
-      // }
-
-      let weatherUserObj = {};
       weatherUserObj["_id"] = id;
-
-      let inputClassesArr = [];
-
-      // collect all the classes  OK
-      allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
-
-      // flat array
-      inputClassesArr = inputClassesArr.flat();
-
-      // loop througt the nodes and create obj
-      allNodes.forEach((x, i) => {
-        if (x.getAttribute("id") === inputClassesArr[i])
-          weatherUserObj[inputClassesArr[i]] = x.value;
-      });
 
       // checks var toSave ? put > post
 
       const res = await ServerCtrl.callApiAuth(
-        putPost,
+        "put",
         ItemCtrl.getToken(),
         App.urls().URL_PUT,
         weatherUserObj,
@@ -557,11 +552,13 @@ const UICtrl = (function () {
         .forEach((x) => x.addEventListener("click", this.submitDelete));
     },
 
-    iconsEditInit: function () {
+    iconsEditInit: function (type) {
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUpdateWeaUser)
         .addEventListener("click", function (e) {
-          UICtrl.updateWeatherUser(e);
+          type === "update"
+            ? UICtrl.updateWeatherUser(e)
+            : ItemCtrl.saveWeatherUser(e);
         });
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
@@ -580,7 +577,7 @@ const App = (function (ItemCtrl, UICtrl) {
       ItemCtrl.sendLogin(e);
     });
 
-    UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUser);
+    UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUserRow);
   };
 
   const checkSessionOnStart = function () {
