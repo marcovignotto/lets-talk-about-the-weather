@@ -5,7 +5,7 @@ let arrAllUsers = [];
 const ServerCtrl = (function () {
   const URLs = {
     URL_POST: "http://localhost:5000/api/auth",
-    URL_POST_USER: "127.0.0.1:5000/api/weatherusers/",
+    URL_POST_USER: "http://127.0.0.1:5000/api/weatherusers/",
     URL_GET: "http://127.0.0.1:5000/api/weatherusers",
     URL_DELETE: "http://127.0.0.1:5000/api/weatherusers/",
     URL_PUT: "http://127.0.0.1:5000/api/weatherusers/",
@@ -59,10 +59,8 @@ const ServerCtrl = (function () {
             },
           ],
         };
-        console.log(options);
 
         const res = await axios(options);
-        console.log(res);
 
         if (res.status >= 200 && res.status <= 399) {
           sessionStorage.setItem("isAuthenticated", true);
@@ -82,14 +80,14 @@ const ItemCtrl = (function () {
   const arrUsers = { arrUsers: sessionStorage.getItem("arrUsers") };
   return {
     getInputUser: function (e) {
-      let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
-        "input"
-      );
-
+      // function that loops through the input nodes in the closest row
       let weatherUserObj = {};
-      // weatherUserObj["_id"] = "id";
-
       let inputClassesArr = [];
+
+      // get all nodes
+      let allNodes = e.target
+        .closest(UICtrl.getSelectorsClasses().row)
+        .querySelectorAll("input");
 
       // collect all the classes  OK
       allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
@@ -126,60 +124,60 @@ const ItemCtrl = (function () {
         // populate users
         .then((res) => UICtrl.listUsers(res.data));
     },
-    sendLoginOldWorking: async function (e) {
-      e.preventDefault();
-      console.log();
-      const email = App.selectors().emailInput.value;
-      const password = App.selectors().emailPassword.value;
+    // sendLoginOldWorking: async function (e) {
+    //   e.preventDefault();
+    //   console.log();
+    //   const email = App.selectors().emailInput.value;
+    //   const password = App.selectors().emailPassword.value;
 
-      try {
-        const optionsPostAuth = {
-          method: "post",
-          data: {
-            email: email,
-            password: password,
-          },
-          url: App.urls().URL_POST,
-          transformResponse: [
-            (data) => {
-              // transform the response
-              return data;
-            },
-          ],
-        };
+    //   try {
+    //     const optionsPostAuth = {
+    //       method: "post",
+    //       data: {
+    //         email: email,
+    //         password: password,
+    //       },
+    //       url: App.urls().URL_POST,
+    //       transformResponse: [
+    //         (data) => {
+    //           // transform the response
+    //           return data;
+    //         },
+    //       ],
+    //     };
 
-        const res = await axios(optionsPostAuth);
-        const { token } = JSON.parse(res.data);
+    //     const res = await axios(optionsPostAuth);
+    //     const { token } = JSON.parse(res.data);
 
-        sessionStorage.setItem("UserToken", token);
+    //     sessionStorage.setItem("UserToken", token);
 
-        const optionsPostLocations = {
-          method: "get",
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          url: App.urls().URL_GET,
-          transformResponse: [
-            (data) => {
-              // transform the response
-              return data;
-            },
-          ],
-        };
+    //     const optionsPostLocations = {
+    //       method: "get",
+    //       headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //       url: App.urls().URL_GET,
+    //       transformResponse: [
+    //         (data) => {
+    //           // transform the response
+    //           return data;
+    //         },
+    //       ],
+    //     };
 
-        resLocations = await axios(optionsPostLocations);
-        console.log(resLocations);
-        if (resLocations.status >= 200 && resLocations.status <= 399)
-          sessionStorage.setItem("isAuthenticated", true);
+    //     resLocations = await axios(optionsPostLocations);
+    //     console.log(resLocations);
+    //     if (resLocations.status >= 200 && resLocations.status <= 399)
+    //       sessionStorage.setItem("isAuthenticated", true);
 
-        listUsers(token);
-        // return JSON.parse(res.data);
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    //     listUsers(token);
+    //     // return JSON.parse(res.data);
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
     getToken: function () {
       return token.token;
     },
@@ -198,9 +196,65 @@ const ItemCtrl = (function () {
       // mandatory
       UICtrl.iconsEditInit("save");
     },
-    saveWeatherUser: function (e) {
+    saveWeatherUser: async function (e) {
       let target = e.target.closest(UICtrl.getSelectorsClasses().row);
       ItemCtrl.getInputUser(e);
+
+      let weatherUserObj = ItemCtrl.getInputUser(e);
+
+      const res = await ServerCtrl.callApiAuth(
+        "post",
+        ItemCtrl.getToken(),
+        App.urls().URL_POST_USER,
+        weatherUserObj
+      );
+
+      if (res.status >= 200 && res.status <= 399) {
+        // get array from session Storage
+        let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+
+        console.log(arrUsers);
+        // splice Item
+        // JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+        //   if (x._id === id) {
+        //     arrUsers.splice(i, 1, weatherUserObj);
+        //   }
+        // });
+
+        // update array in session Storage
+        sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
+
+        let currRow = e.target.closest(
+          UICtrl.getSelectorsClasses().gridItemEdit
+        );
+
+        let prevRow =
+          e.target.parentElement.parentElement.parentElement
+            .previousElementSibling;
+
+        // to disable is is to save
+        setTimeout(() => {
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().firstName
+          ).innerHTML = weatherUserObj.firstName;
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().location
+          ).innerHTML = weatherUserObj.location;
+          prevRow.querySelector(
+            UICtrl.getSelectorsClasses().language
+          ).innerHTML = weatherUserObj.language;
+          prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
+            weatherUserObj.unit;
+        }, 500);
+
+        setTimeout(() => {
+          currRow.style.opacity = "0";
+        }, 1000);
+
+        setTimeout(() => {
+          currRow.remove();
+        }, 1500);
+      }
     },
   };
 })();
@@ -468,14 +522,10 @@ const UICtrl = (function () {
       // });
 
       // send evetnt to funciton that returns an obj
-      console.log(e.target.parentElement.parentElement.getAttribute("data-id"));
 
-      console.log(id);
       let weatherUserObj = ItemCtrl.getInputUser(e);
 
       weatherUserObj["_id"] = id;
-
-      // checks var toSave ? put > post
 
       const res = await ServerCtrl.callApiAuth(
         "put",
