@@ -7,7 +7,7 @@ const postcss = require("gulp-postcss");
 const replace = require("gulp-replace");
 const sass = require("gulp-sass");
 const sourcemaps = require("gulp-sourcemaps");
-const uglify = require("gulp-uglify");
+const terser = require("gulp-terser-js");
 
 // file path vars
 
@@ -31,7 +31,13 @@ function scssTask() {
 function jsTask() {
   return src(files.jsPath)
     .pipe(concat("index.js"))
-    .pipe(uglify())
+    .pipe(
+      terser({
+        mangle: {
+          toplevel: true,
+        },
+      })
+    )
     .pipe(dest("admin/dist"));
 }
 
@@ -51,3 +57,37 @@ function watchTask() {
 // default task
 
 exports.default = series(parallel(scssTask, jsTask), cacheBustTask, watchTask);
+
+// const gulp = require("gulp");
+// const concat = require("gulp-concat");
+// const sourcemaps = require("gulp-sourcemaps");
+// const terser = require("gulp-terser-js");
+
+// const sourceMapOpt = {
+//   sourceMappingURL: (file) => "http://127.0.0.1/map/" + file.relative + ".map",
+// };
+// const mapsFolder = "./public/map";
+
+// const minifyJS = () =>
+//   gulp
+//     .src("./asset/js/*.js")
+//     .pipe(gulp.dest(mapsFolder))
+//     .pipe(sourcemaps.init())
+//     .pipe(concat("script.js"))
+//     .pipe(
+//       terser({
+//         mangle: {
+//           toplevel: true,
+//         },
+//       })
+//     )
+//     .on("error", function (error) {
+//       if (error.plugin !== "gulp-terser-js") {
+//         console.log(error.message);
+//       }
+//       this.emit("end");
+//     })
+//     .pipe(sourcemaps.write(mapsFolder, sourceMapOpt))
+//     .pipe(gulp.dest("./public/js/"));
+
+// gulp.task("minifyJS", minifyJS);
