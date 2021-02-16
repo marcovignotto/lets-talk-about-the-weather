@@ -37,7 +37,13 @@ const allWeatherUsers = async () => {
 };
 
 // POSTs on Mongo user location
-const locationOnMongo = async (firstName, location, units, language) => {
+const locationOnMongo = async (
+  firstName,
+  location,
+  units,
+  language,
+  userCode
+) => {
   // Open Weather API CALL
   const URL = `${OPEN_WEATHER_URL}${location}&units=${units}&appid=${OPEN_WEATHER_KEY}&lang=${language}`;
   try {
@@ -76,6 +82,7 @@ const locationOnMongo = async (firstName, location, units, language) => {
       mainWeather: getMain,
       temperature: getTemp,
       wind: getWind,
+      userCode,
     };
 
     // send to mongo db
@@ -114,7 +121,13 @@ const populateDbWeather = () => {
       allWeatherUsers().then((res) => {
         console.log("DB Populated");
         res.map((x) =>
-          locationOnMongo(x.firstName, x.location, x.language, x.unit)
+          locationOnMongo(
+            x.firstName,
+            x.location,
+            x.language,
+            x.unit,
+            x.userCode
+          )
         );
       });
     }
