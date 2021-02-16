@@ -17,7 +17,8 @@ const filesAdmin = {
 };
 const filesClient = {
   scssPath: "lib/scss/**/*.scss",
-  jsPath: "lib/js/**/*.js",
+  jsPath: "lib/js/index.js",
+  // jsPath: "lib/js/**/*.js",
 };
 
 // sass task admin
