@@ -10,9 +10,6 @@ const URL_POST_LOCATION = config.get("localApi.urlPostLocation");
 const OPEN_WEATHER_URL = config.get("openWeartherAPI.apiUrl");
 const OPEN_WEATHER_KEY = config.get("openWeartherAPI.apiKey");
 
-// Arrays
-// let allWeatherUsersDB = [];
-
 // get al the users from mongo
 const allWeatherUsers = async () => {
   try {
@@ -38,71 +35,6 @@ const allWeatherUsers = async () => {
     console.error(err);
   }
 };
-
-// @get request
-
-// const getWeather = async (firstName, location, language, unitLocation) => {
-//   const API_URL = config.get("openWeartherAPI.apiUrl");
-//   const API_KEY = config.get("openWeartherAPI.apiKey");
-//   const LOCATION_CODE = location;
-//   const LANG = language;
-//   const UNITS = unitLocation;
-//   const FULL_API_URL = `${API_URL}?q=${LOCATION_CODE}&units=${UNITS}&appid=${API_KEY}&lang=${LANG}`;
-
-//   const URL_POST = config.get("localApi.urlGet");
-
-//   try {
-//     const res = await axios.get(FULL_API_URL);
-
-//     // DESTRUCTURING
-//     const {
-//       // name, user name
-//       // language = res.data
-//       name,
-//       weather,
-//       weatherMain = weather[0].main,
-//       weatherIcon = weather[0].icon,
-//       weatherDesc = weather[0].description,
-//       main = { temperature: temp },
-//       wind = { speed },
-//     } = res.data;
-
-//     // OBJ TO SEND
-//     const objLocation = {
-//       firstName,
-//       language,
-//       location: name,
-//       unit: unitLocation,
-//       mainWeather: weather[0].main,
-//       icon: weather[0].icon,
-//       description: weather[0].description,
-//       temperature: main.temp,
-//       wind: wind.speed,
-//     };
-
-//     // SEND
-//     const options = {
-//       method: "post",
-//       headers: {
-//         "Access-Control-Allow-Origin": "*",
-//         "Content-Type": "application/json",
-//         Authorization: config.get("authLocalApi.Bearer"),
-//       },
-//       url: URL_POST,
-//       data: objLocation,
-//       transformResponse: [
-//         (data) => {
-//           // transform the response
-//           return data;
-//         },
-//       ],
-//     };
-
-//     axios(options);
-//   } catch (e) {
-//     console.error(e);
-//   }
-// };
 
 // POSTs on Mongo user location
 const locationOnMongo = async (firstName, location, units, language) => {
@@ -187,16 +119,6 @@ const populateDbWeather = () => {
       });
     }
   });
-  // dbCleaning().then((res) => {
-  //   if (res.result.ok >= 1) {
-  //     console.log("DB Populated");
-  //     allWeatherUsersDB.map((x) =>
-  //       getWeather(x.firstName, x.location, x.language, x.unit)
-  //     );
-  //   }
-  // });
-  // }
-  // });
 };
 
 var job = new CronJob(
