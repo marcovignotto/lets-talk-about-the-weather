@@ -52,6 +52,7 @@ router.post(
       mainWeather,
       temperature,
       wind,
+      userCode,
     } = req.body;
 
     try {
@@ -65,6 +66,7 @@ router.post(
         mainWeather,
         temperature,
         wind,
+        userCode,
       });
 
       const toDo = await newLocation.save();

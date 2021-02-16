@@ -94,6 +94,9 @@ const ItemCtrl = (function () {
         // get id just created and add to the object
         weatherUserObj["_id"] = JSON.parse(res.data)._id;
 
+        // add user code threw back from axios
+        weatherUserObj["userCode"] = JSON.parse(res.data).userCode;
+
         // get array from session Storage
         let arrUsers = JSON.parse(ItemCtrl.getArrUsers());
 
@@ -105,7 +108,14 @@ const ItemCtrl = (function () {
         sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
 
         // destru weatherObj
-        const { _id, firstName, location, language, unit } = weatherUserObj;
+        const {
+          _id,
+          firstName,
+          location,
+          language,
+          unit,
+          userCode,
+        } = weatherUserObj;
 
         // DOM
         let currRow = e.target.closest(UICtrl.getSelectorsClasses().row);
@@ -126,7 +136,7 @@ const ItemCtrl = (function () {
           currRow.remove();
         }, 1000);
 
-        // Create new row with no I doesn't automatically append
+        // Create new row with "no" I doesn't automatically append
 
         let newRow = UICtrl.gridItem(
           firstName,
@@ -149,10 +159,16 @@ const ItemCtrl = (function () {
         }, 1500);
 
         // create user location sending the just created data to the function
-        this.createUserLocation(firstName, location, unit, language);
+        this.createUserLocation(firstName, location, unit, language, userCode);
       }
     },
-    createUserLocation: async function (firstName, location, units, language) {
+    createUserLocation: async function (
+      firstName,
+      location,
+      units,
+      language,
+      userCode
+    ) {
       // OW API CALL
       const res = await OWCtrL.openWCallApi(location, units, language);
 
@@ -177,6 +193,7 @@ const ItemCtrl = (function () {
         location: getLocation,
         mainWeather: getMain,
         temperature: getTemp,
+        userCode: userCode,
         wind: getWind,
       };
 

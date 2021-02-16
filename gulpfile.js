@@ -29,16 +29,18 @@ function scssTask() {
 // JS task
 
 function jsTask() {
-  return src(files.jsPath)
-    .pipe(concat("index.js"))
-    .pipe(
-      terser({
-        mangle: {
-          toplevel: true,
-        },
-      })
-    )
-    .pipe(dest("admin/dist"));
+  return (
+    src(files.jsPath)
+      .pipe(concat("index.js"))
+      // .pipe(
+      //   terser({
+      //     mangle: {
+      //       toplevel: true,
+      //     },
+      //   })
+      // )
+      .pipe(dest("admin/dist"))
+  );
 }
 
 // cachebusting

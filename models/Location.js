@@ -37,6 +37,11 @@ const LocationSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  userCode: {
+    type: Number,
+    require: true,
+    unique: true,
+  },
   date: {
     type: Date,
     default: Date.now,

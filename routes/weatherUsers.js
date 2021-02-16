@@ -58,7 +58,6 @@ router.post(
       // const createUserCode = async () => {
       // find last id
       // returns everything and sort it from the last userCode
-
       const resUserCode = await WeatherUser.find()
         .sort({
           userCode: -1,
@@ -72,6 +71,7 @@ router.post(
         unit,
         userCode: resUserCode.length === 0 ? 0 : resUserCode[0].userCode + 1,
       });
+
       const addUser = await newWeatherUser.save();
 
       res.json(addUser);
