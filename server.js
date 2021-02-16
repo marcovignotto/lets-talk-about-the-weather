@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB = require("./config/db.js");
 
 const auth = require("./middleware/auth");
-const basicAuth = require("express-basic-auth");
+// const basicAuth = require("express-basic-auth");
 
 var path = require("path");
 
