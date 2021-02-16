@@ -53,15 +53,25 @@ router.post(
     // console.log(res);
 
     const { firstName, language, location, unit } = req.body;
-
+    // console.log(req.body);
     try {
+      // const createUserCode = async () => {
+      // find last id
+      // returns everything and sort it from the last userCode
+
+      const resUserCode = await WeatherUser.find()
+        .sort({
+          userCode: -1,
+        })
+        .limit(1);
+
       const newWeatherUser = new WeatherUser({
         firstName,
         language,
         location,
         unit,
+        userCode: resUserCode.length === 0 ? 0 : resUserCode[0].userCode + 1,
       });
-
       const addUser = await newWeatherUser.save();
 
       res.json(addUser);
@@ -77,13 +87,14 @@ router.post(
 // @access  Private
 
 router.put("/:id", auth, async (req, res) => {
-  const { firstName, language, location, unit } = req.body;
+  const { firstName, language, location, unit, userCode } = req.body;
 
   const userFields = {};
   if (firstName) userFields.firstName = firstName;
   if (language) userFields.language = language;
   if (location) userFields.location = location;
   if (unit) userFields.unit = unit;
+  if (userCode) userFields.userCode = userCode;
 
   try {
     let user = await WeatherUser.findById(req.params.id);

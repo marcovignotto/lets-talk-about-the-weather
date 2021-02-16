@@ -45,60 +45,7 @@ const ItemCtrl = (function () {
         // populate users
         .then((res) => UICtrl.listUsers(res.data));
     },
-    // sendLoginOldWorking: async function (e) {
-    //   e.preventDefault();
-    //   console.log();
-    //   const email = App.selectors().emailInput.value;
-    //   const password = App.selectors().emailPassword.value;
 
-    //   try {
-    //     const optionsPostAuth = {
-    //       method: "post",
-    //       data: {
-    //         email: email,
-    //         password: password,
-    //       },
-    //       url: App.urls().URL_POST,
-    //       transformResponse: [
-    //         (data) => {
-    //           // transform the response
-    //           return data;
-    //         },
-    //       ],
-    //     };
-
-    //     const res = await axios(optionsPostAuth);
-    //     const { token } = JSON.parse(res.data);
-
-    //     sessionStorage.setItem("UserToken", token);
-
-    //     const optionsPostLocations = {
-    //       method: "get",
-    //       headers: {
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Content-Type": "application/json",
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //       url: App.urls().URL_GET,
-    //       transformResponse: [
-    //         (data) => {
-    //           // transform the response
-    //           return data;
-    //         },
-    //       ],
-    //     };
-
-    //     resLocations = await axios(optionsPostLocations);
-    //     console.log(resLocations);
-    //     if (resLocations.status >= 200 && resLocations.status <= 399)
-    //       sessionStorage.setItem("isAuthenticated", true);
-
-    //     listUsers(token);
-    //     // return JSON.parse(res.data);
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
     getToken: function () {
       return sessionStorage.getItem("UserToken");
     },
@@ -130,6 +77,9 @@ const ItemCtrl = (function () {
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
 
+      // User code created by the route
+      // weatherUserObj["userCode"] = 3;
+
       const res = await ServerCtrl.callApiAuth(
         "post",
         ItemCtrl.getToken(),
@@ -138,6 +88,9 @@ const ItemCtrl = (function () {
       );
 
       if (res.status >= 200 && res.status <= 399) {
+        //
+        // just for local storage
+        //
         // get id just created and add to the object
         weatherUserObj["_id"] = JSON.parse(res.data)._id;
 

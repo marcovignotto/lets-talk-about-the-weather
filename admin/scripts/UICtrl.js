@@ -219,7 +219,6 @@ const UICtrl = (function () {
         // splice Item
         JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
           if (x._id === id) {
-            console.log("del from arr", i);
             arrUsers.splice(i, 1);
           }
         });
