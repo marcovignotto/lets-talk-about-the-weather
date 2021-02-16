@@ -72,5 +72,3 @@ const ServerCtrl = (function () {
     },
   };
 })();
-
-// export default ServerCtrl;
