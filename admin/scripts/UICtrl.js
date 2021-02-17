@@ -167,9 +167,7 @@ const UICtrl = (function () {
       mainLocationCheck.className = "col-1 main__location";
       mainLocationCheck.setAttribute("type", "checkbox");
       mainLocationCheck.setAttribute("id", "mainLocation");
-      console.log("mainLocation", mainLocation);
-      if (mainLocation == true) {
-        console.log(mainLocationCheck);
+      if (mainLocation === "true") {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);
       }
