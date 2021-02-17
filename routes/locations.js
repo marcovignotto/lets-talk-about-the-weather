@@ -39,25 +39,23 @@ router.post(
     //   return res.status(400).json({ errors: errors.array() });
     // }
 
-    // console.log(req);
-    // console.log(res);
-    console.log(req.body);
-
-    const {
-      firstName,
-      language,
-      description,
-      icon,
-      location,
-      unit,
-      mainWeather,
-      temperature,
-      wind,
-      userCode,
-      mainLocation,
-    } = req.body;
-
     try {
+      await Location.updateMany({}, { mainLocation: false });
+
+      const {
+        firstName,
+        language,
+        description,
+        icon,
+        location,
+        unit,
+        mainWeather,
+        temperature,
+        wind,
+        userCode,
+        mainLocation,
+      } = req.body;
+
       const newLocation = new Location({
         firstName,
         language,

@@ -45,8 +45,9 @@ const LocationSchema = mongoose.Schema({
   mainLocation: {
     type: Boolean,
     // unique: true,
-    default: false,
+    // default: false,
     // sparse: true,
+    // require: true,
   },
   date: {
     type: Date,

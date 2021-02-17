@@ -83,8 +83,6 @@ const ItemCtrl = (function () {
       // User code created by the route
       // weatherUserObj["userCode"] = 3;
 
-      console.log(weatherUserObj);
-
       const res = await ServerCtrl.callApiAuth(
         "post",
         ItemCtrl.getToken(),
@@ -120,6 +118,7 @@ const ItemCtrl = (function () {
           language,
           unit,
           userCode,
+          mainLocation,
         } = weatherUserObj;
 
         // DOM
@@ -164,7 +163,14 @@ const ItemCtrl = (function () {
         }, 1500);
 
         // create user location sending the just created data to the function
-        this.createUserLocation(firstName, location, unit, language, userCode);
+        this.createUserLocation(
+          firstName,
+          location,
+          unit,
+          language,
+          userCode,
+          mainLocation
+        );
       }
     },
     createUserLocation: async function (
@@ -172,7 +178,8 @@ const ItemCtrl = (function () {
       location,
       units,
       language,
-      userCode
+      userCode,
+      mainLocation
     ) {
       // OW API CALL
       const res = await OWCtrL.openWCallApi(location, units, language);
@@ -200,6 +207,7 @@ const ItemCtrl = (function () {
         temperature: getTemp,
         userCode: userCode,
         wind: getWind,
+        mainLocation,
       };
 
       // POST ON MONGO

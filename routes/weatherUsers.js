@@ -65,11 +65,8 @@ router.post(
     try {
       await WeatherUser.updateMany({}, { mainLocation: false });
 
-      // console.log(resDb);
-
       const { firstName, language, location, unit, mainLocation } = req.body;
-      // console.log(req.body);
-      // const createUserCode = async () => {
+
       // find last id
       // returns everything and sort it from the last userCode
       const resUserCode = await WeatherUser.find()

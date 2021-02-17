@@ -39,8 +39,6 @@ const ServerCtrl = (function () {
     callApiAuth: async function (method, token, url, obj = {}, id = "") {
       if (method === "delete" || method === "put") url = `${url}/${id}`;
 
-      // console.log(method, token, url, obj);
-
       try {
         const options = {
           method: method,
