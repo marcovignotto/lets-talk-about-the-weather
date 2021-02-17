@@ -19,7 +19,6 @@ const ItemCtrl = (function () {
       // loop througt the nodes and create obj
       allNodes.forEach((x, i) => {
         if (x.getAttribute("id") === inputClassesArr[i]) {
-          console.log(x.value);
           weatherUserObj[inputClassesArr[i]] = x.value;
         }
       });

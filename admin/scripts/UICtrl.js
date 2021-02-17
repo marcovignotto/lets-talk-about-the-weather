@@ -124,7 +124,7 @@ const UICtrl = (function () {
       location = "",
       language = "",
       unit = "",
-      mainLocation = false
+      mainLocation
     ) {
       const row = document.createElement("div");
       row.className = `row grid__item__edit pb-1`;
@@ -167,8 +167,12 @@ const UICtrl = (function () {
       mainLocationCheck.className = "col-1 main__location";
       mainLocationCheck.setAttribute("type", "checkbox");
       mainLocationCheck.setAttribute("id", "mainLocation");
-      // mainLocationCheck.setAttribute("value", false);
-      // mainLocationCheck.setAttribute("checked");
+      console.log("mainLocation", mainLocation);
+      if (mainLocation == true) {
+        console.log(mainLocationCheck);
+        mainLocationCheck.setAttribute("value", true);
+        mainLocationCheck.setAttribute("checked", true);
+      }
 
       row.innerHTML +=
         firstNameCol.outerHTML +
@@ -199,17 +203,30 @@ const UICtrl = (function () {
       // filter id to edit
       let getAllUsers = JSON.parse(sessionStorage.getItem("arrUsers"));
 
-      const { _id, firstName, location, language, unit } = getAllUsers.find(
-        (x) => x._id === id
-      );
+      const {
+        _id,
+        firstName,
+        location,
+        language,
+        unit,
+        mainLocation,
+      } = getAllUsers.find((x) => x._id === id);
 
       // create new row
-      let newRow = UICtrl.row(_id, firstName, location, language, unit);
+      let newRow = UICtrl.row(
+        _id,
+        firstName,
+        location,
+        language,
+        unit,
+        mainLocation
+      );
 
       // append new row after edited row
       closestRow.after(newRow);
 
       UICtrl.iconsEditInit("update");
+      UICtrl.checkboxMainLocationInit();
     },
 
     submitDelete: async function (e) {
@@ -377,22 +394,23 @@ const UICtrl = (function () {
       document
         .querySelectorAll(UICtrl.getSelectorsClasses().mainLocation)
         .forEach((x) =>
-          x.addEventListener("change", function (e) {
-            // console.log(e.target.value);
-            console.log(this.getAttribute("value"));
+          x.addEventListener("click", function (e) {
+            console.log(this);
             if (this.getAttribute("value") == null) {
               this.setAttribute("value", "true");
-              // this.checked = true;
-              console.log(this);
             } else {
               this.setAttribute("value", "false");
-              // this.removeAttribute("checked");
-              // this.checked = false;
-              console.log(this);
             }
-            // console.log(this);
-            // if (this.value === true) this.value = false;
-            // if (this.value === false) this.value = true;
+            if (this.getAttribute("value") == true) {
+              console.log(this);
+
+              this.setAttribute("value", "false");
+              this.removeAttribute("checked");
+            } else if (this.getAttribute("value") == false) {
+              console.log(this);
+
+              this.setAttribute("value", "true");
+            }
           })
         );
     },
