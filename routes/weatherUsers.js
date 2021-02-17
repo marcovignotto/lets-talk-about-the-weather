@@ -2,12 +2,21 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
+const connectDB = require("../config/db.js");
+
+const mongoose = require("mongoose");
+const config = require("config");
+const db = config.get("mongoDb.URI");
+
+const dbOptions = {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+  useUnifiedTopology: true,
+};
 //
 // AUTH DISABLED
 //
-
-// import dbCleaning
-const dbCleaning = require("../config/dbDelete");
 
 const { check, validationResult } = require("express-validator");
 
@@ -51,10 +60,15 @@ router.post(
 
     // console.log(req);
     // console.log(res);
-
-    const { firstName, language, location, unit } = req.body;
-    // console.log(req.body);
+    // const resDb = await mongoose.connect(db, dbOptions);
+    // const resDb = await WeatherUser.find();
     try {
+      await WeatherUser.updateMany({}, { mainLocation: false });
+
+      // console.log(resDb);
+
+      const { firstName, language, location, unit, mainLocation } = req.body;
+      // console.log(req.body);
       // const createUserCode = async () => {
       // find last id
       // returns everything and sort it from the last userCode
@@ -70,8 +84,10 @@ router.post(
         location,
         unit,
         userCode: resUserCode.length === 0 ? 0 : resUserCode[0].userCode + 1,
+        mainLocation,
       });
 
+      console.log(newWeatherUser);
       const addUser = await newWeatherUser.save();
 
       res.json(addUser);
@@ -87,7 +103,14 @@ router.post(
 // @access  Private
 
 router.put("/:id", auth, async (req, res) => {
-  const { firstName, language, location, unit, userCode } = req.body;
+  const {
+    firstName,
+    language,
+    location,
+    unit,
+    userCode,
+    mainLocation,
+  } = req.body;
 
   const userFields = {};
   if (firstName) userFields.firstName = firstName;
@@ -95,6 +118,7 @@ router.put("/:id", auth, async (req, res) => {
   if (location) userFields.location = location;
   if (unit) userFields.unit = unit;
   if (userCode) userFields.userCode = userCode;
+  if (mainLocation) userFields.mainLocation = mainLocation;
 
   try {
     let user = await WeatherUser.findById(req.params.id);

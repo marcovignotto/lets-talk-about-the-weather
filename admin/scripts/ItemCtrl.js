@@ -18,9 +18,12 @@ const ItemCtrl = (function () {
 
       // loop througt the nodes and create obj
       allNodes.forEach((x, i) => {
-        if (x.getAttribute("id") === inputClassesArr[i])
+        if (x.getAttribute("id") === inputClassesArr[i]) {
+          console.log(x.value);
           weatherUserObj[inputClassesArr[i]] = x.value;
+        }
       });
+
       return weatherUserObj;
     },
     sendLogin: async function (e) {
@@ -71,6 +74,7 @@ const ItemCtrl = (function () {
 
       // mandatory
       UICtrl.iconsEditInit("save");
+      UICtrl.checkboxMainLocationInit();
     },
     saveWeatherUser: async function (e) {
       ItemCtrl.getInputUser(e);
@@ -79,6 +83,8 @@ const ItemCtrl = (function () {
 
       // User code created by the route
       // weatherUserObj["userCode"] = 3;
+
+      console.log(weatherUserObj);
 
       const res = await ServerCtrl.callApiAuth(
         "post",

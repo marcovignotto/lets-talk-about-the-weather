@@ -22,6 +22,12 @@ const WeatherUser = mongoose.Schema({
     require: true,
     unique: true,
   },
+  mainLocation: {
+    type: Boolean,
+    // unique: true,
+    default: false,
+    // sparse: true,
+  },
   date: {
     type: Date,
     default: Date.now,

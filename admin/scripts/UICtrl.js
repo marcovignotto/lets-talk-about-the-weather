@@ -27,6 +27,7 @@ const UICtrl = (function () {
     location: ".location",
     language: ".language",
     unit: ".unit",
+    mainLocation: ".main__location",
 
     // grid edit
     gridItemEdit: ".grid__item__edit",
@@ -60,6 +61,7 @@ const UICtrl = (function () {
       language,
       unit,
       id,
+      mainLocation,
       append = "yes"
     ) {
       const row = document.createElement("div");
@@ -71,7 +73,7 @@ const UICtrl = (function () {
       firstNameCol.innerHTML = firstName;
 
       const locationCol = document.createElement("div");
-      locationCol.className = "col-4 location";
+      locationCol.className = "col-3 location";
 
       locationCol.innerHTML = location;
 
@@ -94,13 +96,22 @@ const UICtrl = (function () {
       deleteIcon.dataset.id = id;
       deleteIcon.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
+      //
+      //remove and keeo for icon only
+      //
+      const mainLocationCheck = document.createElement("input");
+      mainLocationCheck.className = "col-1 main__location";
+      mainLocationCheck.setAttribute("type", "checkbox");
+      // mainLocation.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
+
       row.innerHTML +=
         firstNameCol.outerHTML +
         locationCol.outerHTML +
         languageCol.outerHTML +
         unitCol.outerHTML +
         editIcon.outerHTML +
-        deleteIcon.outerHTML;
+        deleteIcon.outerHTML +
+        mainLocationCheck.outerHTML;
 
       if (append === "yes") {
         return this.getSelectors().locationList.appendChild(row);
@@ -112,7 +123,8 @@ const UICtrl = (function () {
       firstName = "",
       location = "",
       language = "",
-      unit = ""
+      unit = "",
+      mainLocation = false
     ) {
       const row = document.createElement("div");
       row.className = `row grid__item__edit pb-1`;
@@ -124,7 +136,7 @@ const UICtrl = (function () {
       firstNameCol.setAttribute("value", firstName);
 
       const locationCol = document.createElement("input");
-      locationCol.className = "col-4 edit__input location";
+      locationCol.className = "col-3 edit__input location";
       locationCol.setAttribute("type", "text");
       locationCol.setAttribute("id", "location");
       locationCol.setAttribute("value", location);
@@ -151,13 +163,21 @@ const UICtrl = (function () {
       deleteIcon.dataset.id = _id;
       deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
 
+      const mainLocationCheck = document.createElement("input");
+      mainLocationCheck.className = "col-1 main__location";
+      mainLocationCheck.setAttribute("type", "checkbox");
+      mainLocationCheck.setAttribute("id", "mainLocation");
+      // mainLocationCheck.setAttribute("value", false);
+      // mainLocationCheck.setAttribute("checked");
+
       row.innerHTML +=
         firstNameCol.outerHTML +
         locationCol.outerHTML +
         languageCol.outerHTML +
         unitCol.outerHTML +
         editIcon.outerHTML +
-        deleteIcon.outerHTML;
+        deleteIcon.outerHTML +
+        mainLocationCheck.outerHTML;
 
       return row;
     },
@@ -227,7 +247,7 @@ const UICtrl = (function () {
         sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
 
         // DOM
-        gridItem;
+        // gridItem;
         gridItem.style.transition = "all 2s";
         // remove class
         gridItem.classList.remove("row");
@@ -252,32 +272,6 @@ const UICtrl = (function () {
 
       // get values for uptate
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
-      // let firstName = e.target.parentElement.parentElement.parentElement.querySelector(
-      //   ".first__name"
-      // ).value;
-
-      // let allNodes = e.target.parentElement.parentElement.parentElement.querySelectorAll(
-      //   "input"
-      // );
-
-      // let weatherUserObj = {};
-      // weatherUserObj["_id"] = id;
-
-      // let inputClassesArr = [];
-
-      // // collect all the classes  OK
-      // allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));
-
-      // // flat array
-      // inputClassesArr = inputClassesArr.flat();
-
-      // // loop througt the nodes and create obj
-      // allNodes.forEach((x, i) => {
-      //   if (x.getAttribute("id") === inputClassesArr[i])
-      //     weatherUserObj[inputClassesArr[i]] = x.value;
-      // });
-
-      // send evetnt to funciton that returns an obj
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
 
@@ -344,10 +338,18 @@ const UICtrl = (function () {
       sessionStorage.setItem("arrUsers", usersArr);
 
       JSON.parse(usersArr).map((x) =>
-        this.gridItem(x.firstName, x.location, x.language, x.unit, x._id)
+        this.gridItem(
+          x.firstName,
+          x.location,
+          x.language,
+          x.unit,
+          x._id,
+          x.mainLocation
+        )
       );
 
       this.iconsInit();
+      this.checkboxMainLocationInit();
     },
 
     iconsInit: function () {
@@ -370,6 +372,29 @@ const UICtrl = (function () {
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
         .addEventListener("click", undoEditWeatherUser);
+    },
+    checkboxMainLocationInit: function () {
+      document
+        .querySelectorAll(UICtrl.getSelectorsClasses().mainLocation)
+        .forEach((x) =>
+          x.addEventListener("change", function (e) {
+            // console.log(e.target.value);
+            console.log(this.getAttribute("value"));
+            if (this.getAttribute("value") == null) {
+              this.setAttribute("value", "true");
+              // this.checked = true;
+              console.log(this);
+            } else {
+              this.setAttribute("value", "false");
+              // this.removeAttribute("checked");
+              // this.checked = false;
+              console.log(this);
+            }
+            // console.log(this);
+            // if (this.value === true) this.value = false;
+            // if (this.value === false) this.value = true;
+          })
+        );
     },
     showMenu: function () {
       App.selectors().menu.classList.remove("hide");

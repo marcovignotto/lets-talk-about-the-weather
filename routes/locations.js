@@ -41,6 +41,7 @@ router.post(
 
     // console.log(req);
     // console.log(res);
+    console.log(req.body);
 
     const {
       firstName,
@@ -53,6 +54,7 @@ router.post(
       temperature,
       wind,
       userCode,
+      mainLocation,
     } = req.body;
 
     try {
@@ -67,6 +69,7 @@ router.post(
         temperature,
         wind,
         userCode,
+        mainLocation,
       });
 
       const toDo = await newLocation.save();
