@@ -65,7 +65,7 @@ const UICtrl = (function () {
       append = "yes"
     ) {
       const row = document.createElement("div");
-      row.className = `row grid__item pb-1`;
+      row.className = `row grid__item pv-1 ph-1`;
 
       const firstNameCol = document.createElement("div");
       firstNameCol.className = "col-3 first__name";
@@ -99,9 +99,14 @@ const UICtrl = (function () {
       //
       //remove and keeo for icon only
       //
-      const mainLocationCheck = document.createElement("input");
+      const mainLocationCheck = document.createElement("div");
       mainLocationCheck.className = "col-1 main__location";
-      mainLocationCheck.setAttribute("type", "checkbox");
+      if (mainLocation === true) {
+        // mainLocationCheck.style.backgroundColor = "red";
+        mainLocationCheck.style.color = "white";
+        mainLocationCheck.innerHTML = `Main`;
+        row.style.backgroundColor = "#ff7f7f";
+      }
       // mainLocation.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
       row.innerHTML +=
@@ -127,7 +132,7 @@ const UICtrl = (function () {
       mainLocation
     ) {
       const row = document.createElement("div");
-      row.className = `row grid__item__edit pb-1`;
+      row.className = `row grid__item__edit pv-1 ph-1`;
 
       const firstNameCol = document.createElement("input");
       firstNameCol.className = "col-3 edit__input first__name";
@@ -167,7 +172,10 @@ const UICtrl = (function () {
       mainLocationCheck.className = "col-1 main__location";
       mainLocationCheck.setAttribute("type", "checkbox");
       mainLocationCheck.setAttribute("id", "mainLocation");
-      if (mainLocation === "true") {
+
+      console.log(mainLocation === true);
+
+      if (mainLocation === true) {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);
       }
