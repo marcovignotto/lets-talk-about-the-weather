@@ -172,8 +172,7 @@ const UICtrl = (function () {
       mainLocationCheck.className = "col-1 main__location";
       mainLocationCheck.setAttribute("type", "checkbox");
       mainLocationCheck.setAttribute("id", "mainLocation");
-
-      console.log(mainLocation === true);
+      mainLocationCheck.setAttribute("value", false);
 
       if (mainLocation === true) {
         mainLocationCheck.setAttribute("value", true);
@@ -401,20 +400,15 @@ const UICtrl = (function () {
         .querySelectorAll(UICtrl.getSelectorsClasses().mainLocation)
         .forEach((x) =>
           x.addEventListener("click", function (e) {
-            console.log(this);
             if (this.getAttribute("value") == null) {
               this.setAttribute("value", "true");
             } else {
               this.setAttribute("value", "false");
             }
             if (this.getAttribute("value") == true) {
-              console.log(this);
-
               this.setAttribute("value", "false");
               this.removeAttribute("checked");
             } else if (this.getAttribute("value") == false) {
-              console.log(this);
-
               this.setAttribute("value", "true");
             }
           })

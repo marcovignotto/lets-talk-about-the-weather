@@ -40,8 +40,6 @@ router.post(
     // }
 
     try {
-      await Location.updateMany({}, { mainLocation: false });
-
       const {
         firstName,
         language,
@@ -55,6 +53,12 @@ router.post(
         userCode,
         mainLocation,
       } = req.body;
+
+      console.log(mainLocation);
+
+      if (mainLocation === true) {
+        await Location.updateMany({}, { mainLocation: false });
+      }
 
       const newLocation = new Location({
         firstName,

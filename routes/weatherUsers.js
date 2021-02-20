@@ -63,9 +63,13 @@ router.post(
     // const resDb = await mongoose.connect(db, dbOptions);
     // const resDb = await WeatherUser.find();
     try {
-      await WeatherUser.updateMany({}, { mainLocation: false });
-
       const { firstName, language, location, unit, mainLocation } = req.body;
+
+      console.log(mainLocation);
+
+      if (mainLocation === true) {
+        await WeatherUser.updateMany({}, { mainLocation: false });
+      }
 
       // find last id
       // returns everything and sort it from the last userCode
@@ -84,7 +88,6 @@ router.post(
         mainLocation,
       });
 
-      console.log(newWeatherUser);
       const addUser = await newWeatherUser.save();
 
       res.json(addUser);
