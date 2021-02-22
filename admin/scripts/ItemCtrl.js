@@ -193,6 +193,8 @@ const ItemCtrl = (function () {
       // PARSE IT
       const parsedRes = JSON.parse(res);
 
+      console.log(parsedRes);
+
       const {
         getLocation = parsedRes.name,
         getMain = parsedRes.weather[0].main,

@@ -40,13 +40,14 @@ const allWeatherUsers = async () => {
 const locationOnMongo = async (
   firstName,
   location,
-  units,
+  unit,
   language,
   userCode,
   mainLocation
 ) => {
+  console.log(unit);
   // Open Weather API CALL
-  const URL = `${OPEN_WEATHER_URL}${location}&units=${units}&appid=${OPEN_WEATHER_KEY}&lang=${language}`;
+  const URL = `${OPEN_WEATHER_URL}${location}&units=${unit}&appid=${OPEN_WEATHER_KEY}&lang=${language}`;
   try {
     const options = {
       method: "get",
@@ -128,8 +129,8 @@ const populateDbWeather = () => {
           locationOnMongo(
             x.firstName,
             x.location,
-            x.language,
             x.unit,
+            x.language,
             x.userCode,
             x.mainLocation,
             x.timezone

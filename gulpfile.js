@@ -17,7 +17,7 @@ const filesAdmin = {
 };
 const filesClient = {
   scssPath: "lib/scss/**/*.scss",
-  jsPath: "lib/js/index.js",
+  jsPath: "lib/js/all.js",
   // jsPath: "lib/js/**/*.js",
 };
 
