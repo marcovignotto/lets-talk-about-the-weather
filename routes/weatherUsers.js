@@ -2,18 +2,6 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-const connectDB = require("../config/db.js");
-
-const mongoose = require("mongoose");
-const config = require("config");
-const db = config.get("mongoDb.URI");
-
-const dbOptions = {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-};
 //
 // AUTH DISABLED
 //
