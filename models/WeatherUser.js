@@ -24,10 +24,11 @@ const WeatherUser = mongoose.Schema({
   },
   mainLocation: {
     type: Boolean,
-    // unique: true,
-    // default: false,
-    // sparse: true,
-    // require: true,
+    require: true,
+  },
+  timezone: {
+    type: Number,
+    require: true,
   },
   date: {
     type: Date,

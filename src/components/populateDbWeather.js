@@ -71,6 +71,7 @@ const locationOnMongo = async (
       getMainDesc = parsedRes.weather[0].description,
       getTemp = parsedRes.main.temp,
       getWind = parsedRes.wind.speed,
+      getTimeZone = parsedRes.timezone,
     } = parsedRes;
 
     // // CREATEOBJ
@@ -85,6 +86,7 @@ const locationOnMongo = async (
       wind: getWind,
       userCode,
       mainLocation,
+      timezone: getTimeZone,
     };
 
     // send to mongo db
@@ -129,7 +131,8 @@ const populateDbWeather = () => {
             x.language,
             x.unit,
             x.userCode,
-            x.mainLocation
+            x.mainLocation,
+            x.timezone
           )
         );
       });

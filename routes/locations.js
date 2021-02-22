@@ -52,6 +52,7 @@ router.post(
         wind,
         userCode,
         mainLocation,
+        timezone,
       } = req.body;
 
       if (mainLocation === true) {
@@ -70,6 +71,7 @@ router.post(
         wind,
         userCode,
         mainLocation,
+        timezone,
       });
 
       const toDo = await newLocation.save();

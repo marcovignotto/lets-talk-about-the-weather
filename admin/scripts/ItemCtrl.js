@@ -194,6 +194,7 @@ const ItemCtrl = (function () {
         getMainDesc = parsedRes.weather[0].description,
         getTemp = parsedRes.main.temp,
         getWind = parsedRes.wind.speed,
+        getTimeZone = parsedRes.timezone,
       } = parsedRes;
 
       // CREATEOBJ
@@ -208,6 +209,7 @@ const ItemCtrl = (function () {
         userCode: userCode,
         wind: getWind,
         mainLocation,
+        timezone: getTimeZone,
       };
 
       // POST ON MONGO
