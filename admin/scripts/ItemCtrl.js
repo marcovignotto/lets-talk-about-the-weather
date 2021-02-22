@@ -83,8 +83,6 @@ const ItemCtrl = (function () {
       // User code created by the route
       // weatherUserObj["userCode"] = 3;
 
-      console.log(weatherUserObj);
-
       const res = await ServerCtrl.callApiAuth(
         "post",
         ItemCtrl.getToken(),
@@ -163,6 +161,12 @@ const ItemCtrl = (function () {
           // opacity to new row
           newRow.style.opacity = "1";
         }, 1500);
+
+        // if new user is main reinit list
+        if (mainLocation == true || mainLocation == "true") {
+          // re init list user session storage
+          ItemCtrl.reInitListUser();
+        }
 
         // create user location sending the just created data to the function
         this.createUserLocation(
@@ -268,6 +272,23 @@ const ItemCtrl = (function () {
       );
 
       return resLocation;
+    },
+    reInitListUser: async function () {
+      UICtrl.getSelectors().locationList.innerHTML = "";
+
+      const res = await ServerCtrl.callApiAuth(
+        "get",
+        ItemCtrl.getToken(),
+        App.urls().URL_GET
+      );
+
+      // order array from main
+      let orderArr = JSON.parse(res.data).sort(
+        (a, b) => b.mainLocation - a.mainLocation
+      );
+
+      // convert to string before sending
+      UICtrl.listUsers(JSON.stringify(orderArr));
     },
   };
 })();

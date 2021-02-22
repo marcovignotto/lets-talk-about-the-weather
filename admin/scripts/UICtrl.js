@@ -378,6 +378,11 @@ const UICtrl = (function () {
         }, 1500);
       }
 
+      if (mainLocation == true || mainLocation == "true") {
+        // re init list user session storage
+        ItemCtrl.reInitListUser();
+      }
+
       ItemCtrl.updateUserLocation(
         firstName,
         location,
@@ -390,11 +395,16 @@ const UICtrl = (function () {
     },
 
     listUsers: function (usersArr) {
+      // order from main down
+      let orderArr = JSON.parse(usersArr).sort(
+        (a, b) => b.mainLocation - a.mainLocation
+      );
+
       UICtrl.showMenu();
       App.selectors().formLogin.remove();
       sessionStorage.setItem("arrUsers", usersArr);
 
-      JSON.parse(usersArr).map((x) =>
+      orderArr.map((x) =>
         this.gridItem(
           x.firstName,
           x.location,

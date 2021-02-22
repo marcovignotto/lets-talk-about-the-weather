@@ -55,7 +55,7 @@ router.post(
 
       // console.log(mainLocation);
 
-      if (mainLocation == true) {
+      if (mainLocation == true || mainLocation == "true") {
         await WeatherUser.updateMany({}, { mainLocation: false });
       }
 

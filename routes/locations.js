@@ -55,7 +55,7 @@ router.post(
         timezone,
       } = req.body;
 
-      if (mainLocation === true) {
+      if (mainLocation == true || mainLocation == "true") {
         await Location.updateMany({}, { mainLocation: false });
       }
 
