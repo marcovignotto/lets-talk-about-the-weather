@@ -28,7 +28,7 @@ function scssTaskAdmin() {
     .pipe(sass())
     .pipe(postcss([autoprefixer(), cssnano()]))
     .pipe(sourcemaps.write("."))
-    .pipe(dest("admin/dist"));
+    .pipe(dest("admin/dist/css"));
 }
 
 // sass task client
@@ -38,14 +38,14 @@ function scssTaskClient() {
     .pipe(sass())
     .pipe(postcss([autoprefixer(), cssnano()]))
     .pipe(sourcemaps.write("."))
-    .pipe(dest("lib/dist"));
+    .pipe(dest("lib/dist/css"));
 }
 
 // JS task admin
 function jsTaskAdmin() {
   return (
     src(filesAdmin.jsPath)
-      .pipe(concat("index.js"))
+      .pipe(concat("scripts/index.js"))
       // .pipe(
       //   terser({
       //     mangle: {
@@ -61,7 +61,7 @@ function jsTaskAdmin() {
 function jsTaskClient() {
   return (
     src(filesClient.jsPath)
-      .pipe(concat("index.js"))
+      .pipe(concat("scripts/index.js"))
       // .pipe(
       //   terser({
       //     mangle: {
