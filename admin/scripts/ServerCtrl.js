@@ -2,6 +2,7 @@ const ServerCtrl = (function () {
   const URLs = {
     URL_POST: "http://localhost:5000/api/auth",
     URL_POST_USER: "http://127.0.0.1:5000/api/weatherusers/",
+    URL_GET_LOCATION: "http://127.0.0.1:5000/api/locations/",
     URL_POST_LOCATION: "http://127.0.0.1:5000/api/locations/",
     URL_PUT_LOCATION: "http://127.0.0.1:5000/api/locations/",
     URL_GET: "http://127.0.0.1:5000/api/weatherusers",

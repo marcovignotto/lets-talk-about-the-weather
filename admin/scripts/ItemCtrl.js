@@ -228,6 +228,7 @@ const ItemCtrl = (function () {
       unit,
       language,
       mainLocation,
+      userCode,
       _id
     ) {
       // firstName, location, unit, language, mainLocation, _id;
@@ -248,14 +249,35 @@ const ItemCtrl = (function () {
       //   getTemp = parsedRes.main.temp,
       //   getWind = parsedRes.wind.speed,
       // } = parsedRes;
+      console.log(
+        firstName,
+        location,
+        unit,
+        language,
+        mainLocation,
+        userCode,
+        _id
+      );
+
+      // get all location to find userCode
+      const resAllLocation = await ServerCtrl.callApiAuth(
+        "get",
+        ItemCtrl.getToken(),
+        App.urls().URL_GET_LOCATION
+      );
+
+      // find userCode for _id
+      const idForMongo = await JSON.parse(resAllLocation.data).find(
+        (x) => x.userCode === userCode
+      );
 
       // CREATEOBJ
       const objLocation = {
         firstName,
         language,
-
+        unit,
         location,
-
+        userCode,
         mainLocation,
       };
 
@@ -266,7 +288,7 @@ const ItemCtrl = (function () {
         ItemCtrl.getToken(),
         App.urls().URL_PUT_LOCATION,
         objLocation,
-        _id
+        idForMongo._id
       );
 
       return resLocation;
