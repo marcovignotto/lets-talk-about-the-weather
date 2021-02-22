@@ -96,16 +96,19 @@ const UICtrl = (function () {
       deleteIcon.dataset.id = id;
       deleteIcon.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
-      //
-      //remove and keeo for icon only
-      //
       const mainLocationCheck = document.createElement("div");
       mainLocationCheck.className = "col-1 main__location";
-      if (mainLocation === true) {
+
+      //
+      // temporary styling to refactor
+      //
+
+      if (mainLocation == true || mainLocation == "true") {
         // mainLocationCheck.style.backgroundColor = "red";
-        mainLocationCheck.style.color = "white";
-        mainLocationCheck.innerHTML = `Main`;
-        row.style.backgroundColor = "#ff7f7f";
+        // mainLocationCheck.style.color = "white";
+        // mainLocationCheck.innerHTML = `Main`;
+        // row.style.backgroundColor = "#ff7f7f";
+        UICtrl.setMainLocationStyle(row);
       }
       // mainLocation.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
@@ -174,7 +177,7 @@ const UICtrl = (function () {
       mainLocationCheck.setAttribute("id", "mainLocation");
       mainLocationCheck.setAttribute("value", false);
 
-      if (mainLocation === true) {
+      if (mainLocation === true || mainLocation == "true") {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);
       }
@@ -191,9 +194,17 @@ const UICtrl = (function () {
       return row;
     },
 
+    setMainLocationStyle: function (target) {
+      target.classList.add("main__location___row");
+      // target.style.color = "white";
+      // target.innerHTML = `Main`;
+      // target.style.backgroundColor = "#ff7f7f";
+    },
+
     getSelectors: function () {
       return UISelectors;
     },
+
     getSelectorsClasses: function () {
       return UISelectorsClasses;
     },
@@ -350,6 +361,16 @@ const UICtrl = (function () {
 
         setTimeout(() => {
           currRow.remove();
+
+          if (
+            weatherUserObj.mainLocation == true ||
+            weatherUserObj.mainLocation == "true"
+          ) {
+            // mainLocationCheck.style.backgroundColor = "red";
+            mainLocationCheck.style.color = "white";
+            mainLocationCheck.innerHTML = `Main`;
+            row.style.backgroundColor = "#ff7f7f";
+          }
         }, 1500);
       }
     },
@@ -395,25 +416,37 @@ const UICtrl = (function () {
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
         .addEventListener("click", undoEditWeatherUser);
     },
+
     checkboxMainLocationInit: function () {
       document
         .querySelectorAll(UICtrl.getSelectorsClasses().mainLocation)
         .forEach((x) =>
           x.addEventListener("click", function (e) {
-            if (this.getAttribute("value") == null) {
+            if (
+              this.getAttribute("value") == "null" ||
+              this.getAttribute("value") == null
+            ) {
               this.setAttribute("value", "true");
-            } else {
-              this.setAttribute("value", "false");
             }
-            if (this.getAttribute("value") == true) {
+            // else {
+            //   this.setAttribute("value", "false");
+            // }
+            if (
+              this.getAttribute("value") == "true" ||
+              this.getAttribute("value") == true
+            ) {
               this.setAttribute("value", "false");
               this.removeAttribute("checked");
-            } else if (this.getAttribute("value") == false) {
+            } else if (
+              this.getAttribute("value") == "false" ||
+              this.getAttribute("value") == false
+            ) {
               this.setAttribute("value", "true");
             }
           })
         );
     },
+
     showMenu: function () {
       App.selectors().menu.classList.remove("hide");
     },

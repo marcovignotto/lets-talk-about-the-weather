@@ -65,7 +65,7 @@ router.post(
     try {
       const { firstName, language, location, unit, mainLocation } = req.body;
 
-      console.log(mainLocation);
+      // console.log(mainLocation);
 
       if (mainLocation === true) {
         await WeatherUser.updateMany({}, { mainLocation: false });
