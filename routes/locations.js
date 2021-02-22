@@ -54,8 +54,6 @@ router.post(
         mainLocation,
       } = req.body;
 
-      // console.log(mainLocation);
-
       if (mainLocation === true) {
         await Location.updateMany({}, { mainLocation: false });
       }

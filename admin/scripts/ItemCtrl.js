@@ -231,34 +231,6 @@ const ItemCtrl = (function () {
       userCode,
       _id
     ) {
-      // firstName, location, unit, language, mainLocation, _id;
-      //     firstName,
-      // location, units, language, userCode, mainLocation, _id;
-
-      // OW API CALL
-      // const res = await OWCtrL.openWCallApi(location, units, language);
-
-      // PARSE IT
-      // const parsedRes = JSON.parse(res);
-
-      // const {
-      //   getLocation = parsedRes.name,
-      //   getMain = parsedRes.weather[0].main,
-      //   getIcon = parsedRes.weather[0].icon,
-      //   getMainDesc = parsedRes.weather[0].description,
-      //   getTemp = parsedRes.main.temp,
-      //   getWind = parsedRes.wind.speed,
-      // } = parsedRes;
-      console.log(
-        firstName,
-        location,
-        unit,
-        language,
-        mainLocation,
-        userCode,
-        _id
-      );
-
       // get all location to find userCode
       const resAllLocation = await ServerCtrl.callApiAuth(
         "get",
