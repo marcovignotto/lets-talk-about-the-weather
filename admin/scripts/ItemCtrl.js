@@ -222,5 +222,54 @@ const ItemCtrl = (function () {
 
       return resLocation;
     },
+    updateUserLocation: async function (
+      firstName,
+      location,
+      unit,
+      language,
+      mainLocation,
+      _id
+    ) {
+      // firstName, location, unit, language, mainLocation, _id;
+      //     firstName,
+      // location, units, language, userCode, mainLocation, _id;
+
+      // OW API CALL
+      // const res = await OWCtrL.openWCallApi(location, units, language);
+
+      // PARSE IT
+      // const parsedRes = JSON.parse(res);
+
+      // const {
+      //   getLocation = parsedRes.name,
+      //   getMain = parsedRes.weather[0].main,
+      //   getIcon = parsedRes.weather[0].icon,
+      //   getMainDesc = parsedRes.weather[0].description,
+      //   getTemp = parsedRes.main.temp,
+      //   getWind = parsedRes.wind.speed,
+      // } = parsedRes;
+
+      // CREATEOBJ
+      const objLocation = {
+        firstName,
+        language,
+
+        location,
+
+        mainLocation,
+      };
+
+      // POST ON MONGO
+
+      const resLocation = await ServerCtrl.callApiAuth(
+        "put",
+        ItemCtrl.getToken(),
+        App.urls().URL_PUT_LOCATION,
+        objLocation,
+        _id
+      );
+
+      return resLocation;
+    },
   };
 })();

@@ -196,9 +196,6 @@ const UICtrl = (function () {
 
     setMainLocationStyle: function (target) {
       target.classList.add("main__location___row");
-      // target.style.color = "white";
-      // target.innerHTML = `Main`;
-      // target.style.backgroundColor = "#ff7f7f";
     },
 
     getSelectors: function () {
@@ -318,6 +315,16 @@ const UICtrl = (function () {
         weatherUserObj._id
       );
 
+      // destructoring
+      const {
+        firstName,
+        location,
+        unit,
+        language,
+        mainLocation,
+        _id,
+      } = weatherUserObj;
+
       if (res.status >= 200 && res.status <= 399) {
         // get array from session Storage
         let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
@@ -366,13 +373,20 @@ const UICtrl = (function () {
             weatherUserObj.mainLocation == true ||
             weatherUserObj.mainLocation == "true"
           ) {
-            // mainLocationCheck.style.backgroundColor = "red";
-            mainLocationCheck.style.color = "white";
-            mainLocationCheck.innerHTML = `Main`;
-            row.style.backgroundColor = "#ff7f7f";
+            UICtrl.setMainLocationStyle(prevRow);
           }
         }, 1500);
       }
+
+      ItemCtrl.updateUserLocation(
+        firstName,
+        location,
+        unit,
+        language,
+        mainLocation,
+        (userCode = JSON.parse(res.data).userCode),
+        _id
+      );
     },
 
     listUsers: function (usersArr) {

@@ -88,6 +88,46 @@ router.post(
 // @desc    Update location
 // @access  Private
 
+router.put("/:id", auth, async (req, res) => {
+  const {
+    firstName,
+    language,
+    location,
+    unit,
+    userCode,
+    mainLocation,
+  } = req.body;
+
+  if (mainLocation === true || mainLocation === "true") {
+    await Location.updateMany({}, { mainLocation: false });
+  }
+
+  const userFields = {};
+  if (firstName) userFields.firstName = firstName;
+  if (language) userFields.language = language;
+  if (location) userFields.location = location;
+  if (unit) userFields.unit = unit;
+  if (userCode) userFields.userCode = userCode;
+  if (mainLocation) userFields.mainLocation = mainLocation;
+
+  try {
+    let user = await Location.findById(req.params.id);
+
+    if (!user) return res.status(404).json({ msg: "User not found" });
+
+    user = await Location.findByIdAndUpdate(
+      req.params.id,
+      { $set: userFields },
+      { new: true }
+    );
+
+    res.json(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
 // @route   DELETE api/location/:id
 // @desc    Delete location
 // @access  Private

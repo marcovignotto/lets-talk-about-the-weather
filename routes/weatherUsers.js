@@ -67,7 +67,7 @@ router.post(
 
       // console.log(mainLocation);
 
-      if (mainLocation === true) {
+      if (mainLocation == true) {
         await WeatherUser.updateMany({}, { mainLocation: false });
       }
 
@@ -111,6 +111,10 @@ router.put("/:id", auth, async (req, res) => {
     userCode,
     mainLocation,
   } = req.body;
+
+  if (mainLocation === true || mainLocation === "true") {
+    await WeatherUser.updateMany({}, { mainLocation: false });
+  }
 
   const userFields = {};
   if (firstName) userFields.firstName = firstName;
