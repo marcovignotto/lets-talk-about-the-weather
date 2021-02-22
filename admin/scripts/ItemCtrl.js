@@ -83,6 +83,8 @@ const ItemCtrl = (function () {
       // User code created by the route
       // weatherUserObj["userCode"] = 3;
 
+      console.log(weatherUserObj);
+
       const res = await ServerCtrl.callApiAuth(
         "post",
         ItemCtrl.getToken(),
