@@ -2,16 +2,81 @@ const ItemCtrl = (function () {
   userActions = {
     isEditing: false,
   };
+
+  langArray = [
+    { code: "af", language: "Afrikaans" },
+    { code: "al", language: "Albanian" },
+    { code: "ar", language: "Arabic" },
+    { code: "az", language: "Azerbaijani" },
+    { code: "bg", language: "Bulgarian" },
+    { code: "ca", language: "Catalan" },
+    { code: "cz", language: "Czech" },
+    { code: "da", language: "Danish" },
+    { code: "de", language: "German" },
+    { code: "el", language: "Greek" },
+    { code: "en", language: "English" },
+    { code: "eu", language: "Basque" },
+    { code: "fa", language: "Persian (Farsi)" },
+    { code: "fi", language: "Finnish" },
+    { code: "fr", language: "French" },
+    { code: "gl", language: "Galician" },
+    { code: "he", language: "Hebrew" },
+    { code: "hi", language: "Hindi" },
+    { code: "hr", language: "Croatian" },
+    { code: "hu", language: "Hungarian" },
+    { code: "id", language: "Indonesian" },
+    { code: "it", language: "Italian" },
+    { code: "ja", language: "Japanese" },
+    { code: "kr", language: "Korean" },
+    { code: "la", language: "Latvian" },
+    { code: "lt", language: "Lithuanian" },
+    { code: "mk", language: "Macedonian" },
+    { code: "no", language: "Norwegian" },
+    { code: "nl", language: "Dutch" },
+    { code: "pl", language: "Polish" },
+    { code: "pt", language: "Portuguese" },
+    { code: "pt_br", language: "Português Brasil" },
+    { code: "ro", language: "Romanian" },
+    { code: "ru", language: "Russian" },
+    { code: "sv", language: "Swedish" },
+    { code: "sk", language: "Slovak" },
+    { code: "sl", language: "Slovenian" },
+    { code: "sp", language: "Spanish" },
+    { code: "sr", language: "Serbian" },
+    { code: "th", language: "Thai" },
+    { code: "tr", language: "Turkish" },
+    { code: "ua", language: "Ukrainian" },
+    { code: "vi", language: "Vietnamese" },
+    { code: "zh_cn", language: "Chinese Simplified" },
+    { code: "zh_tw", language: "Chinese Traditional" },
+    { code: "zu", language: "Zulu" },
+  ];
+
+  unitArray = ["standard", "metric", "imperial"];
   return {
+    getLangArray: function () {
+      return langArray;
+    },
+    getUnitArray: function () {
+      return unitArray;
+    },
+
     getInputUser: function (e) {
       // function that loops through the input nodes in the closest row
       let weatherUserObj = {};
       let inputClassesArr = [];
 
-      // get all nodes
+      // get all nodes for inputs
       let allNodes = e.target
         .closest(UICtrl.getSelectorsClasses().row)
         .querySelectorAll("input");
+
+      // get all nodes for selects
+      let allNodesSelect = e.target
+        .closest(UICtrl.getSelectorsClasses().row)
+        .querySelectorAll("select");
+
+      allNodes = [...allNodes, ...allNodesSelect];
 
       // collect all the classes  OK
       allNodes.forEach((x) => inputClassesArr.push([x.getAttribute("id")]));

@@ -20,7 +20,7 @@
 
 %input-shared {
   float: left;
-  height: 30px;
+  // height: 30px;
   font-size: 1rem;
   font-weight: $thin;
   letter-spacing: 1px;
@@ -46,7 +46,7 @@
   &-large {
     @extend %input-shared;
 
-    width: 200px;
+    width: 180px;
 
     &:focus {
       @extend %input-focus;
@@ -64,7 +64,7 @@
   &-small {
     @extend %input-shared;
 
-    width: 50px;
+    // width: 100px;
 
     &:focus {
       @extend %input-focus;

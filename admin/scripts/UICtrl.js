@@ -144,17 +144,45 @@ const UICtrl = (function () {
       locationCol.setAttribute("id", "location");
       locationCol.setAttribute("value", location);
 
-      const languageCol = document.createElement("input");
+      // const languageCol = document.createElement("input");
+      const languageCol = document.createElement("select");
       languageCol.className = "col-1 edit__input language input-text-small";
       languageCol.setAttribute("type", "text");
       languageCol.setAttribute("id", "language");
       languageCol.setAttribute("value", language);
 
-      const unitCol = document.createElement("input");
+      ItemCtrl.getLangArray().forEach((element, index) => {
+        let option_elem = document.createElement("option");
+
+        // Add index to option_elem
+        option_elem.value = element.code;
+
+        // Add element HTML
+        option_elem.textContent = element.language;
+
+        // Append option_elem to select_elem
+        languageCol.appendChild(option_elem);
+      });
+
+      // const unitCol = document.createElement("input");
+      const unitCol = document.createElement("select");
       unitCol.className = "col-2 edit__input unit input-text-med";
       unitCol.setAttribute("type", "text");
       unitCol.setAttribute("id", "unit");
       unitCol.setAttribute("value", unit);
+
+      ItemCtrl.getUnitArray().forEach((element, index) => {
+        let option_elem = document.createElement("option");
+
+        // Add index to option_elem
+        option_elem.value = element;
+
+        // Add element HTML
+        option_elem.textContent = element;
+
+        // Append option_elem to select_elem
+        unitCol.appendChild(option_elem);
+      });
 
       const editIcon = document.createElement("div");
       editIcon.className = "col-1 save__icon";
