@@ -248,6 +248,9 @@ const UICtrl = (function () {
 
     submitDelete: async function (e) {
       e.preventDefault();
+
+      if (ItemCtrl.getIsEditing()) return;
+
       let gridItem = e.target.parentElement.closest(
         UICtrl.getSelectorsClasses().gridItem
       );
