@@ -1,6 +1,3 @@
-// var token = "";
-// let arrAllUsers = [];
-
 const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
   // Event listeners init
   const URLs = ServerCtrl.getUrls();

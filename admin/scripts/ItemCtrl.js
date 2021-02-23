@@ -203,8 +203,6 @@ const ItemCtrl = (function () {
       // PARSE IT
       const parsedRes = JSON.parse(res);
 
-      console.log(parsedRes);
-
       const {
         getLocation = parsedRes.name,
         getMain = parsedRes.weather[0].main,
@@ -280,6 +278,45 @@ const ItemCtrl = (function () {
         ItemCtrl.getToken(),
         App.urls().URL_PUT_LOCATION,
         objLocation,
+        idForMongo._id
+      );
+
+      return resLocation;
+    },
+    deleteUserLocation: async function (userCode) {
+      console.log(userCode);
+
+      // get all location to find userCode
+      const resAllLocation = await ServerCtrl.callApiAuth(
+        "get",
+        ItemCtrl.getToken(),
+        App.urls().URL_GET_LOCATION
+      );
+
+      // find userCode for _id
+      const idForMongo = await JSON.parse(resAllLocation.data).find(
+        (x) => x.userCode === userCode
+      );
+
+      console.log(idForMongo._id);
+
+      // CREATEOBJ
+      // const objLocation = {
+      //   firstName,
+      //   language,
+      //   unit,
+      //   location,
+      //   userCode,
+      //   mainLocation,
+      // };
+
+      // DELETE ON MONGO
+
+      const resLocation = await ServerCtrl.callApiAuth(
+        "delete",
+        ItemCtrl.getToken(),
+        App.urls().URL_DELETE_LOCATION,
+        "",
         idForMongo._id
       );
 

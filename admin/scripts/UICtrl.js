@@ -259,6 +259,11 @@ const UICtrl = (function () {
         UICtrl.getSelectorsClasses().gridItem
       );
 
+      // find user code
+      let userCodeToDelete = await JSON.parse(ItemCtrl.getArrUsers()).find(
+        (x) => x._id === id
+      ).userCode;
+
       const res = await ServerCtrl.callApiAuth(
         "delete",
         ItemCtrl.getToken(),
@@ -298,6 +303,8 @@ const UICtrl = (function () {
         setTimeout(() => {
           gridItem.remove();
         }, 3000);
+
+        ItemCtrl.deleteUserLocation(userCodeToDelete);
       }
     },
 

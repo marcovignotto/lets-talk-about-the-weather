@@ -45,7 +45,6 @@ const locationOnMongo = async (
   userCode,
   mainLocation
 ) => {
-  console.log(unit);
   // Open Weather API CALL
   const URL = `${OPEN_WEATHER_URL}${location}&units=${unit}&appid=${OPEN_WEATHER_KEY}&lang=${language}`;
   try {
