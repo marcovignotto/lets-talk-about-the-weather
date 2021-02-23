@@ -350,6 +350,9 @@ const ItemCtrl = (function () {
       yesCallback,
       noCallback
     ) {
+      // isediting
+      ItemCtrl.setIsEditingTrue();
+
       target.classList.remove("row");
       target.classList.add("row-1");
       // create msg
@@ -368,6 +371,7 @@ const ItemCtrl = (function () {
         .addEventListener("click", function () {
           target.classList.remove("row-1");
           target.classList.add("row");
+          ItemCtrl.setIsEditingFalse();
           noCallback();
         });
     },

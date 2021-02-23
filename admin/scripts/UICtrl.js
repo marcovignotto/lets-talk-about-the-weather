@@ -65,7 +65,7 @@ const UICtrl = (function () {
       append = "yes"
     ) {
       const row = document.createElement("div");
-      row.className = `row grid__item pv-1 ph-1`;
+      row.className = `row grid__item pv-1 ph-1 t-center-y`;
 
       const firstNameCol = document.createElement("div");
       firstNameCol.className = "col-3 first__name";
@@ -135,7 +135,7 @@ const UICtrl = (function () {
       mainLocation
     ) {
       const row = document.createElement("div");
-      row.className = `row grid__item__edit pv-1 ph-1`;
+      row.className = `row grid__item__edit pv-1 ph-1 t-center-y`;
 
       const firstNameCol = document.createElement("input");
       firstNameCol.className = "col-3 edit__input first__name input-text-large";
