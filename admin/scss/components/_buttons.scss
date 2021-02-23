@@ -2,7 +2,7 @@
 
 %btn-shared {
   display: inline-block;
-  padding: 0.8rem 2rem;
+  padding: 0.5rem 1rem;
   transition: all 0.3s;
   border: none;
   cursor: pointer;
@@ -81,11 +81,11 @@
 .btn {
   &-alert-yes {
     @include button(
-      $light-blue,
-      $light-blue-hover,
-      $light-blue,
-      $light-blue-text-norm,
-      $light-blue-text-hover,
+      $light-red,
+      $light-red-hover,
+      $light-red,
+      $light-red-text-norm,
+      $light-red-text-hover,
       outlined,
       10px,
       small
@@ -93,11 +93,11 @@
   }
   &-alert-no {
     @include button(
-      $light-blue,
-      $light-blue-hover,
-      $light-blue,
-      $light-blue-text-norm,
-      $light-blue-text-hover,
+      $light-green,
+      $light-green-hover,
+      $light-green,
+      $light-green-text-norm,
+      $light-green-text-hover,
       outlined,
       10px,
       small

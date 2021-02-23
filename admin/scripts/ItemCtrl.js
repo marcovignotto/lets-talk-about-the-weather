@@ -354,7 +354,7 @@ const ItemCtrl = (function () {
       target.classList.add("row-1");
       // create msg
       target.innerHTML = `<div class='row delete__row ${classStyle}'>
-      <div class="msg col-6">${msg}</div>
+      <div class="msg col-6 t-center-y">${msg}</div>
       <div><button class="btn-alert-yes col-2">Yes</button></div>
       <div><button class="btn-alert-no col-2" >No</button></div>
       </div>`;
