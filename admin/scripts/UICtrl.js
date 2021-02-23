@@ -99,18 +99,9 @@ const UICtrl = (function () {
       const mainLocationCheck = document.createElement("div");
       mainLocationCheck.className = "col-1 main__location";
 
-      //
-      // temporary styling to refactor
-      //
-
       if (mainLocation == true || mainLocation == "true") {
-        // mainLocationCheck.style.backgroundColor = "red";
-        // mainLocationCheck.style.color = "white";
-        // mainLocationCheck.innerHTML = `Main`;
-        // row.style.backgroundColor = "#ff7f7f";
         UICtrl.setMainLocationStyle(row);
       }
-      // mainLocation.innerHTML = `<button class="btn__delete"><i class="far fa-trash-alt"></i></button>`;
 
       row.innerHTML +=
         firstNameCol.outerHTML +
