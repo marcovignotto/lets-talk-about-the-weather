@@ -77,6 +77,34 @@
   }
 }
 
+// alert btn-alert-yes
+.btn {
+  &-alert-yes {
+    @include button(
+      $light-blue,
+      $light-blue-hover,
+      $light-blue,
+      $light-blue-text-norm,
+      $light-blue-text-hover,
+      outlined,
+      10px,
+      small
+    );
+  }
+  &-alert-no {
+    @include button(
+      $light-blue,
+      $light-blue-hover,
+      $light-blue,
+      $light-blue-text-norm,
+      $light-blue-text-hover,
+      outlined,
+      10px,
+      small
+    );
+  }
+}
+
 .btn {
   &-outline-light-blue {
     @extend %btn-shared;
