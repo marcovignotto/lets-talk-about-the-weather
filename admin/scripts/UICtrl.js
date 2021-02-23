@@ -64,6 +64,10 @@ const UICtrl = (function () {
       mainLocation,
       append = "yes"
     ) {
+      // uppercase first char
+      firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+      location = location.charAt(0).toUpperCase() + location.slice(1);
+
       const row = document.createElement("div");
       row.className = `row grid__item pv-1 ph-1 t-center-y`;
 
