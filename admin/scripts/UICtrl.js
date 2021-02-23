@@ -144,17 +144,26 @@ const UICtrl = (function () {
       locationCol.setAttribute("id", "location");
       locationCol.setAttribute("value", location);
 
-      // const languageCol = document.createElement("input");
       const languageCol = document.createElement("select");
       languageCol.className = "col-1 edit__input language input-text-small";
       languageCol.setAttribute("type", "text");
       languageCol.setAttribute("id", "language");
       languageCol.setAttribute("value", language);
 
+      // populate selector
       ItemCtrl.getLangArray().forEach((element, index) => {
         let option_elem = document.createElement("option");
 
-        // Add index to option_elem
+        if (language === null || language === "") {
+          // if is empty set value
+          option_elem.value = element.code;
+        } else if (element.code === language) {
+          // when corresponds set everything to language
+          option_elem.setAttribute("selected", "selected");
+          option_elem.value = element.code;
+        }
+
+        // // Add index to option_elem
         option_elem.value = element.code;
 
         // Add element HTML
@@ -164,20 +173,28 @@ const UICtrl = (function () {
         languageCol.appendChild(option_elem);
       });
 
-      // const unitCol = document.createElement("input");
       const unitCol = document.createElement("select");
       unitCol.className = "col-2 edit__input unit input-text-med";
       unitCol.setAttribute("type", "text");
       unitCol.setAttribute("id", "unit");
       unitCol.setAttribute("value", unit);
 
+      // unitCol.setAttribute("value", unit);
+
+      // populate selector
       ItemCtrl.getUnitArray().forEach((element, index) => {
         let option_elem = document.createElement("option");
 
-        // Add index to option_elem
+        if (unit === null || unit === "") {
+          // if is empty set value
+          option_elem.value = element;
+        } else if (element === unit) {
+          // when corresponds set everything to unit
+          option_elem.setAttribute("selected", "selected");
+          option_elem.value = unit;
+        }
         option_elem.value = element;
 
-        // Add element HTML
         option_elem.textContent = element;
 
         // Append option_elem to select_elem
