@@ -252,7 +252,7 @@ const UICtrl = (function () {
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
 
       let userName = e.target.parentElement.parentElement.parentElement.querySelector(
-        ".first__name"
+        UICtrl.getSelectorsClasses().firstName
       ).textContent;
 
       let gridItem = e.target.parentElement.closest(

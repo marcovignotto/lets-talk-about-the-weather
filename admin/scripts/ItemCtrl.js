@@ -284,8 +284,6 @@ const ItemCtrl = (function () {
       return resLocation;
     },
     deleteUserLocation: async function (userCode) {
-      console.log(userCode);
-
       // get all location to find userCode
       const resAllLocation = await ServerCtrl.callApiAuth(
         "get",
@@ -297,18 +295,6 @@ const ItemCtrl = (function () {
       const idForMongo = await JSON.parse(resAllLocation.data).find(
         (x) => x.userCode === userCode
       );
-
-      console.log(idForMongo._id);
-
-      // CREATEOBJ
-      // const objLocation = {
-      //   firstName,
-      //   language,
-      //   unit,
-      //   location,
-      //   userCode,
-      //   mainLocation,
-      // };
 
       // DELETE ON MONGO
 
