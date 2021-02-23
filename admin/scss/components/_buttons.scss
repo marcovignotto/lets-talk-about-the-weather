@@ -65,11 +65,11 @@
   &-blue-out,
   &-add-user {
     @include button(
-      $light-blue,
-      $light-blue-hover,
-      $light-blue,
-      $light-blue-text-norm,
-      $light-blue-text-hover,
+      $light-green,
+      $light-green-hover,
+      $light-green,
+      $light-green-text-norm,
+      $light-green-text-hover,
       outlined,
       10px,
       small
@@ -93,11 +93,11 @@
   }
   &-alert-no {
     @include button(
-      $light-green,
-      $light-green-hover,
-      $light-green,
-      $light-green-text-norm,
-      $light-green-text-hover,
+      $green,
+      $green-hover,
+      $green,
+      $green-text-norm,
+      $green-text-hover,
       outlined,
       10px,
       small
