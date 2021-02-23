@@ -255,88 +255,65 @@ const UICtrl = (function () {
         UICtrl.getSelectorsClasses().firstName
       ).textContent;
 
-      const sendAlert = ItemCtrl.setAlert(
+      ItemCtrl.setAlert(
         `Are you sure to delete ${userName}`,
         "classeDelete",
-        gridItem
-      );
-      // confirm("Want to delete?");
-      const isItOk = sendAlert.then((res) => {
-        if (res) {
-          console.log("true");
-        } else {
-          console.log("false");
+        gridItem,
+        async function () {
+          return;
+        },
+        async function () {
+          let id = e.target.parentElement.parentElement.getAttribute("data-id");
+
+          // find user code
+          let userCodeToDelete = await JSON.parse(ItemCtrl.getArrUsers()).find(
+            (x) => x._id === id
+          ).userCode;
+
+          const res = await ServerCtrl.callApiAuth(
+            "delete",
+            ItemCtrl.getToken(),
+            App.urls().URL_DELETE,
+            {},
+            id
+          );
+
+          if (res.status >= 200 && res.status <= 399) {
+            // get array from session Storage
+            let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
+            // splice Item
+            JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+              if (x._id === id) {
+                arrUsers.splice(i, 1);
+              }
+            });
+
+            // update array in session Storage
+            sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
+
+            // DOM
+            // gridItem;
+            gridItem.style.transition = "all 2s";
+            // remove class
+            gridItem.classList.remove("row");
+
+            // instead of removing filling it empty so it removes all the childs
+            gridItem.style.opacity = "0";
+            gridItem.innerHTML = `${userName} successfully removed`;
+            gridItem.style.opacity = "1";
+
+            setTimeout(() => {
+              gridItem.style.opacity = "0";
+            }, 1000);
+
+            setTimeout(() => {
+              gridItem.remove();
+            }, 3000);
+
+            ItemCtrl.deleteUserLocation(userCodeToDelete);
+          }
         }
-      });
-      isItOk;
-      console.log(isItOk);
-
-      // async function myFunc() {
-      //   if (verifyPermission === true) {
-      //     var result = await confirmPermission();
-      //     if (!result) {
-      //       return;
-      //     }
-      //   }
-      //   // rest of code here
-      // }
-
-      // if (isItOk) {
-      //   console.log("if yes");
-      // } else {
-      //   console.log("if no");
-      // }
-
-      //
-      // let id = e.target.parentElement.parentElement.getAttribute("data-id");
-
-      // // find user code
-      // let userCodeToDelete = await JSON.parse(ItemCtrl.getArrUsers()).find(
-      //   (x) => x._id === id
-      // ).userCode;
-
-      // const res = await ServerCtrl.callApiAuth(
-      //   "delete",
-      //   ItemCtrl.getToken(),
-      //   App.urls().URL_DELETE,
-      //   {},
-      //   id
-      // );
-
-      // if (res.status >= 200 && res.status <= 399) {
-      //   // get array from session Storage
-      //   let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
-      //   // splice Item
-      //   JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
-      //     if (x._id === id) {
-      //       arrUsers.splice(i, 1);
-      //     }
-      //   });
-
-      //   // update array in session Storage
-      //   sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
-
-      //   // DOM
-      //   // gridItem;
-      //   gridItem.style.transition = "all 2s";
-      //   // remove class
-      //   gridItem.classList.remove("row");
-
-      //   // instead of removing filling it empty so it removes all the childs
-      //   gridItem.style.opacity = "0";
-      //   gridItem.innerHTML = `${userName} successfully removed`;
-      //   gridItem.style.opacity = "1";
-
-      //   setTimeout(() => {
-      //     gridItem.style.opacity = "0";
-      //   }, 1000);
-
-      //   setTimeout(() => {
-      //     gridItem.remove();
-      //   }, 3000);
-
-      //   ItemCtrl.deleteUserLocation(userCodeToDelete);
-      // }
+      );
     },
 
     updateWeatherUser: async function (e) {

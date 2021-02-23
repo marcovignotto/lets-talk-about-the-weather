@@ -343,50 +343,33 @@ const ItemCtrl = (function () {
       UICtrl.getSelectors().btnAddUser.disabled = false;
     },
 
-    setAlert: async function (msg, classStyle, target) {
-      // let answer = false;
-      // // const answer = await
-      // function clickYes() {
-      //   console.log("yes");
-      //   answer = true;
-      // }
-      // function clickNo() {
-      //   console.log("no");
-      //   answer = false;
-      // }
-
-      target.innerHTML = `<div class='delete__row ${classStyle}'>
-      <div class="msg">${msg}</div>
-      <div><button class="btn-alert-yes">Yes</button></div>
-      <div><button class="btn-alert-no" >No</button></div>
+    setAlert: async function (
+      msg,
+      classStyle,
+      target,
+      yesCallback,
+      noCallback
+    ) {
+      target.classList.remove("row");
+      target.classList.add("row-1");
+      // create msg
+      target.innerHTML = `<div class='row delete__row ${classStyle}'>
+      <div class="msg col-6">${msg}</div>
+      <div><button class="btn-alert-yes col-2">Yes</button></div>
+      <div><button class="btn-alert-no col-2" >No</button></div>
       </div>`;
-
-      const confirmPermission = async function () {
-        document
-          .querySelector(".btn-alert-no")
-          .addEventListener("click", function () {
-            return false;
-          });
-
-        document
-          .querySelector(".btn-alert-yes")
-          .addEventListener("click", function () {
-            return true;
-          });
-      };
-
-      async function myFunc() {
-        var result = await confirmPermission();
-        if (!result) {
-          console.log("no permision");
-          return;
-        }
-        console.log("yes permision");
-
-        // rest of code here
-      }
-
-      return myFunc();
+      document
+        .querySelector(".btn-alert-no")
+        .addEventListener("click", function () {
+          yesCallback();
+        });
+      document
+        .querySelector(".btn-alert-yes")
+        .addEventListener("click", function () {
+          target.classList.remove("row-1");
+          target.classList.add("row");
+          noCallback();
+        });
     },
   };
 })();
