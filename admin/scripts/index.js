@@ -42,14 +42,8 @@ App.init();
 
 // EDIT & DELETE
 
-const addNewUserInputs1 = (e) => {
-  inputs.menuRow(e).after(inputs.row().row);
+// const addNewUserInputs1 = (e) => {
+//   inputs.menuRow(e).after(inputs.row().row);
 
-  // iconsNewUserInit();
-};
-
-const undoEditWeatherUser = (e) => {
-  console.log("undo");
-  e.preventDefault();
-  e.target.parentElement.closest(".grid__item__edit").remove();
-};
+//   // iconsNewUserInit();
+// };

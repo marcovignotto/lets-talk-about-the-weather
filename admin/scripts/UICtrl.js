@@ -207,6 +207,7 @@ const UICtrl = (function () {
     },
 
     submitEdit: function (e) {
+      if (ItemCtrl.getIsEditing()) return;
       // get the closest row (the one to edit)
       let closestRow = e.target.closest(UICtrl.getSelectorsClasses().row);
 
@@ -240,6 +241,9 @@ const UICtrl = (function () {
 
       UICtrl.iconsEditInit("update");
       UICtrl.checkboxMainLocationInit();
+
+      // isEditing
+      ItemCtrl.setIsEditingTrue();
     },
 
     submitDelete: async function (e) {
@@ -383,6 +387,9 @@ const UICtrl = (function () {
         ItemCtrl.reInitListUser();
       }
 
+      // isEditing
+      ItemCtrl.setIsEditingFalse();
+
       ItemCtrl.updateUserLocation(
         firstName,
         location,
@@ -438,7 +445,9 @@ const UICtrl = (function () {
         });
       document
         .querySelector(UICtrl.getSelectorsClasses().iconUndoWeaUser)
-        .addEventListener("click", undoEditWeatherUser);
+        .addEventListener("click", function (e) {
+          ItemCtrl.undoEditWeatherUser(e);
+        });
     },
 
     checkboxMainLocationInit: function () {

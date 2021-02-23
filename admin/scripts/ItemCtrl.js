@@ -1,4 +1,7 @@
 const ItemCtrl = (function () {
+  userActions = {
+    isEditing: false,
+  };
   return {
     getInputUser: function (e) {
       // function that loops through the input nodes in the closest row
@@ -55,6 +58,7 @@ const ItemCtrl = (function () {
       return sessionStorage.getItem("arrUsers");
     },
     addUserRow: function () {
+      if (userActions.isEditing) return;
       // grid item below last one
       let lastElement;
 
@@ -74,6 +78,9 @@ const ItemCtrl = (function () {
       // mandatory
       UICtrl.iconsEditInit("save");
       UICtrl.checkboxMainLocationInit();
+
+      // isEditing
+      ItemCtrl.setIsEditingTrue();
     },
     saveWeatherUser: async function (e) {
       ItemCtrl.getInputUser(e);
@@ -167,6 +174,9 @@ const ItemCtrl = (function () {
           // re init list user session storage
           ItemCtrl.reInitListUser();
         }
+
+        // isEditing false
+        this.setIsEditingFalse();
 
         // create user location sending the just created data to the function
         this.createUserLocation(
@@ -291,6 +301,23 @@ const ItemCtrl = (function () {
 
       // convert to string before sending
       UICtrl.listUsers(JSON.stringify(orderArr));
+    },
+    undoEditWeatherUser: function (e) {
+      e.preventDefault();
+      this.setIsEditingFalse();
+      e.target.closest(UICtrl.getSelectorsClasses().gridItemEdit).remove();
+    },
+    getIsEditing: function () {
+      return userActions.isEditing;
+    },
+
+    setIsEditingTrue: function () {
+      userActions.isEditing = true;
+      UICtrl.getSelectors().btnAddUser.disabled = true;
+    },
+    setIsEditingFalse: function () {
+      userActions.isEditing = false;
+      UICtrl.getSelectors().btnAddUser.disabled = false;
     },
   };
 })();

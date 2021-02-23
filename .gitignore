@@ -1,8 +1,6 @@
 node_modules/
 lib/dist/
 
-admin/node_modules
 admin/dist
-
 
 .env
