@@ -130,7 +130,7 @@ router.put("/:id", auth, async (req, res) => {
 
 // @route   DELETE api/location/:id
 // @desc    Delete location
-// @access  Private
+// @access  Private rivate
 
 router.delete("/:id", auth, async (req, res) => {
   try {
