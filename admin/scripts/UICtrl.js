@@ -138,25 +138,25 @@ const UICtrl = (function () {
       row.className = `row grid__item__edit pv-1 ph-1`;
 
       const firstNameCol = document.createElement("input");
-      firstNameCol.className = "col-3 edit__input first__name";
+      firstNameCol.className = "col-3 edit__input first__name input-text-large";
       firstNameCol.setAttribute("type", "text");
       firstNameCol.setAttribute("id", "firstName");
       firstNameCol.setAttribute("value", firstName);
 
       const locationCol = document.createElement("input");
-      locationCol.className = "col-3 edit__input location";
+      locationCol.className = "col-3 edit__input location input-text-large";
       locationCol.setAttribute("type", "text");
       locationCol.setAttribute("id", "location");
       locationCol.setAttribute("value", location);
 
       const languageCol = document.createElement("input");
-      languageCol.className = "col-1 edit__input language";
+      languageCol.className = "col-1 edit__input language input-text-small";
       languageCol.setAttribute("type", "text");
       languageCol.setAttribute("id", "language");
       languageCol.setAttribute("value", language);
 
       const unitCol = document.createElement("input");
-      unitCol.className = "col-2 edit__input unit";
+      unitCol.className = "col-2 edit__input unit input-text-med";
       unitCol.setAttribute("type", "text");
       unitCol.setAttribute("id", "unit");
       unitCol.setAttribute("value", unit);

@@ -1,0 +1,62 @@
+@import "../variables/colors";
+
+:root {
+  font-weight: $thin;
+}
+
+h4 {
+  font-weight: $normal;
+  color: #575366;
+}
+
+// admin
+.grid__item {
+  color: #5b3335;
+  * button {
+    outline: none;
+  }
+
+  * i {
+    color: #5b3335;
+    &:hover {
+      border: none;
+      cursor: pointer;
+      color: #c99684;
+    }
+  }
+}
+
+.grid__item__edit {
+  background-color: #efebce;
+  color: #5b3335;
+  border-radius: 5px;
+  * button {
+    outline: none;
+  }
+
+  * i {
+    color: #5b3335;
+    &:hover {
+      border: none;
+      cursor: pointer;
+      color: #c99684;
+    }
+  }
+}
+
+.main__location___row {
+  background-color: #bb8588;
+  color: white;
+  * button {
+    outline: none;
+  }
+
+  * i {
+    color: #efebce;
+    &:hover {
+      border: none;
+      cursor: pointer;
+      color: #5b3335;
+    }
+  }
+}

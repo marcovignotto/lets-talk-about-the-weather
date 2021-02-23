@@ -12,7 +12,7 @@ const terser = require("gulp-terser-js");
 // file path vars
 
 const filesAdmin = {
-  scssPath: "lib/scss/**/*.scss",
+  scssPath: "admin/scss/**/*.scss",
   jsPath: "admin/scripts/**/*.js",
 };
 const filesClient = {
