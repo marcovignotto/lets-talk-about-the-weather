@@ -312,13 +312,21 @@ const UICtrl = (function () {
       let userName = e.target.parentElement.parentElement.parentElement.querySelector(
         UICtrl.getSelectorsClasses().firstName
       ).textContent;
+      let userLocation = e.target.parentElement.parentElement.parentElement.querySelector(
+        UICtrl.getSelectorsClasses().location
+      ).textContent;
 
       ItemCtrl.setAlert(
-        `Are you sure to delete ${userName}?`,
+        `Are you sure to delete ${userName} from ${userLocation}?`,
         "classeDelete",
         gridItem,
         async function () {
-          return;
+          e.target
+            .closest(UICtrl.getSelectorsClasses().locationList)
+            .querySelector(".delete__row")
+            .remove();
+
+          ItemCtrl.setIsEditingFalse();
         },
         async function () {
           let id = e.target.parentElement.parentElement.getAttribute("data-id");

@@ -503,14 +503,26 @@ const ItemCtrl = (function () {
       // isediting
       ItemCtrl.setIsEditingTrue();
 
-      target.classList.remove("row");
-      target.classList.add("row-1");
+      // target.classList.remove("row");
+      // target.classList.add("row-1");
       // create msg
-      target.innerHTML = `<div class='row delete__row ${classStyle}'>
+      let message = "";
+
+      const divMessage = document.createElement("div");
+
+      message = `<div class='row delete__row ${classStyle}'>
       <div class="msg col-6 t-center-y">${msg}</div>
-      <div><button class="btn-alert-yes col-2">Yes</button></div>
-      <div><button class="btn-alert-no col-2" >No</button></div>
-      </div>`;
+      <div class='col-2'><button class="btn-alert-yes">Yes</button></div>
+      <div class='col-2'><button class="btn-alert-no" >No</button></div>
+      </div>
+      `;
+
+      var doc = new DOMParser().parseFromString(message, "text/html");
+
+      // spread operator to extract all the html elements
+      divMessage.appendChild(...doc.body.children);
+
+      target.after(divMessage);
       document
         .querySelector(".btn-alert-no")
         .addEventListener("click", function () {
@@ -519,46 +531,11 @@ const ItemCtrl = (function () {
       document
         .querySelector(".btn-alert-yes")
         .addEventListener("click", function () {
-          target.classList.remove("row-1");
-          target.classList.add("row");
-          ItemCtrl.setIsEditingFalse();
           noCallback();
         });
     },
     setAlertMain: async function (msg) {
       return confirm(msg);
     },
-    // setInputError: function (e, target) {
-    //   // set user error tot true
-    //   userActions.isError = true;
-
-    //   // get elements and create error
-    //   e.target.parentElement
-    //     .closest(".grid__item__edit")
-    //     .querySelector(target)
-    //     .classList.add("input-text-error");
-
-    //   const row = document.createElement("div");
-    //   row.className = `row-1 error__row`;
-
-    //   const divError = document.createElement("div");
-    //   divError.innerHTML = "It must be at least 3 characters";
-
-    //   row.innerHTML += divError.outerHTML;
-
-    //   e.target.parentElement.closest(".grid__item__edit").after(row);
-    // },
-    // removeInputError: function (e, target) {
-    //   // if error is false skip
-    //   if (!userActions.isError) return;
-
-    //   e.target.parentElement
-    //     .closest(".grid__item__edit")
-    //     .querySelector(target)
-    //     .classList.remove("input-text-error");
-    //   document.querySelector(".error__row").remove();
-
-    //   userActions.isError = false;
-    // },
   };
 })();
