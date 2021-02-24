@@ -90,12 +90,18 @@ router.post(
 
 router.put("/:id", auth, async (req, res) => {
   const {
+    description,
     firstName,
+    icon,
     language,
     location,
     unit,
     userCode,
     mainLocation,
+    mainWeather,
+    temperature,
+    timezone,
+    wind,
   } = req.body;
 
   if (mainLocation === true || mainLocation === "true") {
@@ -103,12 +109,18 @@ router.put("/:id", auth, async (req, res) => {
   }
 
   const userFields = {};
+  if (description) userFields.description = description;
   if (firstName) userFields.firstName = firstName;
+  if (icon) userFields.icon = icon;
   if (language) userFields.language = language;
   if (location) userFields.location = location;
+  if (mainLocation) userFields.mainLocation = mainLocation;
+  if (mainWeather) userFields.mainWeather = mainWeather;
+  if (temperature) userFields.temperature = temperature;
+  if (timezone) userFields.timezone = timezone;
   if (unit) userFields.unit = unit;
   if (userCode) userFields.userCode = userCode;
-  if (mainLocation) userFields.mainLocation = mainLocation;
+  if (wind) userFields.wind = wind;
 
   try {
     let user = await Location.findById(req.params.id);

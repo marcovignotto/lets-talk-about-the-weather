@@ -292,6 +292,7 @@ const ItemCtrl = (function () {
         firstName: firstName,
         language: language,
         description: getMainDesc,
+        unit: unit,
         icon: getIcon,
         location: getLocation,
         mainWeather: getMain,
@@ -323,6 +324,38 @@ const ItemCtrl = (function () {
       userCode,
       _id
     ) {
+      // OW API CALL
+      const res = await OWCtrL.openWCallApi(location, unit, language);
+
+      // PARSE IT
+      const parsedRes = JSON.parse(res);
+
+      const {
+        getLocation = parsedRes.name,
+        getMain = parsedRes.weather[0].main,
+        getIcon = parsedRes.weather[0].icon,
+        getMainDesc = parsedRes.weather[0].description,
+        getTemp = parsedRes.main.temp,
+        getWind = parsedRes.wind.speed,
+        getTimeZone = parsedRes.timezone,
+      } = parsedRes;
+
+      // CREATEOBJ
+      const objLocation = {
+        firstName: firstName,
+        language: language,
+        description: getMainDesc,
+        unit: unit,
+        icon: getIcon,
+        location: getLocation,
+        mainWeather: getMain,
+        temperature: getTemp,
+        userCode: userCode,
+        wind: getWind,
+        mainLocation,
+        timezone: getTimeZone,
+      };
+
       // get all location to find userCode
       const resAllLocation = await ServerCtrl.callApiAuth(
         "get",
@@ -336,14 +369,16 @@ const ItemCtrl = (function () {
       );
 
       // CREATEOBJ
-      const objLocation = {
-        firstName,
-        language,
-        unit,
-        location,
-        userCode,
-        mainLocation,
-      };
+      // const objLocation = {
+      //   firstName,
+      //   language,
+      //   unit,
+      //   location,
+      //   userCode,
+      //   mainLocation,
+      // };
+
+      console.log(objLocation);
 
       // POST ON MONGO
 

@@ -79,6 +79,7 @@ const locationOnMongo = async (
       firstName: firstName,
       language: language,
       description: getMainDesc,
+      unit: unit,
       icon: getIcon,
       location: getLocation,
       mainWeather: getMain,
