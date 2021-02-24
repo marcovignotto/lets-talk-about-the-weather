@@ -1,6 +1,7 @@
 const ItemCtrl = (function () {
   userActions = {
     isEditing: false,
+    isError: false,
   };
 
   langArray = [
@@ -52,6 +53,39 @@ const ItemCtrl = (function () {
     { code: "zu", language: "Zulu" },
   ];
 
+  const setInputError = function (e, target) {
+    // set user error tot true
+    userActions.isError = true;
+
+    // get elements and create error
+    e.target.parentElement
+      .closest(".grid__item__edit")
+      .querySelector(target)
+      .classList.add("input-text-error");
+
+    const row = document.createElement("div");
+    row.className = `row-1 error__row`;
+
+    const divError = document.createElement("div");
+    divError.innerHTML = "It must be at least 3 characters";
+
+    row.innerHTML += divError.outerHTML;
+
+    e.target.parentElement.closest(".grid__item__edit").after(row);
+  };
+  const removeInputError = function (e, target) {
+    e.target.parentElement
+      .closest(".grid__item__edit")
+      .querySelector(target)
+      .classList.remove("input-text-error");
+
+    // if error is false skip
+    if (!userActions.isError) return;
+
+    document.querySelector(".error__row").remove();
+
+    userActions.isError = false;
+  };
   unitArray = ["standard", "metric", "imperial"];
   return {
     getLangArray: function () {
@@ -154,53 +188,19 @@ const ItemCtrl = (function () {
 
       // check inputs length
       if (weatherUserObj.firstName.length < 3) {
-        e.target.parentElement
-          .closest(".grid__item__edit")
-          .querySelector(".first__name")
-          .classList.add("input-text-error");
-
-        const row = document.createElement("div");
-        row.className = `row-1 error__row`;
-
-        const divError = document.createElement("div");
-        divError.innerHTML = "It must be at least 3 characters";
-
-        row.innerHTML += divError.outerHTML;
-
-        e.target.parentElement.closest(".grid__item__edit").after(row);
+        setInputError(e, ".first__name");
 
         return;
       } else if (weatherUserObj.firstName.length > 2) {
-        e.target.parentElement
-          .closest(".grid__item__edit")
-          .querySelector(".first__name")
-          .classList.remove("input-text-error");
-        document.querySelector(".error__row").remove();
+        removeInputError(e, ".first__name");
       }
 
       if (weatherUserObj.location.length < 3) {
-        e.target.parentElement
-          .closest(".grid__item__edit")
-          .querySelector(".location")
-          .classList.add("input-text-error");
-
-        const row = document.createElement("div");
-        row.className = `row-1 error__row`;
-
-        const divError = document.createElement("div");
-        divError.innerHTML = "It must be at least 3 characters";
-
-        row.innerHTML += divError.outerHTML;
-
-        e.target.parentElement.closest(".grid__item__edit").after(row);
+        setInputError(e, ".location");
 
         return;
       } else if (weatherUserObj.location.length > 2) {
-        e.target.parentElement
-          .closest(".grid__item__edit")
-          .querySelector(".location")
-          .classList.remove("input-text-error");
-        document.querySelector(".error__row").remove();
+        removeInputError(e, ".location");
       }
 
       if (
@@ -528,5 +528,37 @@ const ItemCtrl = (function () {
     setAlertMain: async function (msg) {
       return confirm(msg);
     },
+    // setInputError: function (e, target) {
+    //   // set user error tot true
+    //   userActions.isError = true;
+
+    //   // get elements and create error
+    //   e.target.parentElement
+    //     .closest(".grid__item__edit")
+    //     .querySelector(target)
+    //     .classList.add("input-text-error");
+
+    //   const row = document.createElement("div");
+    //   row.className = `row-1 error__row`;
+
+    //   const divError = document.createElement("div");
+    //   divError.innerHTML = "It must be at least 3 characters";
+
+    //   row.innerHTML += divError.outerHTML;
+
+    //   e.target.parentElement.closest(".grid__item__edit").after(row);
+    // },
+    // removeInputError: function (e, target) {
+    //   // if error is false skip
+    //   if (!userActions.isError) return;
+
+    //   e.target.parentElement
+    //     .closest(".grid__item__edit")
+    //     .querySelector(target)
+    //     .classList.remove("input-text-error");
+    //   document.querySelector(".error__row").remove();
+
+    //   userActions.isError = false;
+    // },
   };
 })();
