@@ -9,8 +9,6 @@ const { check, validationResult } = require("express-validator");
 
 const BackendUser = require("../models/BackendUser");
 
-const currentDate = new Date();
-
 // @route   GET api/users
 // @desc    Get all userss
 // @access  Private
@@ -19,67 +17,73 @@ const currentDate = new Date();
 // @desc    add a users
 // @access  Private
 
-router.post(
-  "/",
-  [
-    check("userName", "Username is required!").not().isEmpty(),
-    check("email", "Please insert a valid E-mail").isEmail(),
-    check(
-      "password",
-      "Please insert a valid password with 6 or more characters"
-    ).isLength({ min: 6 }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
+//
+//
+// disable for security
+//
+//
 
-    const { userName, email, password } = req.body;
+// router.post(
+//   "/",
+//   [
+//     check("userName", "Username is required!").not().isEmpty(),
+//     check("email", "Please insert a valid E-mail").isEmail(),
+//     check(
+//       "password",
+//       "Please insert a valid password with 6 or more characters"
+//     ).isLength({ min: 6 }),
+//   ],
+//   async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({ errors: errors.array() });
+//     }
 
-    try {
-      let user = await BackendUser.findOne({ email });
+//     const { userName, email, password } = req.body;
 
-      if (user) {
-        return res.status(400).json({ msg: "Username already exists!" });
-      }
+//     try {
+//       let user = await BackendUser.findOne({ email });
 
-      user = new BackendUser({
-        userName,
-        email,
-        password,
-      });
+//       if (user) {
+//         return res.status(400).json({ msg: "Username already exists!" });
+//       }
 
-      const salt = await bcrypt.genSalt(10);
+//       user = new BackendUser({
+//         userName,
+//         email,
+//         password,
+//       });
 
-      // insert the hashed password into the obj
-      user.password = await bcrypt.hash(password, salt);
+//       const salt = await bcrypt.genSalt(10);
 
-      await user.save();
+//       // insert the hashed password into the obj
+//       user.password = await bcrypt.hash(password, salt);
 
-      const payload = {
-        user: {
-          id: user.id,
-        },
-      };
+//       await user.save();
 
-      jwt.sign(
-        payload,
-        config.get("authLocalApi.jwtSecret"),
-        {
-          // expiresIn: 360000,
-        },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server Error");
-    }
-  }
-);
+//       const payload = {
+//         user: {
+//           id: user.id,
+//         },
+//       };
+
+//       jwt.sign(
+//         payload,
+//         config.get("authLocalApi.jwtSecret"),
+//         {
+//           // expiresIn: 360000,
+//         },
+//         (err, token) => {
+//           if (err) throw err;
+//           res.json({ token });
+//         }
+//       );
+//     } catch (err) {
+//       console.error(err.message);
+//       res.status(500).send("Server Error");
+//     }
+//   }
+// );
 
 // @route   PUT api/users/:id
 // @desc    Update users

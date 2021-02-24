@@ -2,10 +2,6 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-//
-// AUTH DISABLED
-//
-
 const { check, validationResult } = require("express-validator");
 
 const WeatherUser = require("../models/WeatherUser");
