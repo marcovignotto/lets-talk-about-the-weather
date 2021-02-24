@@ -68,6 +68,13 @@ const UICtrl = (function () {
       firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
       location = location.charAt(0).toUpperCase() + location.slice(1);
 
+      // find language complete
+      let langComplete = "";
+
+      ItemCtrl.getLangArray().map((x) => {
+        if (x.code === language) langComplete = x.language;
+      });
+
       const row = document.createElement("div");
       row.className = `row grid__item pv-1 ph-1 t-center-y`;
 
@@ -82,16 +89,16 @@ const UICtrl = (function () {
       locationCol.innerHTML = location;
 
       const languageCol = document.createElement("div");
-      languageCol.className = "col-1 language";
+      languageCol.className = "col-2 language";
 
-      languageCol.innerHTML = language;
+      languageCol.innerHTML = langComplete;
 
       const unitCol = document.createElement("div");
-      unitCol.className = "col-2 unit";
+      unitCol.className = "col-1 unit";
       unitCol.innerHTML = unit;
 
       const editIcon = document.createElement("div");
-      editIcon.className = "col-1 edit__icon";
+      editIcon.className = "col-1 edit__icon pl-2";
       editIcon.dataset.id = id;
       editIcon.innerHTML = `<button class="btn__edit"><i class="far fa-1x fa-edit"></i></button>`;
 
@@ -203,12 +210,12 @@ const UICtrl = (function () {
       });
 
       const editIcon = document.createElement("div");
-      editIcon.className = "col-1 save__icon";
+      editIcon.className = "col-1 save__icon pl-1";
       editIcon.dataset.id = _id;
       editIcon.innerHTML = `<button class="btn__update__weather__user"><i class="fas fa-save"></i></button>`;
 
       const deleteIcon = document.createElement("div");
-      deleteIcon.className = "col-1 undo__icon";
+      deleteIcon.className = "col-1 undo__icon pr-1";
       deleteIcon.dataset.id = _id;
       deleteIcon.innerHTML = `<button class="btn__undo__weather__user"><i class="fas fa-times"></i></button>`;
 
@@ -223,6 +230,7 @@ const UICtrl = (function () {
       //   mainLocationCheck.setAttribute("checked", true);
       //   // document.getElementsByClassName("main__location")[0].remove();
       // }
+
       if (mainLocation == true || mainLocation == "true") {
         setTimeout(() => {
           document.querySelector("#mainLocation").remove();
@@ -425,6 +433,13 @@ const UICtrl = (function () {
           e.target.parentElement.parentElement.parentElement
             .previousElementSibling;
 
+        // find language complete
+        let langComplete = "";
+
+        ItemCtrl.getLangArray().map((x) => {
+          if (x.code === language) langComplete = x.language;
+        });
+
         // to disable is is to save
         setTimeout(() => {
           prevRow.querySelector(
@@ -435,7 +450,7 @@ const UICtrl = (function () {
           ).innerHTML = weatherUserObj.location;
           prevRow.querySelector(
             UICtrl.getSelectorsClasses().language
-          ).innerHTML = weatherUserObj.language;
+          ).innerHTML = langComplete;
           prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
             weatherUserObj.unit;
         }, 500);
