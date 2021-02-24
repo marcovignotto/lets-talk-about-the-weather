@@ -261,18 +261,20 @@ const ItemCtrl = (function () {
           userCode,
           mainLocation
         );
+
+        UICtrl.iconsInit();
       }
     },
     createUserLocation: async function (
       firstName,
       location,
-      units,
+      unit,
       language,
       userCode,
       mainLocation
     ) {
       // OW API CALL
-      const res = await OWCtrL.openWCallApi(location, units, language);
+      const res = await OWCtrL.openWCallApi(location, unit, language);
 
       // PARSE IT
       const parsedRes = JSON.parse(res);
@@ -367,18 +369,6 @@ const ItemCtrl = (function () {
       const idForMongo = await JSON.parse(resAllLocation.data).find(
         (x) => x.userCode === userCode
       );
-
-      // CREATEOBJ
-      // const objLocation = {
-      //   firstName,
-      //   language,
-      //   unit,
-      //   location,
-      //   userCode,
-      //   mainLocation,
-      // };
-
-      console.log(objLocation);
 
       // POST ON MONGO
 

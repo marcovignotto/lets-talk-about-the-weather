@@ -226,14 +226,14 @@ const UICtrl = (function () {
       mainLocationCheck.setAttribute("value", false);
 
       // if (mainLocation === true || mainLocation == "true") {
-      //   mainLocationCheck.setAttribute("value", true);
-      //   mainLocationCheck.setAttribute("checked", true);
       //   // document.getElementsByClassName("main__location")[0].remove();
       // }
 
       if (mainLocation == true || mainLocation == "true") {
+        mainLocationCheck.setAttribute("value", true);
+        mainLocationCheck.setAttribute("checked", true);
         setTimeout(() => {
-          document.querySelector("#mainLocation").remove();
+          document.querySelector("#mainLocation").style.opacity = 0;
         }, 1);
       }
 
