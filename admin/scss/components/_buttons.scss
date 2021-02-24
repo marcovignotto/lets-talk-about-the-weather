@@ -63,7 +63,8 @@
 
 .btn {
   &-blue-out,
-  &-add-user {
+  &-add-user,
+  &-login {
     @include button(
       $light-green,
       $light-green-hover,

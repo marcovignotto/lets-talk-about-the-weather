@@ -76,7 +76,7 @@ const UICtrl = (function () {
       });
 
       const row = document.createElement("div");
-      row.className = `row grid__item pv-1 ph-1 t-center-y`;
+      row.className = `row grid__item ph-1 t-center-y`;
 
       const firstNameCol = document.createElement("div");
       firstNameCol.className = "col-3 first__name";
@@ -314,7 +314,7 @@ const UICtrl = (function () {
       ).textContent;
 
       ItemCtrl.setAlert(
-        `Are you sure to delete ${userName}`,
+        `Are you sure to delete ${userName}?`,
         "classeDelete",
         gridItem,
         async function () {

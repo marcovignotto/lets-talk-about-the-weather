@@ -87,6 +87,16 @@
     }
   }
 }
+.input-text-email {
+  @extend %input-shared;
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  &:focus {
+    @extend %input-focus;
+  }
+}
 
 .input-text-area {
   width: 100%;

@@ -9,7 +9,48 @@ h4 {
   color: #575366;
 }
 
-// admin
+%spacing-row {
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+.locations__list {
+  .row:nth-of-type(even) {
+    @extend %spacing-row;
+
+    background-color: #f5f3e0;
+
+    border-radius: 0.3rem;
+    &:hover {
+      color: #efebce;
+      background-color: #a76268;
+      i {
+        color: #efebce;
+        &:hover {
+          color: #5b3335;
+        }
+      }
+    }
+  }
+  .row:nth-of-type(odd) {
+    @extend %spacing-row;
+    background-color: #f0edd1;
+    border-radius: 0.3rem;
+    &:hover {
+      color: #efebce;
+      background-color: #a76268;
+      i {
+        color: #efebce;
+        &:hover {
+          color: #5b3335;
+        }
+      }
+    }
+  }
+}
+
 .grid__item {
   color: #5b3335;
   * button {
@@ -43,10 +84,9 @@ h4 {
     }
   }
 }
-
 .main__location___row {
-  background-color: #bb8588;
-  color: white;
+  background-color: #bb8588 !important;
+  color: white !important;
   * button {
     outline: none;
   }
@@ -60,10 +100,16 @@ h4 {
     }
   }
 }
-
 .delete__row {
   display: flex;
-  width: 100%;
+  color: #5b3335 !important;
+  width: 100% !important;
+  padding-left: 1rem !important;
+  margin-top: 1rem !important;
+  &:hover {
+    background-color: #f0edd1 !important;
+    border-radius: 0.3rem !important;
+  }
 }
 
 .error__row {
@@ -73,4 +119,27 @@ h4 {
   background-color: #ff5148;
   padding: 0.5rem;
   border-radius: 5px;
+}
+
+.form__login {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.form__inputs {
+  padding: 4rem;
+  border-radius: 0.5rem;
+  background-color: #efebce;
+  text-align: center;
+  * {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  h3 {
+    color: #5b3335;
+  }
 }
