@@ -152,13 +152,64 @@ const ItemCtrl = (function () {
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
 
-      // User code created by the route
-      // weatherUserObj["userCode"] = 3;
+      // check inputs length
+      if (weatherUserObj.firstName.length < 3) {
+        e.target.parentElement
+          .closest(".grid__item__edit")
+          .querySelector(".first__name")
+          .classList.add("input-text-error");
+
+        const row = document.createElement("div");
+        row.className = `row-1 error__row`;
+
+        const divError = document.createElement("div");
+        divError.innerHTML = "It must be at least 3 characters";
+
+        row.innerHTML += divError.outerHTML;
+
+        e.target.parentElement.closest(".grid__item__edit").after(row);
+
+        return;
+      } else if (weatherUserObj.firstName.length > 2) {
+        e.target.parentElement
+          .closest(".grid__item__edit")
+          .querySelector(".first__name")
+          .classList.remove("input-text-error");
+        document.querySelector(".error__row").remove();
+      }
+
+      if (weatherUserObj.location.length < 3) {
+        e.target.parentElement
+          .closest(".grid__item__edit")
+          .querySelector(".location")
+          .classList.add("input-text-error");
+
+        const row = document.createElement("div");
+        row.className = `row-1 error__row`;
+
+        const divError = document.createElement("div");
+        divError.innerHTML = "It must be at least 3 characters";
+
+        row.innerHTML += divError.outerHTML;
+
+        e.target.parentElement.closest(".grid__item__edit").after(row);
+
+        return;
+      } else if (weatherUserObj.location.length > 2) {
+        e.target.parentElement
+          .closest(".grid__item__edit")
+          .querySelector(".location")
+          .classList.remove("input-text-error");
+        document.querySelector(".error__row").remove();
+      }
 
       if (
         weatherUserObj.mainLocation === true ||
         weatherUserObj.mainLocation === "true"
       ) {
+        // User code created by the route
+        // weatherUserObj["userCode"] = 3;
+
         ItemCtrl.setAlertMain(
           "The new user will change the Main Location! Are you sure?"
         );

@@ -26,63 +26,50 @@ router.get("/", auth, async (req, res) => {
 // @desc    add a location
 // @access  Private
 
-router.post(
-  "/",
-  auth,
-  //   [
-  //     check("Location", "Task is required").not().isEmpty(),
-  //     check("priority", "Give it a priority").not().isEmpty(),
-  //   ],
-  async (req, res) => {
-    // const errors = validationResult(req);
-    // if (!errors.isEmpty()) {
-    //   return res.status(400).json({ errors: errors.array() });
-    // }
+router.post("/", auth, async (req, res) => {
+  try {
+    const {
+      firstName,
+      language,
+      description,
+      icon,
+      location,
+      unit,
+      mainWeather,
+      temperature,
+      wind,
+      userCode,
+      mainLocation,
+      timezone,
+    } = req.body;
 
-    try {
-      const {
-        firstName,
-        language,
-        description,
-        icon,
-        location,
-        unit,
-        mainWeather,
-        temperature,
-        wind,
-        userCode,
-        mainLocation,
-        timezone,
-      } = req.body;
-
-      if (mainLocation == true || mainLocation == "true") {
-        await Location.updateMany({}, { mainLocation: false });
-      }
-
-      const newLocation = new Location({
-        firstName,
-        language,
-        description,
-        icon,
-        location,
-        unit,
-        mainWeather,
-        temperature,
-        wind,
-        userCode,
-        mainLocation,
-        timezone,
-      });
-
-      const toDo = await newLocation.save();
-
-      res.json(toDo);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Server Error");
+    if (mainLocation == true || mainLocation == "true") {
+      await Location.updateMany({}, { mainLocation: false });
     }
+
+    const newLocation = new Location({
+      firstName,
+      language,
+      description,
+      icon,
+      location,
+      unit,
+      mainWeather,
+      temperature,
+      wind,
+      userCode,
+      mainLocation,
+      timezone,
+    });
+
+    const toDo = await newLocation.save();
+
+    res.json(toDo);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
   }
-);
+});
 
 // @route   PUT api/location/:id
 // @desc    Update location

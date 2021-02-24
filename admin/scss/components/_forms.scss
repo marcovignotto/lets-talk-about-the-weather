@@ -42,6 +42,22 @@
   font-weight: 100;
 }
 
+%input-error {
+  background-color: #764246;
+  color: white;
+  border-radius: 5px;
+  border: 0px; // removes border on selction, it can be customized
+  outline: none; // removes outline on selection
+  font-weight: 100;
+}
+
+.input-text-error {
+  @extend %input-error;
+  &:focus {
+    @extend %input-error;
+  }
+}
+
 .input-text {
   &-large {
     @extend %input-shared;

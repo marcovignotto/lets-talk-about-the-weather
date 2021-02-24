@@ -64,9 +64,13 @@ h4 {
 .delete__row {
   display: flex;
   width: 100%;
-  .msg {
-    // width: 400px;
-  }
-  *div {
-  }
+}
+
+.error__row {
+  margin-top: 0.5rem;
+  width: 100%;
+  color: #efebce;
+  background-color: #ff5148;
+  padding: 0.5rem;
+  border-radius: 5px;
 }
