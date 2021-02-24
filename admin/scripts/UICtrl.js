@@ -105,6 +105,9 @@ const UICtrl = (function () {
 
       if (mainLocation == true || mainLocation == "true") {
         UICtrl.setMainLocationStyle(row);
+        setTimeout(() => {
+          document.querySelector(".btn__delete").remove();
+        }, 10);
       }
 
       row.innerHTML +=
@@ -215,10 +218,15 @@ const UICtrl = (function () {
       mainLocationCheck.setAttribute("id", "mainLocation");
       mainLocationCheck.setAttribute("value", false);
 
-      if (mainLocation === true || mainLocation == "true") {
-        mainLocationCheck.setAttribute("value", true);
-        mainLocationCheck.setAttribute("checked", true);
-        // document.getElementsByClassName("main__location")[0].remove();
+      // if (mainLocation === true || mainLocation == "true") {
+      //   mainLocationCheck.setAttribute("value", true);
+      //   mainLocationCheck.setAttribute("checked", true);
+      //   // document.getElementsByClassName("main__location")[0].remove();
+      // }
+      if (mainLocation == true || mainLocation == "true") {
+        setTimeout(() => {
+          document.querySelector("#mainLocation").remove();
+        }, 1);
       }
 
       row.innerHTML +=
