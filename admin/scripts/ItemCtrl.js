@@ -503,14 +503,14 @@ const ItemCtrl = (function () {
       // isediting
       ItemCtrl.setIsEditingTrue();
 
-      // target.classList.remove("row");
-      // target.classList.add("row-1");
+      // light row to delete
+      target.classList.add("row__deleting");
+
       // create msg
-      let message = "";
 
       const divMessage = document.createElement("div");
 
-      message = `<div class='row delete__row ${classStyle}'>
+      let message = `<div class='row delete__row ${classStyle}'>
       <div class="msg col-6 t-center-y">${msg}</div>
       <div class='col-2'><button class="btn-alert-yes">Yes</button></div>
       <div class='col-2'><button class="btn-alert-no" >No</button></div>

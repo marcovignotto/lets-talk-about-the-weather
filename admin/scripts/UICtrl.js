@@ -321,11 +321,14 @@ const UICtrl = (function () {
         "classeDelete",
         gridItem,
         async function () {
+          gridItem.classList.remove("row__deleting");
+
+          // remove delete confirm msg
           e.target
             .closest(UICtrl.getSelectorsClasses().locationList)
             .querySelector(".delete__row")
             .remove();
-
+          // set is false
           ItemCtrl.setIsEditingFalse();
         },
         async function () {

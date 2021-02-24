@@ -113,6 +113,17 @@ h4 {
   }
 }
 
+.row__deleting {
+  color: #efebce !important;
+  background-color: #a76268 !important;
+  i {
+    color: #efebce !important;
+    &:hover {
+      color: #5b3335 !important;
+    }
+  }
+}
+
 .error__row {
   margin-top: 0.5rem;
   width: 100%;
