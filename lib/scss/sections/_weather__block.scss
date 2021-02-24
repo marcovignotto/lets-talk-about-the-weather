@@ -77,8 +77,16 @@
   grid-row: 1 / span 2;
 }
 
+.main__week_day {
+  margin-top: 20px;
+  color: rgb(50, 67, 87);
+  opacity: 0.75;
+  font-size: 1.5rem;
+  max-width: 100%;
+}
+
 .main__time {
-  margin-top: 25px;
+  margin-top: 10px;
   color: rgb(68, 91, 117);
   opacity: 0.5;
   font-size: 4rem;
