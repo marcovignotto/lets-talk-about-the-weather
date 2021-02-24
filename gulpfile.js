@@ -18,7 +18,6 @@ const filesAdmin = {
 const filesClient = {
   scssPath: "lib/scss/**/*.scss",
   jsPath: "lib/js/all.js",
-  // jsPath: "lib/js/**/*.js",
 };
 
 // sass task admin
@@ -43,34 +42,30 @@ function scssTaskClient() {
 
 // JS task admin
 function jsTaskAdmin() {
-  return (
-    src(filesAdmin.jsPath)
-      .pipe(concat("scripts/index.js"))
-      // .pipe(
-      //   terser({
-      //     mangle: {
-      //       toplevel: true,
-      //     },
-      //   })
-      // )
-      .pipe(dest("admin/dist"))
-  );
+  return src(filesAdmin.jsPath)
+    .pipe(concat("scripts/index.js"))
+    .pipe(
+      terser({
+        mangle: {
+          toplevel: true,
+        },
+      })
+    )
+    .pipe(dest("admin/dist"));
 }
 
 // JS task Client
 function jsTaskClient() {
-  return (
-    src(filesClient.jsPath)
-      .pipe(concat("scripts/index.js"))
-      // .pipe(
-      //   terser({
-      //     mangle: {
-      //       toplevel: true,
-      //     },
-      //   })
-      // )
-      .pipe(dest("lib/dist"))
-  );
+  return src(filesClient.jsPath)
+    .pipe(concat("scripts/index.js"))
+    .pipe(
+      terser({
+        mangle: {
+          toplevel: true,
+        },
+      })
+    )
+    .pipe(dest("lib/dist"));
 }
 
 // cachebusting admin
@@ -108,6 +103,5 @@ exports.default = series(
   parallel(scssTaskAdmin, jsTaskAdmin),
   parallel(scssTaskClient, jsTaskClient),
   cacheBustTask,
-  // watchTaskAdmin,
   watchTaskAll
 );
