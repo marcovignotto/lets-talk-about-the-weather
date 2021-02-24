@@ -155,6 +155,15 @@ const ItemCtrl = (function () {
       // User code created by the route
       // weatherUserObj["userCode"] = 3;
 
+      if (
+        weatherUserObj.mainLocation === true ||
+        weatherUserObj.mainLocation === "true"
+      ) {
+        ItemCtrl.setAlertMain(
+          "The new user will change the Main Location! Are you sure?"
+        );
+      }
+
       const res = await ServerCtrl.callApiAuth(
         "post",
         ItemCtrl.getToken(),
@@ -439,6 +448,9 @@ const ItemCtrl = (function () {
           ItemCtrl.setIsEditingFalse();
           noCallback();
         });
+    },
+    setAlertMain: async function (msg) {
+      return confirm(msg);
     },
   };
 })();

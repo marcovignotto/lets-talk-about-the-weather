@@ -179,8 +179,6 @@ const UICtrl = (function () {
       unitCol.setAttribute("id", "unit");
       unitCol.setAttribute("value", unit);
 
-      // unitCol.setAttribute("value", unit);
-
       // populate selector
       ItemCtrl.getUnitArray().forEach((element, index) => {
         let option_elem = document.createElement("option");
@@ -220,6 +218,7 @@ const UICtrl = (function () {
       if (mainLocation === true || mainLocation == "true") {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);
+        // document.getElementsByClassName("main__location")[0].remove();
       }
 
       row.innerHTML +=
@@ -366,6 +365,15 @@ const UICtrl = (function () {
       let id = e.target.parentElement.parentElement.getAttribute("data-id");
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
+
+      if (
+        weatherUserObj.mainLocation === true ||
+        weatherUserObj.mainLocation === "true"
+      ) {
+        ItemCtrl.setAlertMain(
+          "Your update will change the Main Location! Are you sure?"
+        );
+      }
 
       weatherUserObj["_id"] = id;
 
