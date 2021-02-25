@@ -6,9 +6,7 @@
   "scripts": {
     "sass": "node-sass --source-map lib/dist/css/main.css.map --output-style compressed -w lib/scss -o lib/dist/css -- recursive ",
     "publish": "gh-pages -d lib/dist",
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "dev": "nodemon -r dotenv/config server.js"
+    "server": "nodemon -r dotenv/config server.js"
   },
   "author": "",
   "license": "ISC",

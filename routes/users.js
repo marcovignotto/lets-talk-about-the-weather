@@ -69,7 +69,7 @@ const BackendUser = require("../models/BackendUser");
 
 //       jwt.sign(
 //         payload,
-//         process.env.JWT_SECRET ||  config.get("authLocalApi.jwtSecret"),
+//         process.env.JWT_SECRET,
 //         {
 //           // expiresIn: 360000,
 //         },

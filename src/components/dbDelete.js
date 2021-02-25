@@ -1,7 +1,7 @@
 // DELETE ALL DB
 const { MongoClient } = require("mongodb");
 const config = require("config");
-const db = process.env.MONGODB_URI || config.get("mongoDb.URI");
+const db = process.env.MONGODB_URI;
 
 const dbOptions = {
   useNewUrlParser: true,

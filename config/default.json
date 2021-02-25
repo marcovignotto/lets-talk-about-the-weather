@@ -1,23 +1,11 @@
 {
-  "server": {
-    "PORT": "5000",
-    "apiKey": "386d2fb975cfed105bf736e651309f91"
-  },
   "openWeartherAPI": {
-    "apiUrl": "https://api.openweathermap.org/data/2.5/weather?q=",
-    "apiKey": "169986ea94b386da8e6d479f3e6971d0"
+    "apiUrl": "https://api.openweathermap.org/data/2.5/weather?q="
   },
   "localApi": {
     "urlGet": "http://127.0.0.1:5000/api/locations",
     "urlPostLocation": "http://127.0.0.1:5000/api/locations",
     "urlPost": "http://127.0.0.1:5000/api/general/6017c8b6ee1e290f38a21a9f",
     "urlGetWeatherUsers": "http://127.0.0.1:5000/api/weatherusers"
-  },
-  "mongoDb": {
-    "URI": "mongodb+srv://marco123:marco123@cluster0-mjoj6.mongodb.net/test?retryWrites=true&w=majority"
-  },
-  "authLocalApi": {
-    "Bearer": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjAxYTc5YWY2OTY1YzAxZTM2ZDBlNmEyIn0sImlhdCI6MTYxMzQ2MjU1Mn0.b7JaOIK4hhFUVLUJUONk6G6z-tDCPU53wtrgZeJ6-kM",
-    "jwtSecret": "mySecretSecretMy"
   }
 }

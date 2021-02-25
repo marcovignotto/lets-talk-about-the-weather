@@ -37,6 +37,6 @@ app.use("/api/auth", require("./routes/auth"));
 // HTML ADMIN
 app.use("/admin", express.static(path.join(__dirname, "admin")));
 
-const PORT = process.env.PORT || config.get("server.PORT");
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => console.log(`Server started`));

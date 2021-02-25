@@ -8,11 +8,10 @@ const dbCleaning = require("./dbDelete");
 const URL_GET_WEATHER_USERS = config.get("localApi.urlGetWeatherUsers");
 const URL_POST_LOCATION = config.get("localApi.urlPostLocation");
 const OPEN_WEATHER_URL = config.get("openWeartherAPI.apiUrl");
-const OPEN_WEATHER_KEY =
-  process.env.OW_API_KEY || config.get("openWeartherAPI.apiKey");
+const OPEN_WEATHER_KEY = process.env.OW_API_KEY;
 
 //KEYS
-const API_BEARER = process.env.API_BEARER || config.get("authLocalApi.Bearer");
+const API_BEARER = process.env.API_BEARER;
 
 // get al the users from mongo
 const allWeatherUsers = async () => {
