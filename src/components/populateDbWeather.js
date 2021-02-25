@@ -2,7 +2,7 @@ const axios = require("axios");
 const config = require("config");
 var CronJob = require("cron").CronJob;
 
-const dbCleaning = require("../../config/dbDelete");
+const dbCleaning = require("./dbDelete");
 
 // URLs
 const URL_GET_WEATHER_USERS = config.get("localApi.urlGetWeatherUsers");
