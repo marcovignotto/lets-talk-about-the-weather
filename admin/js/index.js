@@ -36,11 +36,3 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
 })(ItemCtrl, UICtrl, ServerCtrl, OWCtrL);
 
 App.init();
-
-// EDIT & DELETE
-
-// const addNewUserInputs1 = (e) => {
-//   inputs.menuRow(e).after(inputs.row().row);
-
-//   // iconsNewUserInit();
-// };
