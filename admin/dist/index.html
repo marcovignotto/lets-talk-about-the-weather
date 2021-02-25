@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="css/main.css?cb=123" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row form__login">
+        <div class="col-4"></div>
+        <div class="col-4 form__inputs">
+          <h3>Login</h3>
+          <form action="">
+            <input
+              class="input-text-email email"
+              type="email"
+              placeholder="example@email.com"
+              value="admin@gmail.com"
+            />
+            <input
+              class="input-text-email password"
+              type="password"
+              placeholder="password"
+              value="123456"
+            />
+            <input class="btn-login" type="submit" value="Submit" />
+          </form>
+        </div>
+        <div class="col-4"></div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="locations__list"></div>
+        </div>
+      </div>
+      <div class="row pt-1">
+        <div class="col-12">
+          <div class="menu hide">
+            <button class="btn-add-user">ADD USER</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://kit.fontawesome.com/2c6793b698.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="scripts/index.js"></script>
+  </body>
+</html>
