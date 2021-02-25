@@ -36,7 +36,7 @@ app.use("/api/auth", require("./routes/auth"));
 
 // HTML ADMIN
 app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
-// app.use("/", express.static(path.join(__dirname, "lib/dist")));
+app.use("/", express.static(path.join(__dirname, "lib/dist")));
 
 const PORT = process.env.PORT;
 
