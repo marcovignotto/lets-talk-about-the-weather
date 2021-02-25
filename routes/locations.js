@@ -10,7 +10,7 @@ const Location = require("../models/Location");
 // @desc    Get all locations
 // @access  Private
 
-router.get("/", auth, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const locations = await Location.find({ locations: req.locations }).sort({
       date: -1,

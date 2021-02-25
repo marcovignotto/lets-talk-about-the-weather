@@ -102,6 +102,6 @@ function watchTaskAll() {
 exports.default = series(
   parallel(scssTaskAdmin, jsTaskAdmin),
   parallel(scssTaskClient, jsTaskClient),
-  cacheBustTask,
+  // cacheBustTask,
   watchTaskAll
 );

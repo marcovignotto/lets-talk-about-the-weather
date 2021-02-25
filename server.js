@@ -40,22 +40,12 @@ const adminAuthKeys = {
 // routes
 
 app.use("/api/locations", require("./routes/locations"));
-// app.use("/api/general", require("./routes/general"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/weatherusers", require("./routes/weatherUsers"));
 app.use("/api/auth", require("./routes/auth"));
 
 // HTML ADMIN
 app.use("/admin", express.static(path.join(__dirname, "admin")));
-// app.use("/admin/*", auth, express.static(path.join(__dirname, "admin")));
-
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("client/build"));
-
-//   app.get("*", (req, res) =>
-//     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
-//   );
-// }
 
 const PORT = process.env.PORT || config.get("server.PORT");
 
