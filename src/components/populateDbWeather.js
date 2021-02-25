@@ -8,7 +8,11 @@ const dbCleaning = require("./dbDelete");
 const URL_GET_WEATHER_USERS = config.get("localApi.urlGetWeatherUsers");
 const URL_POST_LOCATION = config.get("localApi.urlPostLocation");
 const OPEN_WEATHER_URL = config.get("openWeartherAPI.apiUrl");
-const OPEN_WEATHER_KEY = config.get("openWeartherAPI.apiKey");
+const OPEN_WEATHER_KEY =
+  process.env.OW_API_KEY || config.get("openWeartherAPI.apiKey");
+
+//KEYS
+const API_BEARER = process.env.API_BEARER || config.get("authLocalApi.Bearer");
 
 // get al the users from mongo
 const allWeatherUsers = async () => {
@@ -18,7 +22,7 @@ const allWeatherUsers = async () => {
       headers: {
         // "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
-        Authorization: config.get("authLocalApi.Bearer"),
+        Authorization: API_BEARER,
       },
       url: URL_GET_WEATHER_USERS,
       transformResponse: [
@@ -96,7 +100,7 @@ const locationOnMongo = async (
         method: "post",
         headers: {
           "Content-Type": "application/json",
-          Authorization: config.get("authLocalApi.Bearer"),
+          Authorization: API_BEARER,
         },
         data: objLocation,
         url: URL_POST_LOCATION,

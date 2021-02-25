@@ -63,7 +63,7 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get("authLocalApi.jwtSecret"),
+        process.env.JWT_SECRET || config.get("authLocalApi.jwtSecret"),
         {
           // expiresIn: 360000,
         },

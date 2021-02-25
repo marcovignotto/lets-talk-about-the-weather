@@ -2,7 +2,6 @@ const express = require("express");
 const connectDB = require("./config/db.js");
 
 const auth = require("./middleware/auth");
-// const basicAuth = require("express-basic-auth");
 
 var path = require("path");
 
@@ -24,21 +23,12 @@ app.use(cors());
 // Middleware
 app.use(express.json({ extended: false }));
 
-app.get("/", (req, res) =>
-  res.send({ msg: `Let's talk about the weather API` })
-);
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
 
-const adminAuthKeys = {
-  admin: "123456",
-};
-
 // routes
-
 app.use("/api/locations", require("./routes/locations"));
 app.use("/api/users", require("./routes/users"));
 app.use("/api/weatherusers", require("./routes/weatherUsers"));
