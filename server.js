@@ -23,10 +23,6 @@ app.use(cors());
 // Middleware
 app.use(express.json({ extended: false }));
 
-app.get("/", (req, res) =>
-  res.send({ msg: `Let's talk about the weather API` })
-);
-
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
@@ -39,7 +35,7 @@ app.use("/api/weatherusers", require("./routes/weatherUsers"));
 app.use("/api/auth", require("./routes/auth"));
 
 // HTML ADMIN
-app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
+app.use("/admin", express.static(path.join(__dirname, "./admin/dist")));
 // app.use("/", express.static(path.join(__dirname, "lib/dist")));
 
 const PORT = process.env.PORT;
