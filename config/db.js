@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("config");
-const db = process.env.MONGODB_URI || config.get("mongoDb.URI");
+const db = config.get("mongoDb.URI");
 
 const dbOptions = {
   useNewUrlParser: true,
