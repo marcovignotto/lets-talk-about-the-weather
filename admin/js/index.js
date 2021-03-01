@@ -1,4 +1,4 @@
-const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
+const App = (function (ItemCtrl, UICtrl, ServerCtrl) {
   // Event listeners init
   const URLs = ServerCtrl.getUrls();
   const UISelectors = UICtrl.getSelectors();
@@ -33,6 +33,6 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl, OWCtrL) {
     selectors: () => UISelectors,
     urls: () => URLs,
   };
-})(ItemCtrl, UICtrl, ServerCtrl, OWCtrL);
+})(ItemCtrl, UICtrl, ServerCtrl);
 
 App.init();
