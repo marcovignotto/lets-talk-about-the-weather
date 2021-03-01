@@ -30,6 +30,11 @@
   }
   .block__weather__temp {
     padding-bottom: 1rem;
+    // align icons and text
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     i {
       font-size: 1rem;
       margin-right: 0.5rem;
@@ -39,6 +44,11 @@
   }
   .block__weather__wind {
     padding-bottom: 1rem;
+    // align icons and text
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     i {
       font-size: 1rem;
       margin-right: 0.5rem;

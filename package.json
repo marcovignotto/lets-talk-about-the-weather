@@ -1,11 +1,10 @@
 {
   "name": "lets-talk-about-the-weather",
-  "version": "3.9.0",
+  "version": "3.9.5",
   "description": "",
   "main": "index.js",
   "scripts": {
     "sass": "node-sass --source-map lib/dist/css/main.css.map --output-style compressed -w lib/scss -o lib/dist/css -- recursive ",
-    "publish": "gh-pages -d lib/dist",
     "start": "node -r dotenv/config server.js",
     "server": "nodemon -r dotenv/config server.js"
   },
@@ -21,7 +20,6 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-validator": "^6.9.2",
-    "gh-pages": "^3.1.0",
     "gulp-terser-js": "^5.2.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.14",
