@@ -2,6 +2,7 @@
 
 #footer {
   bottom: 0;
+  position: absolute;
 
   padding: 1rem;
   color: $main-text-color;
@@ -11,6 +12,7 @@
   align-items: center;
   width: 100%;
   margin: 0 auto;
+  margin-bottom: 1rem;
 
   & p {
     color: $main-text-color;
