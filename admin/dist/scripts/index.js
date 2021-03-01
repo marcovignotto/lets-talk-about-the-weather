@@ -804,10 +804,6 @@ const UICtrl = (function () {
       mainLocationCheck.setAttribute("id", "mainLocation");
       mainLocationCheck.setAttribute("value", false);
 
-      // if (mainLocation === true || mainLocation == "true") {
-      //   // document.getElementsByClassName("main__location")[0].remove();
-      // }
-
       if (mainLocation == true || mainLocation == "true") {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);
@@ -1204,16 +1200,9 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl) {
     });
 
     UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUserRow);
-
-    console.log(document.getElementById("footer"));
     UISelectors.btnAbout.addEventListener("click", function (e) {
       e.preventDefault();
       UICtrl.openModal("aboutModal");
-    });
-
-    UISelectors.btnResetUserFav.addEventListener("click", function (e) {
-      e.preventDefault();
-      ItemCtrl.resetUserFav(e);
     });
   };
 

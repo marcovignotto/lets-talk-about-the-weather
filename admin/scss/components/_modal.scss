@@ -16,17 +16,16 @@
   margin: 15% auto;
   padding: 40px;
   width: 80%;
-  color: white;
-  background: linear-gradient(
-    142deg,
-    rgba(29, 166, 185, 1) 5%,
-    rgba(149, 230, 233, 1) 100%
-  );
+  color: black;
+  background: white;
 
   -webkit-box-shadow: 1px 1px 15px -5px rgba(0, 0, 0, 0.6);
   box-shadow: 1px 1px 15px -5px rgba(0, 0, 0, 0.6);
-  p {
+  h4 {
     margin-top: 1rem;
+  }
+  p {
+    margin-bottom: 1rem;
     font-size: 1.2rem;
     font-weight: 300;
     font-weight: 300;

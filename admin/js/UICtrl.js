@@ -229,10 +229,6 @@ const UICtrl = (function () {
       mainLocationCheck.setAttribute("id", "mainLocation");
       mainLocationCheck.setAttribute("value", false);
 
-      // if (mainLocation === true || mainLocation == "true") {
-      //   // document.getElementsByClassName("main__location")[0].remove();
-      // }
-
       if (mainLocation == true || mainLocation == "true") {
         mainLocationCheck.setAttribute("value", true);
         mainLocationCheck.setAttribute("checked", true);

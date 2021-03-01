@@ -9,16 +9,9 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl) {
     });
 
     UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUserRow);
-
-    console.log(document.getElementById("footer"));
     UISelectors.btnAbout.addEventListener("click", function (e) {
       e.preventDefault();
       UICtrl.openModal("aboutModal");
-    });
-
-    UISelectors.btnResetUserFav.addEventListener("click", function (e) {
-      e.preventDefault();
-      ItemCtrl.resetUserFav(e);
     });
   };
 
