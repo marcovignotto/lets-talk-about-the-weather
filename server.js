@@ -13,10 +13,10 @@ const app = express();
 
 // REMOVE AT THE END
 const populateDbWeather = require("./src/components/populateDbWeather");
-// connectDB().then((res) => populateDbWeather());
+connectDB().then((res) => populateDbWeather());
 
 // connect Mongo DB
-connectDB();
+// connectDB();
 
 app.use(cors());
 
