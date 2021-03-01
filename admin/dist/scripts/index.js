@@ -626,6 +626,10 @@ const UICtrl = (function () {
 
     // icons
     menu: document.querySelector(UISelectorsClasses.menu),
+
+    // modal
+    btnAbout: document.querySelector("#modalOpen"),
+    btnResetUserFav: document.querySelector(".reset-user-fav"),
   };
 
   // public
@@ -1173,6 +1177,19 @@ const UICtrl = (function () {
     showMenu: function () {
       App.selectors().menu.classList.remove("hide");
     },
+    openModal: function (target) {
+      var modal = document.getElementById(target);
+
+      // When the user clicks on the button, open the modal
+      modal.style.display = "block";
+
+      // Close modal
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    },
   };
 })();
 
@@ -1187,6 +1204,17 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl) {
     });
 
     UISelectors.btnAddUser.addEventListener("click", ItemCtrl.addUserRow);
+
+    console.log(document.getElementById("footer"));
+    UISelectors.btnAbout.addEventListener("click", function (e) {
+      e.preventDefault();
+      UICtrl.openModal("aboutModal");
+    });
+
+    UISelectors.btnResetUserFav.addEventListener("click", function (e) {
+      e.preventDefault();
+      ItemCtrl.resetUserFav(e);
+    });
   };
 
   const checkSessionOnStart = function () {
@@ -1204,12 +1232,12 @@ const App = (function (ItemCtrl, UICtrl, ServerCtrl) {
   };
 
   return {
+    selectors: () => UISelectors,
+    urls: () => URLs,
     init: function () {
       checkSessionOnStart();
       loadEventListeners();
     },
-    selectors: () => UISelectors,
-    urls: () => URLs,
   };
 })(ItemCtrl, UICtrl, ServerCtrl);
 

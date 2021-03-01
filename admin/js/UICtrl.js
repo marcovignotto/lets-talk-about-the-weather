@@ -51,6 +51,10 @@ const UICtrl = (function () {
 
     // icons
     menu: document.querySelector(UISelectorsClasses.menu),
+
+    // modal
+    btnAbout: document.querySelector("#modalOpen"),
+    btnResetUserFav: document.querySelector(".reset-user-fav"),
   };
 
   // public
@@ -597,6 +601,19 @@ const UICtrl = (function () {
 
     showMenu: function () {
       App.selectors().menu.classList.remove("hide");
+    },
+    openModal: function (target) {
+      var modal = document.getElementById(target);
+
+      // When the user clicks on the button, open the modal
+      modal.style.display = "block";
+
+      // Close modal
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
     },
   };
 })();
