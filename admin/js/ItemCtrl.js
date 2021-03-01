@@ -166,7 +166,6 @@ const ItemCtrl = (function () {
       } else {
         lastElement = UICtrl.getSelectors().locationList.lastElementChild;
       }
-      // console.log(UICtrl.getSelectors().locationList.lastElementChild === null);
 
       // create new row
       let newRow = UICtrl.row();

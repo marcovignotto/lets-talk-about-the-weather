@@ -166,7 +166,6 @@ const ItemCtrl = (function () {
       } else {
         lastElement = UICtrl.getSelectors().locationList.lastElementChild;
       }
-      // console.log(UICtrl.getSelectors().locationList.lastElementChild === null);
 
       // create new row
       let newRow = UICtrl.row();
@@ -936,9 +935,20 @@ const UICtrl = (function () {
             // update array in session Storage
             sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
 
+            //
             // DOM
+            //
+            // remove deleteing msg
+            gridItem.classList.remove("row__deleting");
+
+            // remove delete confirm msg
+            e.target
+              .closest(UICtrl.getSelectorsClasses().locationList)
+              .querySelector(".delete__row")
+              .remove();
+
             // gridItem;
-            gridItem.style.transition = "all 2s";
+            gridItem.style.transition = "all 1s";
             // remove class
             gridItem.classList.remove("row");
 
@@ -953,8 +963,12 @@ const UICtrl = (function () {
 
             setTimeout(() => {
               gridItem.remove();
-            }, 3000);
+            }, 1100);
 
+            // set is false
+            ItemCtrl.setIsEditingFalse();
+
+            // send delete mongoDb
             ItemCtrl.deleteUserLocation(userCodeToDelete);
           }
         }
