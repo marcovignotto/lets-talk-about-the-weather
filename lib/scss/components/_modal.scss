@@ -1,0 +1,42 @@
+@import "../variables/colors";
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(173, 185, 255, 0.4);
+}
+
+.modal-content {
+  margin: 15% auto;
+  padding: 40px;
+  width: 80%;
+  color: white;
+  background: linear-gradient(
+    142deg,
+    rgba(29, 166, 185, 1) 5%,
+    rgba(149, 230, 233, 1) 100%
+  );
+
+  -webkit-box-shadow: 1px 1px 15px -5px rgba(0, 0, 0, 0.6);
+  box-shadow: 1px 1px 15px -5px rgba(0, 0, 0, 0.6);
+  p {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    font-weight: 300;
+    font-weight: 300;
+  }
+  a {
+    color: white;
+    font-weight: 550;
+    &:hover {
+      color: $main-text-color;
+      border-bottom: 3px solid $main-text-color;
+    }
+  }
+}
