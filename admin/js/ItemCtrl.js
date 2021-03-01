@@ -324,39 +324,18 @@ const ItemCtrl = (function () {
       userCode,
       mainLocation
     ) {
-      // OW API CALL
-      const res = await OWCtrL.openWCallApi(location, unit, language);
-
-      // PARSE IT
-      const parsedRes = JSON.parse(res);
-
-      const {
-        getLocation = parsedRes.name,
-        getMain = parsedRes.weather[0].main,
-        getIcon = parsedRes.weather[0].icon,
-        getMainDesc = parsedRes.weather[0].description,
-        getTemp = parsedRes.main.temp,
-        getWind = parsedRes.wind.speed,
-        getTimeZone = parsedRes.timezone,
-      } = parsedRes;
-
       // CREATEOBJ
       const objLocation = {
-        firstName: firstName,
-        language: language,
-        description: getMainDesc,
-        unit: unit,
-        icon: getIcon,
-        location: getLocation,
-        mainWeather: getMain,
-        temperature: getTemp,
-        userCode: userCode,
-        wind: getWind,
+        firstName,
+        language,
+        unit,
+        location,
+        userCode,
         mainLocation,
-        timezone: getTimeZone,
       };
 
       // POST ON MONGO
+      // the route will call Open Weather
 
       const resLocation = await ServerCtrl.callApiAuth(
         "post",
@@ -377,36 +356,14 @@ const ItemCtrl = (function () {
       userCode,
       _id
     ) {
-      // OW API CALL
-      const res = await OWCtrL.openWCallApi(location, unit, language);
-
-      // PARSE IT
-      const parsedRes = JSON.parse(res);
-
-      const {
-        getLocation = parsedRes.name,
-        getMain = parsedRes.weather[0].main,
-        getIcon = parsedRes.weather[0].icon,
-        getMainDesc = parsedRes.weather[0].description,
-        getTemp = parsedRes.main.temp,
-        getWind = parsedRes.wind.speed,
-        getTimeZone = parsedRes.timezone,
-      } = parsedRes;
-
       // CREATEOBJ
       const objLocation = {
-        firstName: firstName,
-        language: language,
-        description: getMainDesc,
-        unit: unit,
-        icon: getIcon,
-        location: getLocation,
-        mainWeather: getMain,
-        temperature: getTemp,
-        userCode: userCode,
-        wind: getWind,
+        firstName,
+        language,
+        unit,
+        location,
+        userCode,
         mainLocation,
-        timezone: getTimeZone,
       };
 
       // get all location to find userCode
@@ -422,6 +379,7 @@ const ItemCtrl = (function () {
       );
 
       // POST ON MONGO
+      // the route will call Open Weather
 
       const resLocation = await ServerCtrl.callApiAuth(
         "put",

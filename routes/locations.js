@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
+const openWeatherCall = require("../src/components/openWeatherCall");
+
 const { check, validationResult } = require("express-validator");
 
 const Location = require("../models/Location");
@@ -31,35 +33,45 @@ router.post("/", auth, async (req, res) => {
     const {
       firstName,
       language,
-      description,
-      icon,
       location,
       unit,
-      mainWeather,
-      temperature,
-      wind,
       userCode,
       mainLocation,
-      timezone,
     } = req.body;
 
     if (mainLocation == true || mainLocation == "true") {
       await Location.updateMany({}, { mainLocation: false });
     }
 
+    // OW API CALL
+    const resOpenWeather = await openWeatherCall(location, unit, language);
+
+    // PARSE IT
+    const parsedRes = JSON.parse(resOpenWeather);
+
+    const {
+      getLocation = parsedRes.name,
+      getMain = parsedRes.weather[0].main,
+      getIcon = parsedRes.weather[0].icon,
+      getMainDesc = parsedRes.weather[0].description,
+      getTemp = parsedRes.main.temp,
+      getWind = parsedRes.wind.speed,
+      getTimeZone = parsedRes.timezone,
+    } = parsedRes;
+
     const newLocation = new Location({
       firstName,
       language,
-      description,
-      icon,
-      location,
+      description: getMainDesc,
+      icon: getIcon,
+      location: getLocation,
       unit,
-      mainWeather,
-      temperature,
-      wind,
+      mainWeather: getMain,
+      temperature: getTemp,
+      wind: getWind,
       userCode,
       mainLocation,
-      timezone,
+      timezone: getTimeZone,
     });
 
     const toDo = await newLocation.save();
@@ -77,37 +89,49 @@ router.post("/", auth, async (req, res) => {
 
 router.put("/:id", auth, async (req, res) => {
   const {
-    description,
     firstName,
-    icon,
     language,
-    location,
     unit,
+    location,
     userCode,
     mainLocation,
-    mainWeather,
-    temperature,
-    timezone,
-    wind,
   } = req.body;
 
   if (mainLocation === true || mainLocation === "true") {
     await Location.updateMany({}, { mainLocation: false });
   }
 
+  // OW API CALL
+  const resOpenWeather = await openWeatherCall(location, unit, language);
+
+  // PARSE IT
+  const parsedRes = JSON.parse(resOpenWeather);
+
+  const {
+    getLocation = parsedRes.name,
+    getMain = parsedRes.weather[0].main,
+    getIcon = parsedRes.weather[0].icon,
+    getMainDesc = parsedRes.weather[0].description,
+    getTemp = parsedRes.main.temp,
+    getWind = parsedRes.wind.speed,
+    getTimeZone = parsedRes.timezone,
+  } = parsedRes;
+
   const userFields = {};
-  if (description) userFields.description = description;
   if (firstName) userFields.firstName = firstName;
-  if (icon) userFields.icon = icon;
   if (language) userFields.language = language;
-  if (location) userFields.location = location;
   if (mainLocation) userFields.mainLocation = mainLocation;
-  if (mainWeather) userFields.mainWeather = mainWeather;
-  if (temperature) userFields.temperature = temperature;
-  if (timezone) userFields.timezone = timezone;
   if (unit) userFields.unit = unit;
   if (userCode) userFields.userCode = userCode;
-  if (wind) userFields.wind = wind;
+
+  // from open weather
+  if (location) userFields.location = getLocation;
+  userFields.description = getMainDesc;
+  userFields.icon = getIcon;
+  userFields.mainWeather = getMain;
+  userFields.temperature = getTemp;
+  userFields.timezone = getTimeZone;
+  userFields.wind = getWind;
 
   try {
     let user = await Location.findById(req.params.id);
