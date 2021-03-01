@@ -39,4 +39,17 @@
       border-bottom: 3px solid $main-text-color;
     }
   }
+  ul {
+    li {
+      font-size: 1.2rem;
+      font-weight: 300;
+      padding: 0.25rem;
+    }
+    li:before {
+      font-size: 1.2rem;
+      font-weight: 900;
+      content: "\00B7";
+      margin-right: 5px;
+    }
+  }
 }
