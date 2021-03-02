@@ -8,6 +8,8 @@ const replace = require("gulp-replace");
 const sass = require("gulp-sass");
 const sourcemaps = require("gulp-sourcemaps");
 const terser = require("gulp-terser-js");
+var browserSync1 = require("browser-sync").create();
+var browserSync2 = require("browser-sync").create();
 
 // file path vars
 
@@ -72,24 +74,40 @@ function jsTaskClient() {
   );
 }
 
-// cachebusting admin
-const cbString = new Date().getTime();
-function cacheBustTask() {
-  return src(["admin/dist/index.html"])
-    .pipe(replace(/cb=\d+/g, "cb=" + cbString))
-    .pipe(dest("."));
-}
-
-// watch task admin
-function watchTaskAdmin() {
-  watch(
-    [filesAdmin.scssPath, filesAdmin.jsPath],
-    parallel(scssTaskAdmin, jsTaskAdmin)
-  );
-}
-
 // watch task client
 function watchTaskAll() {
+  browserSync1.init({
+    files: ["admin/dist/css/*.css", "admin/dist/scripts/*.js"],
+    port: 8080,
+    uiPort: 8081,
+    notify: false,
+    reloadOnRestart: true,
+    https: false,
+    server: {
+      baseDir: "-",
+      routes: {
+        "/admin": "./admin/dist",
+      },
+    },
+    startPath: "./admin/",
+    watch: true,
+  });
+  browserSync2.init({
+    files: ["lib/dist/css/*.css", "lib/dist/scripts/*.js"],
+    port: 8090,
+    uiPort: 8091,
+    notify: false,
+    reloadOnRestart: true,
+    https: false,
+    server: {
+      baseDir: "-",
+      routes: {
+        "/": "./lib/dist",
+      },
+    },
+    startPath: "./",
+    watch: true,
+  });
   watch(
     [
       filesAdmin.scssPath,
@@ -102,10 +120,8 @@ function watchTaskAll() {
 }
 
 // default task
-
 exports.default = series(
   parallel(scssTaskAdmin, jsTaskAdmin),
   parallel(scssTaskClient, jsTaskClient),
-  // cacheBustTask,
   watchTaskAll
 );
