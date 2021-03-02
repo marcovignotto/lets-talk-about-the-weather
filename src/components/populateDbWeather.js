@@ -49,48 +49,16 @@ const locationOnMongo = async (
   mainLocation
 ) => {
   // Open Weather API CALL
-  const URL = `${OPEN_WEATHER_URL}${location}&units=${unit}&appid=${OPEN_WEATHER_KEY}&lang=${language}`;
+  // made by the route
   try {
-    const options = {
-      method: "get",
-      url: URL,
-      transformResponse: [
-        (data) => {
-          // transform the response
-          return data;
-        },
-      ],
-    };
-
-    const res = await axios(options);
-
-    // // PARSE results
-    const parsedRes = JSON.parse(res.data);
-
-    const {
-      getLocation = parsedRes.name,
-      getMain = parsedRes.weather[0].main,
-      getIcon = parsedRes.weather[0].icon,
-      getMainDesc = parsedRes.weather[0].description,
-      getTemp = parsedRes.main.temp,
-      getWind = parsedRes.wind.speed,
-      getTimeZone = parsedRes.timezone,
-    } = parsedRes;
-
-    // // CREATEOBJ
+    // CREATEOBJ
     const objLocation = {
-      firstName: firstName,
-      language: language,
-      description: getMainDesc,
+      firstName,
+      language,
+      location,
       unit: unit,
-      icon: getIcon,
-      location: getLocation,
-      mainWeather: getMain,
-      temperature: getTemp,
-      wind: getWind,
       userCode,
       mainLocation,
-      timezone: getTimeZone,
     };
 
     // send to mongo db
