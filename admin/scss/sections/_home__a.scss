@@ -34,6 +34,7 @@ h4 {
       }
     }
   }
+
   .row:nth-of-type(odd) {
     @extend %spacing-row;
     background-color: #f0edd1;
@@ -48,6 +49,19 @@ h4 {
         }
       }
     }
+  }
+}
+
+.locations__list__header {
+  @extend %spacing-row;
+  // margin-left: 20px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: #5b3335;
+
+  margin-bottom: 0.65rem;
+  .col__edit {
+    margin-left: 2rem;
   }
 }
 

@@ -11,6 +11,8 @@ const UICtrl = (function () {
 
     // listing
     locationList: ".locations__list",
+    locationListHeader: ".locations__list__header",
+    listHeaderContainer: ".list__header__container",
 
     // icons
     iconEdit: ".edit__icon",
@@ -48,6 +50,12 @@ const UICtrl = (function () {
     // forms
     // listing
     locationList: document.querySelector(UISelectorsClasses.locationList),
+    locationListHeader: document.querySelector(
+      UISelectorsClasses.locationListHeader
+    ),
+    listHeaderContainer: document.querySelector(
+      UISelectorsClasses.listHeaderContainer
+    ),
 
     // icons
     menu: document.querySelector(UISelectorsClasses.menu),
@@ -596,7 +604,9 @@ const UICtrl = (function () {
     },
 
     showMenu: function () {
+      // show menu and list header
       App.selectors().menu.classList.remove("hide");
+      App.selectors().listHeaderContainer.classList.remove("hide");
     },
     openModal: function (target) {
       var modal = document.getElementById(target);
