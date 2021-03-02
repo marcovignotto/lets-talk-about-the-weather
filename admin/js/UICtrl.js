@@ -36,6 +36,9 @@ const UICtrl = (function () {
 
     //menu
     menu: ".menu",
+
+    // footer
+    footer: "footer",
   };
 
   const UISelectors = {
@@ -63,6 +66,9 @@ const UICtrl = (function () {
     // modal
     btnAbout: document.querySelector("#modalOpen"),
     btnResetUserFav: document.querySelector(".reset-user-fav"),
+
+    // footer
+    footer: document.querySelector(UISelectorsClasses.footer),
   };
 
   // public
@@ -604,9 +610,11 @@ const UICtrl = (function () {
     },
 
     showMenu: function () {
+      console.log(App.selectors().footer);
       // show menu and list header
       App.selectors().menu.classList.remove("hide");
       App.selectors().listHeaderContainer.classList.remove("hide");
+      App.selectors().footer.classList.remove("hide");
     },
     openModal: function (target) {
       var modal = document.getElementById(target);
