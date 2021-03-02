@@ -1233,7 +1233,6 @@ const UICtrl = (function () {
     },
 
     showMenu: function () {
-      console.log(App.selectors().footer);
       // show menu and list header
       App.selectors().menu.classList.remove("hide");
       App.selectors().listHeaderContainer.classList.remove("hide");
