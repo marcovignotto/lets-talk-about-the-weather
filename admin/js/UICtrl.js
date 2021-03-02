@@ -422,112 +422,133 @@ const UICtrl = (function () {
 
       let weatherUserObj = ItemCtrl.getInputUser(e);
 
+      const allParams = { id, obj: weatherUserObj };
+
       if (
         weatherUserObj.mainLocation === true ||
         weatherUserObj.mainLocation === "true"
       ) {
-        ItemCtrl.setAlertMain(
-          "Your update will change the Main Location! Are you sure?"
-        );
+        return ItemCtrl.setAlertMain({
+          msgMain: "Your update will change the Main Location!",
+          msgYes: "Yes! Go on!",
+          msgNo: "No! Keep it!",
+          msgDelete: "Updated successfully!",
+          msgUndo: "Not updated!",
+        }).then((res) => {
+          // waits for promise is yes execs
+          if (res) return updateAll(allParams);
+        });
       }
 
-      weatherUserObj["_id"] = id;
+      // all the updates
+      async function updateAll(params) {
+        let weatherUserObj = params.obj;
 
-      const res = await ServerCtrl.callApiAuth(
-        "put",
-        ItemCtrl.getToken(),
-        App.urls().URL_PUT,
-        weatherUserObj,
-        weatherUserObj._id
-      );
+        weatherUserObj["_id"] = params.id;
 
-      // destructoring
-      const {
-        firstName,
-        location,
-        unit,
-        language,
-        mainLocation,
-        _id,
-      } = weatherUserObj;
-
-      if (res.status >= 200 && res.status <= 399) {
-        // get array from session Storage
-        let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
-
-        // splice Item
-        JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
-          if (x._id === id) {
-            arrUsers.splice(i, 1, weatherUserObj);
-          }
-        });
-
-        // update array in session Storage
-        sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
-
-        let currRow = e.target.closest(
-          UICtrl.getSelectorsClasses().gridItemEdit
+        const res = await ServerCtrl.callApiAuth(
+          "put",
+          ItemCtrl.getToken(),
+          App.urls().URL_PUT,
+          weatherUserObj,
+          weatherUserObj._id
         );
 
-        let prevRow =
-          e.target.parentElement.parentElement.parentElement
-            .previousElementSibling;
+        // destructoring
+        const {
+          firstName,
+          location,
+          unit,
+          language,
+          mainLocation,
+          _id,
+        } = weatherUserObj;
 
-        // find language complete
-        let langComplete = "";
+        if (res.status >= 200 && res.status <= 399) {
+          // get array from session Storage
+          let arrUsers = JSON.parse(ItemCtrl.getArrUsers()).slice();
 
-        ItemCtrl.getLangArray().map((x) => {
-          if (x.code === language) langComplete = x.language;
-        });
+          // splice Item
+          JSON.parse(ItemCtrl.getArrUsers()).filter((x, i) => {
+            if (x._id === id) {
+              arrUsers.splice(i, 1, weatherUserObj);
+            }
+          });
 
-        // to disable is is to save
-        setTimeout(() => {
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().firstName
-          ).innerHTML = weatherUserObj.firstName;
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().location
-          ).innerHTML = weatherUserObj.location;
-          prevRow.querySelector(
-            UICtrl.getSelectorsClasses().language
-          ).innerHTML = langComplete;
-          prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
-            weatherUserObj.unit;
-        }, 500);
+          // update array in session Storage
+          sessionStorage.setItem("arrUsers", JSON.stringify(arrUsers));
 
-        setTimeout(() => {
-          currRow.style.opacity = "0";
-        }, 1000);
+          let currRow = e.target.closest(
+            UICtrl.getSelectorsClasses().gridItemEdit
+          );
 
-        setTimeout(() => {
-          currRow.remove();
+          let prevRow =
+            e.target.parentElement.parentElement.parentElement
+              .previousElementSibling;
 
-          if (
-            weatherUserObj.mainLocation == true ||
-            weatherUserObj.mainLocation == "true"
-          ) {
-            UICtrl.setMainLocationStyle(prevRow);
-          }
-        }, 1500);
+          // find language complete
+          let langComplete = "";
+
+          ItemCtrl.getLangArray().map((x) => {
+            if (x.code === language) langComplete = x.language;
+          });
+
+          // to disable is is to save
+          setTimeout(() => {
+            weatherUserObj.firstName =
+              firstName.charAt(0).toUpperCase() + firstName.slice(1);
+            weatherUserObj.location =
+              location.charAt(0).toUpperCase() + location.slice(1);
+
+            prevRow.querySelector(
+              UICtrl.getSelectorsClasses().firstName
+            ).innerHTML = weatherUserObj.firstName;
+            prevRow.querySelector(
+              UICtrl.getSelectorsClasses().location
+            ).innerHTML = weatherUserObj.location;
+            prevRow.querySelector(
+              UICtrl.getSelectorsClasses().language
+            ).innerHTML = langComplete;
+            prevRow.querySelector(UICtrl.getSelectorsClasses().unit).innerHTML =
+              weatherUserObj.unit;
+          }, 500);
+
+          setTimeout(() => {
+            currRow.style.opacity = "0";
+          }, 1000);
+
+          setTimeout(() => {
+            currRow.remove();
+
+            if (
+              weatherUserObj.mainLocation == true ||
+              weatherUserObj.mainLocation == "true"
+            ) {
+              UICtrl.setMainLocationStyle(prevRow);
+            }
+          }, 1500);
+        }
+
+        if (mainLocation == true || mainLocation == "true") {
+          // re init list user session storage
+          ItemCtrl.reInitListUser();
+        }
+
+        // isEditing
+        ItemCtrl.setIsEditingFalse();
+
+        ItemCtrl.updateUserLocation(
+          firstName,
+          location,
+          unit,
+          language,
+          mainLocation,
+          (userCode = JSON.parse(res.data).userCode),
+          _id
+        );
       }
-
-      if (mainLocation == true || mainLocation == "true") {
-        // re init list user session storage
-        ItemCtrl.reInitListUser();
-      }
-
-      // isEditing
-      ItemCtrl.setIsEditingFalse();
-
-      ItemCtrl.updateUserLocation(
-        firstName,
-        location,
-        unit,
-        language,
-        mainLocation,
-        (userCode = JSON.parse(res.data).userCode),
-        _id
-      );
+      // if mainLocation is not true it execs
+      updateAll(allParams);
     },
 
     listUsers: function (usersArr) {

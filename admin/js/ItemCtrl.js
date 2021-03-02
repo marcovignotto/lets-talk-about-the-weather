@@ -209,9 +209,13 @@ const ItemCtrl = (function () {
         // User code created by the route
         // weatherUserObj["userCode"] = 3;
 
-        ItemCtrl.setAlertMain(
-          "The new user will change the Main Location! Are you sure?"
-        );
+        ItemCtrl.setAlertMain({
+          msgMain: "Your update will change the Main Location!",
+          msgYes: "Yes! Go on!",
+          msgNo: "No! Keep it!",
+          msgDelete: "Updated successfully!",
+          msgUndo: "Not updated!",
+        });
       }
 
       const res = await ServerCtrl.callApiAuth(
@@ -491,8 +495,31 @@ const ItemCtrl = (function () {
           noCallback();
         });
     },
-    setAlertMain: async function (msg) {
-      return confirm(msg);
+    setAlertMain: function (params) {
+      var msgMain = params.hasOwnProperty("msgMain")
+        ? params.msgMain
+        : "Are you sure to modify this field?";
+      var msgYes = params.hasOwnProperty("msgYes") ? params.msgYes : "Yes!";
+      var msgNo = params.hasOwnProperty("msgNo") ? params.msgNo : "No!";
+
+      return new Promise((resolve, reject) => {
+        Swal.fire({
+          title: "Sure?",
+          text: msgMain,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: msgYes,
+          cancelButtonText: msgNo,
+        }).then((result) => {
+          if (result.value) {
+            resolve(result.value);
+            Swal.fire(params.msgDelete, "Updated!", "success");
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            // reject(result.dismiss);
+            Swal.fire("Cancelled", params.msgUndo, "error");
+          }
+        });
+      });
     },
   };
 })();
