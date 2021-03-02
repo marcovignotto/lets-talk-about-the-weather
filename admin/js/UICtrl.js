@@ -412,16 +412,21 @@ const UICtrl = (function () {
         weatherUserObj.mainLocation === true ||
         weatherUserObj.mainLocation === "true"
       ) {
-        ItemCtrl.setAlertMain({
+        return ItemCtrl.setAlertMain({
           msgMain: "Your update will change the Main Location!",
           msgYes: "Yes! Go on!",
           msgNo: "No! Keep it!",
           msgDelete: "Updated successfully!",
           msgUndo: "Not updated!",
         }).then((res) => {
-          console.log(res);
-          console.log("true", res === true);
-          console.log("cancel", res === "cancel");
+          console.log("res", res);
+
+          if (res) return next();
+          // console.log("error", error);
+          // console.log(value, error);
+          // console.log(res);
+          // console.log("true", res === true);
+          // console.log("cancel", res === "cancel");
           // if (res === "cancel") return;
           // if (!res) return console.log("cancell");
           // if (res) return console.log("true");

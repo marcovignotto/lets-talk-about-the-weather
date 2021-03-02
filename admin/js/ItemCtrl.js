@@ -512,11 +512,11 @@ const ItemCtrl = (function () {
           cancelButtonText: msgNo,
         }).then((result) => {
           if (result.value) {
-            Swal.fire(params.msgDelete, "Updated!", "success");
             resolve(result.value);
+            Swal.fire(params.msgDelete, "Updated!", "success");
           } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire("Cancelled", params.msgUndo, "error");
             // reject(result.dismiss);
+            Swal.fire("Cancelled", params.msgUndo, "error");
           }
         });
       });
