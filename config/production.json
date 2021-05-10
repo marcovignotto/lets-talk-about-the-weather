@@ -1,0 +1,11 @@
+{
+  "openWeartherAPI": {
+    "apiUrl": "https://api.openweathermap.org/data/2.5/weather?q="
+  },
+  "localApi": {
+    "urlGet": "http://lets-talk-about-the-weather.herokuapp.com/api/locations",
+    "urlPostLocation": "http://lets-talk-about-the-weather.herokuapp.com/api/locations",
+    "urlPost": "http://lets-talk-about-the-weather.herokuapp.com/api/general/6017c8b6ee1e290f38a21a9f",
+    "urlGetWeatherUsers": "http://lets-talk-about-the-weather.herokuapp.com/api/weatherusers"
+  }
+}

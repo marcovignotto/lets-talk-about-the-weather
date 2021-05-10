@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "sass": "node-sass --source-map lib/dist/css/main.css.map --output-style compressed -w lib/scss -o lib/dist/css -- recursive ",
-    "start": "node -r dotenv/config server.js",
-    "server": "nodemon -r dotenv/config server.js"
+    "start": "NODE_ENV=production node -r dotenv/config server.js",
+    "server": "NODE_ENV=development nodemon -r dotenv/config server.js"
   },
   "author": "",
   "license": "ISC",
