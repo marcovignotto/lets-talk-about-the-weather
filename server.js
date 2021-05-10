@@ -5,13 +5,7 @@ var path = require("path");
 
 var cors = require("cors");
 
-const config = require("config");
-
 const app = express();
-
-// REMOVE AT THE END
-const populateDbWeather = require("./src/components/populateDbWeather");
-// connectDB().then((res) => populateDbWeather());
 
 // connect Mongo DB
 connectDB();

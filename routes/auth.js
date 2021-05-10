@@ -1,11 +1,14 @@
+/**
+ * @description route for the authentication
+ * of the users in the backend
+ */
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const auth = require("../middleware/auth");
-
-const config = require("config");
 
 const { check, validationResult } = require("express-validator");
 
@@ -65,7 +68,7 @@ router.post(
         payload,
         process.env.JWT_SECRET,
         {
-          // expiresIn: 360000,
+          expiresIn: 360000,
         },
         (err, token) => {
           if (err) throw err;

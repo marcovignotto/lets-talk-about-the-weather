@@ -1,3 +1,8 @@
+/**
+ * @description CRUD route for the locations
+ * displayed in the frontend
+ */
+
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");

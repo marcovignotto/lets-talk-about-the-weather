@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+/**
+ * @description model for Locations
+ * location with all the data linked with the user
+ * displayed in the frontend
+ */
+
 const LocationSchema = mongoose.Schema({
   firstName: {
     type: String,

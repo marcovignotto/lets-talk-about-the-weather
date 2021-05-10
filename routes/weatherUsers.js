@@ -1,3 +1,7 @@
+/**
+ * @description CRUD route for the weather users
+ * linkend with  a location, displayed in the backend
+ */
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");

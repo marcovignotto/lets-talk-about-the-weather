@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+/**
+ * @description model for Backend Users
+ */
+
 const BackendUserSchema = mongoose.Schema({
   userName: {
     type: String,

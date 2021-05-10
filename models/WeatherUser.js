@@ -1,5 +1,11 @@
 const mongoose = require("mongoose");
 
+/**
+ * @description model for Weather Users
+ * users linked with a location
+ * displayed in /admin
+ */
+
 const WeatherUser = mongoose.Schema({
   firstName: {
     type: String,

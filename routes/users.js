@@ -1,3 +1,8 @@
+/**
+ * @description route for the creation / edit / delete
+ * of users for the backend
+ */
+
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");

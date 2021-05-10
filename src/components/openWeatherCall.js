@@ -1,3 +1,9 @@
+/**
+ * @description calls Open Weather API
+ * @used by the route api/locations
+ * @requires axios
+ */
+
 const axios = require("axios");
 
 const config = require("config");

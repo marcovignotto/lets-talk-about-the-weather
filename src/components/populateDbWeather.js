@@ -1,3 +1,8 @@
+/**
+ * @description calls Open Weather API
+ * @requires axios
+ */
+
 const axios = require("axios");
 const config = require("config");
 var CronJob = require("cron").CronJob;
@@ -7,19 +12,24 @@ const dbCleaning = require("./dbDelete");
 // URLs
 const URL_GET_WEATHER_USERS = config.get("localApi.urlGetWeatherUsers");
 const URL_POST_LOCATION = config.get("localApi.urlPostLocation");
-const OPEN_WEATHER_URL = config.get("openWeartherAPI.apiUrl");
-const OPEN_WEATHER_KEY = process.env.OW_API_KEY;
 
 //KEYS
 const API_BEARER = process.env.API_BEARER;
 
-// get al the users from mongo
+/**
+ * @description get all the users from mongo
+ * @returns saved data on Mongo
+ */
+
 const allWeatherUsers = async () => {
+  /**
+   * @descripton 1° call to get all the users from mongo
+   */
+
   try {
     const options = {
       method: "get",
       headers: {
-        // "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
         Authorization: API_BEARER,
       },
@@ -39,7 +49,18 @@ const allWeatherUsers = async () => {
   }
 };
 
-// POSTs on Mongo user location
+/**
+ *
+ * @description POSTs on Mongo user location
+ * @param {*} firstName
+ * @param {*} location
+ * @param {*} unit
+ * @param {*} language
+ * @param {*} userCode
+ * @param {*} mainLocation
+ * @returns saved data on Mongo
+ */
+
 const locationOnMongo = async (
   firstName,
   location,
@@ -48,8 +69,6 @@ const locationOnMongo = async (
   userCode,
   mainLocation
 ) => {
-  // Open Weather API CALL
-  // made by the route
   try {
     // CREATEOBJ
     const objLocation = {
@@ -61,7 +80,10 @@ const locationOnMongo = async (
       mainLocation,
     };
 
-    // send to mongo db
+    /**
+     * @description send data to mongo
+     * made by the route /api/locations = URL_POST_LOCATION
+     */
     try {
       const options = {
         method: "post",
@@ -89,7 +111,11 @@ const locationOnMongo = async (
   }
 };
 
-// populate
+/**
+ * @description @dbCleaning > @allWeatherUsers get users from MongoDB
+ * > sends every single item to @locationOnMongo
+ * @used every 30 minutes by CronJob
+ */
 
 const populateDbWeather = () => {
   dbCleaning().then((res) => {

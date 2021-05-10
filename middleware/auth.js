@@ -1,8 +1,6 @@
 const jwt = require("jsonwebtoken");
-const config = require("config");
 
 module.exports = async function (req, res, next) {
-  // OLD
   const token = req.header("Authorization").split(" ")[1];
   if (!token) res.status(401).json({ msg: "No token, no auth!" });
 

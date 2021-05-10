@@ -1,6 +1,10 @@
-// DELETE ALL DB
+/**
+ * @description cleans the DB before making the call to
+ * Open Weather API
+ * @used by the @populateDbWeather function
+ */
+
 const { MongoClient } = require("mongodb");
-const config = require("config");
 const db = process.env.MONGODB_URI;
 
 const dbOptions = {
