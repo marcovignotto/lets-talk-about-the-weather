@@ -1,12 +1,12 @@
 {
   "name": "lets-talk-about-the-weather",
-  "version": "3.9.5",
+  "version": "4.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "sass": "node-sass --source-map lib/dist/css/main.css.map --output-style compressed -w lib/scss -o lib/dist/css -- recursive ",
     "start": "NODE_ENV=production node -r dotenv/config server.js",
-    "server": "NODE_ENV=development nodemon -r dotenv/config server.js"
+    "server": "nodemon -r dotenv/config server.js"
   },
   "author": "",
   "license": "ISC",

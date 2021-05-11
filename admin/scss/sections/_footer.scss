@@ -1,31 +1,39 @@
 @import "../variables/colors";
 
-#footer {
+.footer {
   bottom: 0;
   // position: absolute;
 
   padding: 1rem;
-  color: $main-text-color;
 
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   margin: 0 auto;
-  margin-bottom: 1rem;
+  // margin-bottom: 1rem;
+  height: 10vh;
+  background-color: #0077b6;
+  border-top: 3px solid #0096c7;
+  padding-top: 50px;
+  padding-bottom: 30px;
 
-  & p {
-    color: $main-text-color;
-    font-size: 1.1rem;
-    font-weight: $thin;
-  }
+  color: "white";
+  .footer__text {
+    & p {
+      // color: $main-text-color;
+      font-size: 1.1rem;
+      font-weight: $thin;
+      // color: "white";
+    }
 
-  & a {
-    color: $main-text-color;
-    font-weight: 500;
-    &:hover {
+    & a {
+      color: $main-text-color;
       font-weight: 500;
-      border-bottom: 3px solid $main-text-color;
+      &:hover {
+        font-weight: 500;
+        border-bottom: 3px solid $main-text-color;
+      }
     }
   }
 }

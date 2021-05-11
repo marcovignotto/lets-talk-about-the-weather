@@ -5,6 +5,14 @@
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
+  background: linear-gradient(
+    58deg,
+    rgba(0, 119, 182, 1) 0%,
+    rgba(72, 202, 228, 1) 100%
+  );
+
+  position: relative;
+  height: 90vh;
 }
 
 //z-index
@@ -15,6 +23,7 @@
 //
 .hide {
   visibility: hidden;
+  display: none;
 }
 
 .items-w-100 {

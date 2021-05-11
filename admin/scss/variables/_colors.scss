@@ -7,6 +7,23 @@ $menu-item-hover: #afaab9; // silver metallic
 // text color
 $main-text-color: rgb(88, 81, 103);
 
+// palete
+$navy-blue: #03045e;
+$dark-cornflow: #023e8a;
+$star-command: #0077b6;
+$blue-green: #0096c7;
+$cerulean-cray: #00b4d8;
+$sky-blue-cray: #48cae4;
+$sky-blue-cray2: #90e0ef;
+$blizzard-blue: #ade8f4;
+$powder-blue: #caf0f8;
+
+$light-green: $dark-cornflow;
+$light-green-text: $blizzard-blue;
+$light-green-hover: $star-command;
+$light-green-text-norm: white;
+$light-green-text-hover: $powder-blue;
+
 // BTNS COLORS
 $light-blue: rgb(142, 194, 242);
 $light-blue-text: rgb(255, 255, 255);
@@ -32,12 +49,6 @@ $green-text: white;
 $green-hover: #47b300;
 $green-text-norm: white;
 $green-text-hover: black;
-
-$light-green: #a3a380;
-$light-green-text: #efebce;
-$light-green-hover: #c7bc6b;
-$light-green-text-norm: #454535;
-$light-green-text-hover: #efebce;
 
 // PAGES
 

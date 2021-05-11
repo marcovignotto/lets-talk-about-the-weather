@@ -13,6 +13,11 @@
       rel="stylesheet"
     />
     <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin</title>
@@ -20,28 +25,40 @@
   </head>
   <body>
     <div class="container">
+      <!-- Form Login -->
       <div class="row form__login">
-        <div class="col-4"></div>
-        <div class="col-4 form__inputs">
-          <h3>Login</h3>
-          <form action="">
-            <input
-              class="input-text-email email"
-              type="email"
-              placeholder="example@email.com"
-              value="admin@gmail.com"
-            />
-            <input
-              class="input-text-email password"
-              type="password"
-              placeholder="password"
-              value="123456"
-            />
-            <input class="btn-login" type="submit" value="Submit" />
-          </form>
+        <div class="col-2"></div>
+        <div class="col-8 form__inputs">
+          <div class="form__title__container">
+            <div class="form__logo_container">
+              <h2 class="form__title__icon">
+                <i class="fas fa-cloud-sun-rain fa-2x"></i>
+              </h2>
+              <h2 class="form__title__login">Let's talk about the weather!</h2>
+            </div>
+          </div>
+          <div class="form__input__container">
+            <h3>Login</h3>
+            <form class="t-center-x" action="">
+              <input
+                class="input-text-email email"
+                type="email"
+                placeholder="example@email.com"
+                value="admin@gmail.com"
+              />
+              <input
+                class="input-text-email password"
+                type="password"
+                placeholder="password"
+                value="123456"
+              />
+              <input class="btn-login" type="submit" value="Submit" />
+            </form>
+          </div>
         </div>
-        <div class="col-4"></div>
+        <div class="col-2"></div>
       </div>
+      <!-- Users List -->
       <div class="row">
         <div class="col-12">
           <div class="list__header__container hide">
@@ -97,12 +114,10 @@
         </p>
       </div>
     </div>
-
-    <footer id="footer" class="hide footer">
-      <div class="row-1 t-center-x">
-        <col-12 class="pt-1">
-          Let's Talk About The Weather - 2021 - Marco Vignotto
-        </col-12>
+    <!-- Footer -->
+    <footer id="footer" class="footer">
+      <div class="row-1 t-center-x footer__text">
+        <col-12> Let's Talk About The Weather - 2021 - Marco Vignotto </col-12>
         <col-12>
           <a href="#" id="modalOpen">Help</a>
         </col-12>

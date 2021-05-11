@@ -1,6 +1,6 @@
 ## Let's Talk About The Weather
 
-`Version 3.95`
+`Version 4.0.0`
 
 Small utility that collects weather reports from different locations.
 

@@ -154,18 +154,57 @@ h4 {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+  color: white;
+  line-height: 3rem;
+  // height: 100%;
+  .form__title__login {
+    // color: "white";
+    font-family: $font-logo;
+    letter-spacing: 1px;
+  }
+  .form__title__icon {
+    margin-bottom: 2rem;
+  }
+}
+.form__logo_container {
+  margin-bottom: 10px;
 }
 
+.form__input__container {
+  background-color: #0077b6;
+  padding: 1rem;
+  margin: 5rem;
+  margin-top: 2rem;
+  // border: #0096c7 2px solid;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
+}
 .form__inputs {
   padding: 4rem;
-  border-radius: 0.5rem;
-  background-color: #efebce;
+  // margin: 0;
+  // border-radius: 0.5rem;
+  // background-color: #efebce;
   text-align: center;
-  * {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+  // box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.5);
+  // width: 50%;
+  .form__title__container {
+    width: 100%;
   }
+  form {
+    // width: 60%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    input {
+      // width: 60%;
+    }
+  }
+  // * {
+  //   margin-top: 0.5rem;
+  //   margin-bottom: 0.5rem;
+  // }
   h3 {
-    color: #5b3335;
+    color: white;
+    letter-spacing: 1px;
+    font-weight: $thin;
   }
 }
