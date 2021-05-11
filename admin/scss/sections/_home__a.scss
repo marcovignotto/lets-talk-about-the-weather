@@ -20,12 +20,12 @@ h4 {
   .row:nth-of-type(even) {
     @extend %spacing-row;
 
-    background-color: #f5f3e0;
+    background-color: #f0f0ea;
 
     border-radius: 0.3rem;
     &:hover {
       color: #efebce;
-      background-color: #a76268;
+      background-color: $cerulean-cray;
       i {
         color: #efebce;
         &:hover {
@@ -41,7 +41,7 @@ h4 {
     border-radius: 0.3rem;
     &:hover {
       color: #efebce;
-      background-color: #a76268;
+      background-color: $star-command;
       i {
         color: #efebce;
         &:hover {
@@ -57,7 +57,7 @@ h4 {
   // margin-left: 20px;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: #5b3335;
+  color: white;
 
   margin-bottom: 0.65rem;
   .col__edit {
@@ -66,7 +66,7 @@ h4 {
 }
 
 .grid__item {
-  color: #5b3335;
+  color: $navy-blue;
   * button {
     outline: none;
   }
@@ -76,7 +76,7 @@ h4 {
     &:hover {
       border: none;
       cursor: pointer;
-      color: #c99684;
+      color: $star-command;
     }
   }
 }
@@ -90,17 +90,18 @@ h4 {
   }
 
   * i {
-    color: #5b3335;
+    color: $star-command;
     &:hover {
       border: none;
       cursor: pointer;
-      color: #c99684;
+      color: white;
     }
   }
 }
 .main__location___row {
-  background-color: #bb8588 !important;
+  background-color: $star-command !important;
   color: white !important;
+  box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.25);
   * button {
     outline: none;
   }
