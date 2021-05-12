@@ -5,14 +5,16 @@
   margin: 0;
   margin-left: auto;
   margin-right: auto;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-y: scroll;
+
   background: linear-gradient(
     58deg,
     rgba(0, 119, 182, 1) 0%,
     rgba(72, 202, 228, 1) 100%
   );
-
-  position: relative;
+  padding: 20px;
+  // position: relative;
   // height: 90vh;
   height: 100%;
 

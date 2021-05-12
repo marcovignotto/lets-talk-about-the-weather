@@ -286,14 +286,8 @@ const UICtrl = (function () {
       // filter id to edit
       let getAllUsers = JSON.parse(sessionStorage.getItem("arrUsers"));
 
-      const {
-        _id,
-        firstName,
-        location,
-        language,
-        unit,
-        mainLocation,
-      } = getAllUsers.find((x) => x._id === id);
+      const { _id, firstName, location, language, unit, mainLocation } =
+        getAllUsers.find((x) => x._id === id);
 
       // create new row
       let newRow = UICtrl.row(
@@ -323,12 +317,14 @@ const UICtrl = (function () {
       let gridItem = e.target.parentElement.closest(
         UICtrl.getSelectorsClasses().gridItem
       );
-      let userName = e.target.parentElement.parentElement.parentElement.querySelector(
-        UICtrl.getSelectorsClasses().firstName
-      ).textContent;
-      let userLocation = e.target.parentElement.parentElement.parentElement.querySelector(
-        UICtrl.getSelectorsClasses().location
-      ).textContent;
+      let userName =
+        e.target.parentElement.parentElement.parentElement.querySelector(
+          UICtrl.getSelectorsClasses().firstName
+        ).textContent;
+      let userLocation =
+        e.target.parentElement.parentElement.parentElement.querySelector(
+          UICtrl.getSelectorsClasses().location
+        ).textContent;
 
       ItemCtrl.setAlert(
         `Are you sure to delete ${userName} from ${userLocation}?`,
@@ -455,14 +451,8 @@ const UICtrl = (function () {
         );
 
         // destructoring
-        const {
-          firstName,
-          location,
-          unit,
-          language,
-          mainLocation,
-          _id,
-        } = weatherUserObj;
+        const { firstName, location, unit, language, mainLocation, _id } =
+          weatherUserObj;
 
         if (res.status >= 200 && res.status <= 399) {
           // get array from session Storage
@@ -634,7 +624,7 @@ const UICtrl = (function () {
       // show menu and list header
       App.selectors().menu.classList.remove("hide");
       App.selectors().listHeaderContainer.classList.remove("hide");
-      App.selectors().footer.classList.remove("hide");
+      // App.selectors().footer.classList.remove("hide");
     },
     openModal: function (target) {
       var modal = document.getElementById(target);
