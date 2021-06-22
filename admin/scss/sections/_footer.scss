@@ -6,7 +6,6 @@
   height: 80px;
   bottom: 0;
   padding: 1rem;
-  display: flex;
   justify-content: center;
 
   align-items: center;
@@ -15,8 +14,8 @@
   padding-bottom: 30px;
   color: white;
 
-  // position: relative;
   clear: both;
+  display: contents !important;
 
   .footer__text {
     & p {
