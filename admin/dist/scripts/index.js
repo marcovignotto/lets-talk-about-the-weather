@@ -530,7 +530,7 @@ const ServerCtrl = (function () {
   const getHost = window.location.host;
 
   if (getHost === "localhost:5000") {
-    urlPrefix = "http://localhost:5000";
+    urlPrefix = "http://localhost:5000/";
   } else {
     urlPrefix = "https://lets-talk-about-the-weather.herokuapp.com/";
   }

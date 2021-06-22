@@ -150,7 +150,7 @@ h4 {
 
 .form__login {
   margin: 0;
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -208,4 +208,8 @@ h4 {
     letter-spacing: 1px;
     font-weight: $thin;
   }
+}
+
+.users__list {
+  position: relative;
 }
