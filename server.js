@@ -3,9 +3,14 @@ const connectDB = require("./config/db.js");
 
 var path = require("path");
 
-// var cors = require("cors");
+const cors = require("./middleware/cors");
 
 const app = express();
+
+/**
+ * @desc Custom middleware
+ */
+app.use(cors);
 
 // connect Mongo DB
 connectDB();
@@ -14,11 +19,6 @@ connectDB();
 
 // Middleware
 app.use(express.json({ extended: false }));
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5000/");
-  next();
-});
 
 // routes
 app.use("/api/locations", require("./routes/locations"));
