@@ -3,20 +3,20 @@ const connectDB = require("./config/db.js");
 
 var path = require("path");
 
-var cors = require("cors");
+// var cors = require("cors");
 
 const app = express();
 
 // connect Mongo DB
 connectDB();
 
-app.use(cors());
+// app.use(cors());
 
 // Middleware
 app.use(express.json({ extended: false }));
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5000/");
   next();
 });
 
