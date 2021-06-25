@@ -8,14 +8,17 @@ const cors = require("./middleware/cors");
 const app = express();
 
 /**
+ * @desc PORT
+ */
+const PORT = process.env.PORT;
+
+/**
  * @desc Custom middleware
  */
 app.use(cors);
 
 // connect Mongo DB
 connectDB();
-
-// app.use(cors());
 
 // Middleware
 app.use(express.json({ extended: false }));
@@ -30,6 +33,26 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
 app.use("/", express.static(path.join(__dirname, "lib/dist")));
 
-const PORT = process.env.PORT;
+/**
+ * @desc Global error handler middleware
+ */
+
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+  /**
+   * @desc default 500
+   */
+  res
+    .status(err.status || 500)
+    // send the rest to the user
+    .send({
+      success: false,
+      message: "Somenthig went wrong!",
+      status: err.status,
+      error: err.message,
+    });
+});
 
 app.listen(PORT, () => console.log(`Server started`));

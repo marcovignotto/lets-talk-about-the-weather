@@ -6,153 +6,32 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 
-const { check, validationResult } = require("express-validator");
+const { locationValidator } = require("../middleware/validators");
 
-const WeatherUser = require("../models/WeatherUser");
+const { get, post, put, del } = require("../controllers/weatherUsers");
 
 // @route   GET api/weatherusers
 // @desc    Get all weatherusers
 // @access  Private
 
-router.get("/", auth, async (req, res) => {
-  try {
-    const weatherUsers = await WeatherUser.find({
-      weatherUsers: req.weatherUsers,
-    }).sort({
-      date: -1,
-    });
-    res.json(weatherUsers);
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).send("Server error");
-  }
-});
+router.get("/", auth, get);
 
 // @route   POST api/weatherusers
 // @desc    add a weatherusers
 // @access  Private
 
-router.post(
-  "/",
-  auth,
-  [
-    check("location", "Location is required").not().isEmpty(),
-    check("firstName", "Name is required").not().isEmpty(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-      const { firstName, language, location, unit, mainLocation } = req.body;
-
-      if (mainLocation == true || mainLocation == "true") {
-        await WeatherUser.updateMany({}, { mainLocation: false });
-      }
-
-      // find last id
-      // returns everything and sort it from the last userCode
-      const resUserCode = await WeatherUser.find()
-        .sort({
-          userCode: -1,
-        })
-        .limit(1);
-
-      const newWeatherUser = new WeatherUser({
-        firstName,
-        language,
-        location,
-        unit,
-        userCode: resUserCode.length === 0 ? 0 : resUserCode[0].userCode + 1,
-        mainLocation,
-      });
-
-      const addUser = await newWeatherUser.save();
-
-      res.json(addUser);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Server Error");
-    }
-  }
-);
+router.post("/", auth, locationValidator, post);
 
 // @route   PUT api/weatherusers/:id
 // @desc    Update weatherusers
 // @access  Private
 
-router.put(
-  "/:id",
-  auth,
-  [
-    check("location", "Location is required").not().isEmpty(),
-    check("firstName", "Name is required").not().isEmpty(),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const {
-      firstName,
-      language,
-      location,
-      unit,
-      userCode,
-      mainLocation,
-    } = req.body;
-
-    if (mainLocation === true || mainLocation === "true") {
-      await WeatherUser.updateMany({}, { mainLocation: false });
-    }
-
-    const userFields = {};
-    if (firstName) userFields.firstName = firstName;
-    if (language) userFields.language = language;
-    if (location) userFields.location = location;
-    if (unit) userFields.unit = unit;
-    if (userCode) userFields.userCode = userCode;
-    if (mainLocation) userFields.mainLocation = mainLocation;
-
-    try {
-      let user = await WeatherUser.findById(req.params.id);
-
-      if (!user) return res.status(404).json({ msg: "User not found" });
-
-      user = await WeatherUser.findByIdAndUpdate(
-        req.params.id,
-        { $set: userFields },
-        { new: true }
-      );
-
-      res.json(user);
-    } catch (error) {
-      console.error(error.message);
-      res.status(500).send("Server error");
-    }
-  }
-);
+router.put("/:id", auth, locationValidator, put);
 
 // @route   DELETE api/weatherusers/:id
 // @desc    Delete weatherusers
 // @access  Private
 
-router.delete("/:id", auth, async (req, res) => {
-  try {
-    let user = await WeatherUser.findById(req.params.id);
-
-    if (!user) return res.status(404).json({ msg: "User not found" });
-
-    await WeatherUser.findByIdAndRemove(req.params.id);
-
-    res.json({ msg: "User deleted" });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
+router.delete("/:id", auth, del);
 
 module.exports = router;
