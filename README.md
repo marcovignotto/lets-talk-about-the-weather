@@ -14,6 +14,10 @@ The app is created in pure Javascript, designed with s module pattern
 - Javascript
 - MongoDB
 - Axios
+- SASS
+- Gulp JS
+
+Tested with Jest
 
 [Try the Frontend demo on Heroku](http://lets-talk-about-the-weather.herokuapp.com)
 
