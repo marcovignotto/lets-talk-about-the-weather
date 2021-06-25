@@ -10,6 +10,8 @@ module.exports = (req, res, next) => {
     "http://127.0.0.1:5000/",
     "http://localhost:5000",
     "http://127.0.0.1:5000",
+    "https://lets-talk-about-the-weather.herokuapp.com/",
+    "https://lets-talk-about-the-weather.herokuapp.com",
   ];
 
   if (allowedOrigins.includes(origin)) {
